@@ -28,7 +28,7 @@ public class JwtUtils {
   private int jwtRefreshExpirationMs;
 
   // Generate JWT token from Authentication object (used on login)
-  public String generateJwtToken(Authentication authentication) {
+  public String generateJwtToken(Authentication authentication, Long sessionId) {
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
     return Jwts.builder()
@@ -38,6 +38,7 @@ public class JwtUtils {
             .claim("adminId", userPrincipal.getAdmin() != null ? userPrincipal.getAdmin().getId() : null)
             .claim("bankId", userPrincipal.getBank() != null ? userPrincipal.getBank().getId() : null)
             .claim("agencyId", userPrincipal.getAgency() != null ? userPrincipal.getAgency().getId() : null)
+            .claim("sessionId", sessionId)  // Add sessionId to JWT claims
             .setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)) // Access token expiration
             .signWith(key(), SignatureAlgorithm.HS512)
@@ -73,6 +74,15 @@ public class JwtUtils {
             .getBody()
             .getSubject();
   }
+  public Long getSessionIdFromJwtToken(String token) {
+    Claims claims = Jwts.parserBuilder()
+            .setSigningKey(key())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    return claims.get("sessionId", Long.class);
+  }
+
 
   // Validate the JWT token
   public boolean validateJwtToken(String authToken) {

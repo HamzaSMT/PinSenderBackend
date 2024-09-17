@@ -3,10 +3,9 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
+import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.models.*;
-import com.monetique.PinSenderV0.payload.request.LoginRequest;
-import com.monetique.PinSenderV0.payload.request.SignupRequest;
-import com.monetique.PinSenderV0.payload.request.TokenRefreshRequest;
+import com.monetique.PinSenderV0.payload.request.*;
 import com.monetique.PinSenderV0.payload.response.JwtResponse;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.TokenRefreshResponse;
@@ -18,6 +17,8 @@ import com.monetique.PinSenderV0.security.jwt.JwtUtils;
 import com.monetique.PinSenderV0.security.services.MonitoringService;
 import com.monetique.PinSenderV0.security.services.RefreshTokenService;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ public class AuthController {
 
   @Autowired
   AuthenticationManager authenticationManager;
+
+  @Autowired
+  IuserManagementService iuserManagementService;
 
   @Autowired
   UserRepository userRepository;
@@ -81,16 +85,17 @@ public class AuthController {
               new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
-      String jwt = jwtUtils.generateJwtToken(authentication);
-
       UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+      // Start a new session for the user
+      UserSession session = monitoringService.startSession(userDetails.getId());
+
+      String jwt = jwtUtils.generateJwtToken(authentication, session.getId());  // Pass sessionId
+
       List<String> roles = userDetails.getAuthorities().stream()
               .map(GrantedAuthority::getAuthority)
               .collect(Collectors.toList());
       RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-
-      // Start a new session for the user
-      UserSession session = monitoringService.startSession(userDetails.getId());
 
       logger.info("User {} signed in successfully.", loginRequest.getUsername());
 
@@ -102,15 +107,77 @@ public class AuthController {
               roles,
               session.getId()  // Return session ID to track API usage
       ));
+    } catch (BadCredentialsException e) {
+      // Handle incorrect username or password
+      logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
+      return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid username or password", 401));
     } catch (Exception e) {
       logger.error("Error during sign-in for username: {}", loginRequest.getUsername(), e);
-      return ResponseEntity.status(401).body(new MessageResponse("Error: Unauthorized", 401));
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
+    }
+  }
+
+  // Signout method (Logout)
+  
+  @PostMapping("/signout")
+  public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String authorizationHeader) {
+    logger.info("Received sign-out request.");
+
+    try {
+      // Extract JWT token from the Authorization header
+      String jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+
+      // Validate and parse the token
+      if (!jwtUtils.validateJwtToken(jwtToken)) {
+        return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid JWT token", 401));
+      }
+
+      // Get the Authentication object from Security Context
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+      // Extract user ID from the UserDetailsImpl
+      Long userId = userDetails.getId();
+
+      // Extract session ID from the JWT token claims
+      Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);
+
+      // Fetch the session from the database
+      UserSession session = monitoringService.getSessionById(sessionId);
+
+      if (session == null) {
+        return ResponseEntity.status(404).body(new MessageResponse("Error: Session not found", 404));
+      }
+
+      // Check if the session is already ended
+      if (session.getLogoutTime() != null) {
+        return ResponseEntity.status(400).body(new MessageResponse("Error: Session already ended", 400));
+      }
+
+      // Invalidate the session for the user
+      monitoringService.endSession(sessionId);
+
+      // Revoke the refresh token associated with the user
+      refreshTokenService.deleteByUserId(userId);
+
+      logger.info("User with ID {} signed out successfully.", userId);
+
+      return ResponseEntity.ok(new MessageResponse("You've been signed out successfully!", 200));
+    } catch (Exception e) {
+      logger.error("Error during sign-out: {}", e.getMessage(), e);
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to sign out", 500));
     }
   }
 
 
+
+
+
+
+
   // Create Super Admin method
   @PostMapping("/createSuperAdmin")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<?> createSuperAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
     logger.info("Received Super Admin creation request for username: {}", signUpRequest.getUsername());
 
@@ -217,6 +284,7 @@ public class AuthController {
 
 
   @PostMapping("/associateAdminToBank")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<?> associateAdminToBank(@RequestParam Long adminId, @RequestParam Long bankId) {
     logger.info("Received request to associate admin {} with bank {}", adminId, bankId);
 
@@ -295,4 +363,25 @@ public class AuthController {
             })
             .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database!"));
   }
+
+  @PostMapping("/changePassword")
+
+  public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+    try {
+      iuserManagementService.changePassword(request.getUserId(), request.getOldPassword(), request.getNewPassword());
+      return ResponseEntity.ok(new MessageResponse("Password changed successfully!", 200));
+    } catch (Exception e) {
+      return ResponseEntity.status(400).body(new MessageResponse(e.getMessage(), 400));
+    }
+  }
+  @PostMapping("/forgetPassword")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+  public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
+    try {
+      String newPassword = iuserManagementService.generateRandomPassword(request.getUserId());
+      return ResponseEntity.ok(new MessageResponse("Random password generated and saved successfully! New password: " + newPassword, 200));    } catch (Exception e) {
+      return ResponseEntity.status(400).body(new MessageResponse(e.getMessage(), 400));
+    }
+  }
+
 }

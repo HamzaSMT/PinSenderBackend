@@ -8,6 +8,7 @@ import com.monetique.PinSenderV0.repository.RefreshTokenRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -30,18 +31,24 @@ public class RefreshTokenService {
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
-
     public RefreshToken createRefreshToken(Long userId) {
         // Check if a refresh token already exists for the user
         Optional<RefreshToken> existingToken = findByUserId(userId);
 
         if (existingToken.isPresent()) {
-            // If a token exists, delete the old one
-            refreshTokenRepository.delete(existingToken.get());
+            RefreshToken token = existingToken.get();
 
+            // Check if the existing token is expired
+            if (token.getExpiryDate().isAfter(Instant.now())) {
+                // Token is not expired, return the existing token
+                return token;
+            }
+
+            // If the token is expired, delete the old one
+            refreshTokenRepository.delete(token);
         }
 
-        // Create a new refresh token
+        // Create a new refresh token as none exist or it was expired
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found")));
@@ -51,6 +58,7 @@ public class RefreshTokenService {
         // Save the new token and return it
         return refreshTokenRepository.save(refreshToken);
     }
+
 
     public Optional<RefreshToken> findByUserId(Long userId) {
         return refreshTokenRepository.findByUserId(userId);
@@ -65,7 +73,7 @@ public class RefreshTokenService {
 
         return token;
     }
-
+    @Transactional
     public void deleteByUserId(Long userId) {
         refreshTokenRepository.deleteByUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
     }

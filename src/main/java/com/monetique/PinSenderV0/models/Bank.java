@@ -23,7 +23,6 @@ public class Bank {
 
     @NotBlank
     private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id", nullable = true)
     private User admin;  // The admin of the bank (an Admin user)

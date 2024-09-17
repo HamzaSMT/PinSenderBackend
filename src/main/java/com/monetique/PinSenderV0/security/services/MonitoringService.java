@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,15 +31,10 @@ public class MonitoringService {
     @Autowired
     private UserSessionRepository userSessionRepository;
 
-    public UserSession getCurrentSession(String username) {
-        // Fetch session from the repository or session service by username
-        UserSession session = userSessionRepository.findCurrentSessionByUsername(username);
-
-        if (session == null) {
-            throw new ResourceNotFoundException("Session", "username", username);
-        }
-
-        return session;
+    public UserSession getSessionById(Long sessionId) {
+        // Fetch session from the repository by ID
+        return userSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Session", "id", sessionId));
     }
 
 
@@ -133,5 +129,18 @@ public class MonitoringService {
         // Save the session to the repository
         return userSessionRepository.save(session);
     }
+
+
+
+        public void endSession(long sessionId) {
+            // Find the session by sessionId and mark it as ended
+            Optional<UserSession> session = userSessionRepository.findById(sessionId);
+            if (session.isPresent()) {
+                UserSession userSession = session.get();
+                userSession.setLogoutTime(LocalDateTime.now());
+                userSessionRepository.save(userSession);
+            }
+        }
+
 
 }

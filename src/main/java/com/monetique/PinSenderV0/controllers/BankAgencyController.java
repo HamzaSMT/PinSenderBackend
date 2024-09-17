@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,7 @@ public class BankAgencyController {
 
     // Create a new Bank (Only for Super Admin)
     @PostMapping("/Addbanks")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> createBank(@RequestParam String bankName) {
         logger.info("Received request to create bank: {}", bankName);
 
@@ -62,6 +64,7 @@ public class BankAgencyController {
     // List all banks (Accessible to Super Admin)
 
     @GetMapping("/Listbanks")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> listAllBanks() {
         logger.info("Received request to list all banks");
 
@@ -139,6 +142,7 @@ public class BankAgencyController {
 
     // Delete a Bank (Only for Super Admin)
     @DeleteMapping("/banks/{id}")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> deleteBank(@PathVariable Long id) {
         logger.info("Received request to delete bank with id: {}", id);
 
