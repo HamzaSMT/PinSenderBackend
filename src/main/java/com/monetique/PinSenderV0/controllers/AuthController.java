@@ -3,8 +3,11 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
+import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
-import com.monetique.PinSenderV0.models.*;
+import com.monetique.PinSenderV0.models.Banks.Agency;
+import com.monetique.PinSenderV0.models.Banks.TabBank;
+import com.monetique.PinSenderV0.models.Users.*;
 import com.monetique.PinSenderV0.payload.request.*;
 import com.monetique.PinSenderV0.payload.response.JwtResponse;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
@@ -14,9 +17,9 @@ import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.RoleRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.security.jwt.JwtUtils;
-import com.monetique.PinSenderV0.security.services.MonitoringService;
 import com.monetique.PinSenderV0.security.services.RefreshTokenService;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -72,7 +75,7 @@ public class AuthController {
   JwtUtils jwtUtils;
 
   @Autowired
-  private MonitoringService monitoringService;
+  private ImonitoringService monitoringService;
 
 
   // Signin method (Login)
@@ -81,6 +84,12 @@ public class AuthController {
     logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
 
     try {
+      // Check if the user already has an active session
+      UserSession activeSession = monitoringService.getActiveSessionByUsername(loginRequest.getUsername());
+      if (activeSession != null && activeSession.getLogoutTime() == null) {
+        logger.warn("User {} already has an active session.", loginRequest.getUsername());
+        return ResponseEntity.status(403).body(new MessageResponse("Error: Another session is already opened for this user.", 403));
+      }
       Authentication authentication = authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -177,7 +186,6 @@ public class AuthController {
 
   // Create Super Admin method
   @PostMapping("/createSuperAdmin")
-  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<?> createSuperAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
     logger.info("Received Super Admin creation request for username: {}", signUpRequest.getUsername());
 
@@ -186,7 +194,10 @@ public class AuthController {
       logger.error("Username {} is already taken", signUpRequest.getUsername());
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!", 400));
     }
-
+    if (userRepository.countByRole(ERole.ROLE_SUPER_ADMIN) > 0) {
+      logger.error("A Super Admin already exists, cannot create another.");
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: A Super Admin already exists!", 400));
+    }
     // Add the Super Admin role to the new user
     Set<Role> roles = new HashSet<>();
     Role superAdminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN)
@@ -299,7 +310,7 @@ public class AuthController {
 
     User admin = userRepository.findById(adminId)
             .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", adminId));
-    Bank bank = bankRepository.findById(bankId)
+    TabBank bank = bankRepository.findById(bankId)
             .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", bankId));
 
     bank.setAdmin(admin); // Associate the admin with the bank
@@ -384,4 +395,31 @@ public class AuthController {
     }
   }
 
+  @PutMapping("/update")
+  public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest updateUserRequest) {
+    try {
+      // Get authenticated user details
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+      Long userId = currentUserDetails.getId();
+      // Update user details
+      User updatedUser = iuserManagementService.updateUser(userId, updateUserRequest);
+      logger.info("User {} updated successfully", updatedUser.getUsername());
+
+      // Return success message
+      return ResponseEntity.ok(new MessageResponse("User updated successfully!", 200));
+    } catch (ResourceNotFoundException e) {
+      logger.error("User not found: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage(), 404));
+    } catch (Exception e) {
+      logger.error("Error updating user details: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(new MessageResponse("Error updating user details", 500));
+    }
+  }
+
+
 }
+
+
+

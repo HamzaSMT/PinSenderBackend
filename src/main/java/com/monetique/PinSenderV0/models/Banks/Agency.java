@@ -1,7 +1,8 @@
-package com.monetique.PinSenderV0.models;
+package com.monetique.PinSenderV0.models.Banks;
 
 
 
+import com.monetique.PinSenderV0.models.Users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,17 @@ public class Agency {
     @NotBlank
     private String name;
 
+    private String contactEmail;
+
+   @Column(name = "branch_code", unique = true, nullable = false)
+   private String agencyCode;
+
+
+    private String contactPhoneNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id", nullable = true)
-    private Bank bank;
+    private TabBank bank;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();

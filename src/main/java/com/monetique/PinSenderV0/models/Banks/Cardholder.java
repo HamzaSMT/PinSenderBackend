@@ -1,4 +1,4 @@
-package com.monetique.PinSenderV0.models;
+package com.monetique.PinSenderV0.models.Banks;
 
 
 import lombok.AllArgsConstructor;

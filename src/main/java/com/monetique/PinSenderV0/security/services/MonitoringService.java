@@ -2,11 +2,12 @@ package com.monetique.PinSenderV0.security.services;
 
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
-import com.monetique.PinSenderV0.models.HttpMethodEnum;
-import com.monetique.PinSenderV0.models.User;
+import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
+import com.monetique.PinSenderV0.models.Users.HttpMethodEnum;
+import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.repository.UserRepository;
-import com.monetique.PinSenderV0.models.ApiRequestLog;
-import com.monetique.PinSenderV0.models.UserSession;
+import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
+import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.payload.response.ApiReportResponse;
 import com.monetique.PinSenderV0.repository.ApiRequestLogRepository;
 import com.monetique.PinSenderV0.repository.UserSessionRepository;
@@ -20,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MonitoringService {
+public class MonitoringService implements ImonitoringService {
 
     @Autowired
     private ApiRequestLogRepository apiRequestLogRepository;
@@ -30,16 +31,15 @@ public class MonitoringService {
 
     @Autowired
     private UserSessionRepository userSessionRepository;
-
+    @Override
     public UserSession getSessionById(Long sessionId) {
         // Fetch session from the repository by ID
         return userSessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Session", "id", sessionId));
     }
 
-
-    // Generate report for all API calls by a user
-    public ApiReportResponse generateUserReport(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+@Override
+public ApiReportResponse generateUserReport(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
         List<ApiRequestLog> logs = apiRequestLogRepository.findBySession_User_Id(userId).stream()
                 .filter(log -> log.getTimestamp().isAfter(startDate) && log.getTimestamp().isBefore(endDate))
                 .collect(Collectors.toList());
@@ -52,6 +52,7 @@ public class MonitoringService {
     }
 
     // Generate report for all API calls by all users of an admin
+    @Override
     public ApiReportResponse generateAdminReport(Long adminId, LocalDateTime startDate, LocalDateTime endDate) {
         List<ApiRequestLog> logs = apiRequestLogRepository.findBySession_User_Admin_Id(adminId).stream()
                 .filter(log -> log.getTimestamp().isAfter(startDate) && log.getTimestamp().isBefore(endDate))
@@ -63,9 +64,8 @@ public class MonitoringService {
 
         return new ApiReportResponse(totalRequests, successRequests, failedRequests, logs);
     }
-
-    // Generate report for session durations
-    public Map<Long, Long> generateSessionDurations(Long userId) {
+@Override
+public Map<Long, Long> generateSessionDurations(Long userId) {
         List<UserSession> sessions = userSessionRepository.findByUser_Id(userId);
 
         return sessions.stream().collect(Collectors.toMap(
@@ -77,29 +77,33 @@ public class MonitoringService {
     }
 
     // Fetch logs by admin ID
+    @Override
     public List<ApiRequestLog> getLogsByAdminId(Long adminId) {
         return apiRequestLogRepository.findBySession_User_Admin_Id(adminId);
     }
 
     // Fetch logs by user ID
+    @Override
     public List<ApiRequestLog> getLogsByUserId(Long userId) {
         return apiRequestLogRepository.findBySession_User_Id(userId);
     }
 
     // Fetch active sessions (users currently logged in)
+    @Override
     public List<UserSession> getActiveSessions() {
         return userSessionRepository.findByLogoutTimeIsNull();
     }
 
     // Fetch all sessions
+    @Override
     public List<UserSession> getAllSessions() {
         return userSessionRepository.findAll();
     }
 
 
 
-
-    public void logRequest(UserSession session, String requestPath, HttpMethodEnum method, int statusCode, long responseTimeMs) {
+@Override
+public void logRequest(UserSession session, String requestPath, HttpMethodEnum method, int statusCode, long responseTimeMs) {
         ApiRequestLog requestLog = new ApiRequestLog();
         requestLog.setSession(session);  // Correctly set the UserSession object
         requestLog.setRequestPath(requestPath);
@@ -116,6 +120,7 @@ public class MonitoringService {
 
 
     // Method to start a new session when the user logs in
+    @Override
     public UserSession startSession(Long userId) {
         // Retrieve the user from the repository
         User user = userRepository.findById(userId)
@@ -131,8 +136,8 @@ public class MonitoringService {
     }
 
 
-
-        public void endSession(long sessionId) {
+@Override
+public void endSession(long sessionId) {
             // Find the session by sessionId and mark it as ended
             Optional<UserSession> session = userSessionRepository.findById(sessionId);
             if (session.isPresent()) {
@@ -142,5 +147,15 @@ public class MonitoringService {
             }
         }
 
+    @Override
+    public UserSession getActiveSessionByUsername(String username) {
+        // Find the user by username
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+
+        // Find the active session for the user (where logoutTime is null)
+        return userSessionRepository.findByUserAndLogoutTimeIsNull(user)
+                .orElse(null);  // Return null if no active session is found
+    }
 
 }

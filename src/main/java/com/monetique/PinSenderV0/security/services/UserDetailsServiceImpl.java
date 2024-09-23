@@ -1,6 +1,6 @@
 package com.monetique.PinSenderV0.security.services;
 
-import com.monetique.PinSenderV0.models.User;
+import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

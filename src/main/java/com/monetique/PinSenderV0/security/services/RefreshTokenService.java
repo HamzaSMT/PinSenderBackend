@@ -3,7 +3,7 @@ package com.monetique.PinSenderV0.security.services;
 
 
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
-import com.monetique.PinSenderV0.models.RefreshToken;
+import com.monetique.PinSenderV0.models.Users.RefreshToken;
 import com.monetique.PinSenderV0.repository.RefreshTokenRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 public class RefreshTokenService {
 
-    @Value("${app.jwtExpirationMs}")
+    @Value("${app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
     private final RefreshTokenRepository refreshTokenRepository;

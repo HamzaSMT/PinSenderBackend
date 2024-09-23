@@ -1,6 +1,6 @@
 package com.monetique.PinSenderV0.controllers;
-import com.monetique.PinSenderV0.models.ApiRequestLog;
-import com.monetique.PinSenderV0.models.UserSession;
+import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
+import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.payload.response.ApiReportResponse;
 import com.monetique.PinSenderV0.security.services.MonitoringService;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/monitor")
-public class MonitoringController {
+public class  MonitoringController {
 
     @Autowired
     private MonitoringService monitoringService;

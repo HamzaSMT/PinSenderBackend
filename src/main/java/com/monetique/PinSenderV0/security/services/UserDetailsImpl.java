@@ -1,8 +1,8 @@
 package com.monetique.PinSenderV0.security.services;
 
-import com.monetique.PinSenderV0.models.Agency;
-import com.monetique.PinSenderV0.models.Bank;
-import com.monetique.PinSenderV0.models.User;
+import com.monetique.PinSenderV0.models.Banks.Agency;
+import com.monetique.PinSenderV0.models.Banks.TabBank;
+import com.monetique.PinSenderV0.models.Users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class UserDetailsImpl implements UserDetails {
   private String password;
 
   private User admin;
-  private Bank bank;
+  private TabBank bank;
   private Agency agency;
 
   private Collection<? extends GrantedAuthority> authorities;

@@ -2,8 +2,8 @@ package com.monetique.PinSenderV0.repository;
 
 
 
-import com.monetique.PinSenderV0.models.RefreshToken;
-import com.monetique.PinSenderV0.models.User;
+import com.monetique.PinSenderV0.models.Users.RefreshToken;
+import com.monetique.PinSenderV0.models.Users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

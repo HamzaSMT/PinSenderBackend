@@ -1,7 +1,7 @@
 package com.monetique.PinSenderV0.repository;
 
 
-import com.monetique.PinSenderV0.models.Cardholder;
+import com.monetique.PinSenderV0.models.Banks.Cardholder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

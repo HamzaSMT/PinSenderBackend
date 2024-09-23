@@ -1,7 +1,10 @@
-package com.monetique.PinSenderV0.models;
+
+/*
+package com.monetique.PinSenderV0.models.Banks;
 
 
 
+import com.monetique.PinSenderV0.models.Users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -23,6 +26,15 @@ public class Bank {
 
     @NotBlank
     private String name;
+    @NotBlank
+    private String contactEmail;
+
+    @NotBlank
+    private String contactPhoneNumber;
+
+    private String address;
+    @Column(name = "bank_code", unique = true, nullable = false)
+    private String bankCode;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id", nullable = true)
     private User admin;  // The admin of the bank (an Admin user)
@@ -34,3 +46,4 @@ public class Bank {
         this.name = name;
     }
 }
+*/

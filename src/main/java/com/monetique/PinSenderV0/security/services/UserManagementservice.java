@@ -1,7 +1,8 @@
 package com.monetique.PinSenderV0.security.services;
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
-import com.monetique.PinSenderV0.models.User;
+import com.monetique.PinSenderV0.models.Users.User;
+import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.InvalidPasswordException;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
@@ -63,7 +64,19 @@ public class UserManagementservice implements IuserManagementService {
         userRepository.save(user);
     }
 
+@Override
+public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
+        // Find user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
+        // Update fields
+        user.setEmail(userUpdateRequest.getEmail());
+        user.setPhoneNumber(userUpdateRequest.getPhoneNumber());
+
+        // Save updated user
+        return userRepository.save(user);
+    }
 
 
 }

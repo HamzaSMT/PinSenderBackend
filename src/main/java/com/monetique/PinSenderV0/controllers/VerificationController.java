@@ -1,14 +1,14 @@
 package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
-import com.monetique.PinSenderV0.models.HttpMethodEnum;
-import com.monetique.PinSenderV0.models.UserSession;
+import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
+import com.monetique.PinSenderV0.models.Users.HttpMethodEnum;
+import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.payload.request.CardholderVerificationRequest;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.repository.UserSessionRepository;
 import com.monetique.PinSenderV0.security.services.CardholderService;
-import com.monetique.PinSenderV0.security.services.MonitoringService;
 import com.monetique.PinSenderV0.security.services.OtpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class VerificationController {
     private UserSessionRepository userSessionRepository;
 
     @Autowired
-    private MonitoringService monitoringService;  // Injected monitoring service to log events
+    private ImonitoringService monitoringService;
 
     // Requires JWT authentication
     @PostMapping("/verifyCardholder")
@@ -65,6 +65,7 @@ public class VerificationController {
             if (isValid) {
                 String otp = otpService.generateOtp(request.getPhoneNumber());
                 otpService.sendOtp(request.getPhoneNumber(), otp);
+                //billingService.logSentItem(agentId, branchId, bankId, "OTP");
                 logger.info("OTP sent successfully to phoneNumber: {} by user: {}", request.getPhoneNumber(), username);
 
                 // Log the successful request to monitoring with UserSession

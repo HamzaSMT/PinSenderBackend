@@ -1,5 +1,7 @@
-package com.monetique.PinSenderV0.models;
+package com.monetique.PinSenderV0.models.Users;
 
+import com.monetique.PinSenderV0.models.Banks.Agency;
+import com.monetique.PinSenderV0.models.Banks.TabBank;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,8 @@ public class User {
 
   @NotBlank
   private String password;
+  private String email;
+  private String phoneNumber;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_roles",
@@ -36,16 +40,17 @@ public class User {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bank_id", nullable = true) // Nullable for Super Admin or non-associated Admins
-  private Bank bank;
+  private TabBank bank;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "agency_id", nullable = true) // Nullable for users not yet associated with an agency
   private Agency agency;
 
   // Constructor for general users
-  public User(String username, String password, Set<Role> roles, User admin, Bank bank, Agency agency) {
+  public User(String username, String password,Set<Role> roles, User admin, TabBank bank, Agency agency) {
     this.username = username;
     this.password = password;
+
     this.roles = roles;
     this.admin = admin;
     this.bank = bank;

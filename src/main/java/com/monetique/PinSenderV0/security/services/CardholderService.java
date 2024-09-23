@@ -1,6 +1,6 @@
 package com.monetique.PinSenderV0.security.services;
 
-import com.monetique.PinSenderV0.models.Cardholder;
+import com.monetique.PinSenderV0.models.Banks.Cardholder;
 import com.monetique.PinSenderV0.repository.CardholderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,9 @@ public class CardholderService {
     @Autowired
     private InfobipSmsService infobipSmsService;
 
+    @Autowired
+    BillingServicePinOtp billingService;
+
     public boolean verifyCardholder(String cardNumber, String cin, String phoneNumber, String expirationDate) {
         Optional<Cardholder> cardholder = cardholderRepository.findByCardNumberAndCinAndPhoneNumberAndExpirationDate(
                 cardNumber, cin, phoneNumber,expirationDate
@@ -34,6 +37,8 @@ public class CardholderService {
             String pin = cardholders.get(0).getPin();
             try {
                 infobipSmsService.sendSms(phoneNumber, "Your card PIN is: " + pin);
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

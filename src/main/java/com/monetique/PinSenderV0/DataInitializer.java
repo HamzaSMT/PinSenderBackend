@@ -1,7 +1,7 @@
 package com.monetique.PinSenderV0;
 
-import com.monetique.PinSenderV0.models.ERole;
-import com.monetique.PinSenderV0.models.Role;
+import com.monetique.PinSenderV0.models.Users.ERole;
+import com.monetique.PinSenderV0.models.Users.Role;
 import com.monetique.PinSenderV0.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

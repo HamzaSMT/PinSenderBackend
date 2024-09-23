@@ -2,7 +2,7 @@ package com.monetique.PinSenderV0.payload.response;
 
 
 
-import com.monetique.PinSenderV0.models.ApiRequestLog;
+import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
