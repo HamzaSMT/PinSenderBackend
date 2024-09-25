@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.monetique.PinSenderV0.models.Users.ERole;
@@ -17,6 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByRole(ERole role);
   @Query("SELECT COUNT(u) FROM User u JOIN u.roles r WHERE r.name = :roleName")
   long countByRole(@Param("roleName") ERole roleName);
+
+  List<User> findByAdminId(Long adminId);
+
+
 
  /* @Procedure(name = "FindUserByUsername")
   Optional<User> findByUsername(@Param("Username") String username);

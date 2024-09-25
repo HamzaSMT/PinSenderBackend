@@ -3,9 +3,11 @@ package com.monetique.PinSenderV0.security.services;
 
 
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
+import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
 import com.monetique.PinSenderV0.models.Users.RefreshToken;
 import com.monetique.PinSenderV0.repository.RefreshTokenRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +29,13 @@ public class RefreshTokenService {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
     }
+    @Autowired
+    ImonitoringService monitoringService;
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
+
     public RefreshToken createRefreshToken(Long userId) {
         // Check if a refresh token already exists for the user
         Optional<RefreshToken> existingToken = findByUserId(userId);
@@ -65,9 +70,11 @@ public class RefreshTokenService {
     }
 
 
+
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().isBefore(Instant.now())) {
             refreshTokenRepository.delete(token);
+
             throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new sign-in request.");
         }
 
@@ -75,6 +82,9 @@ public class RefreshTokenService {
     }
     @Transactional
     public void deleteByUserId(Long userId) {
+
         refreshTokenRepository.deleteByUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
     }
+
+
 }

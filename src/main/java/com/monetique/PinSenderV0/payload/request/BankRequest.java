@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.payload.request;
 
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class BankRequest {
@@ -16,6 +17,7 @@ public class BankRequest {
     private String binAcquereurMcd;
     private String ctb;
     private String banqueEtrangere;
+
 
 
 }

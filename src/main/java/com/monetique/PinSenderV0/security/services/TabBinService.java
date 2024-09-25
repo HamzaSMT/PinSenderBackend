@@ -22,7 +22,7 @@ public class TabBinService implements ItabBinService {
 
         public TabBin createTabBin(TabBinRequest tabBinRequest) {
             // Check if the bin already exists
-            if (tabBinRepository.existsById(tabBinRequest.getBin())) {
+            if (tabBinRepository.existsTabBinByBin(tabBinRequest.getBin())) {
                 throw new ResourceAlreadyExistsException("TabBin with bin " + tabBinRequest.getBin() + " already exists.");
             }
             TabBin tabBin = new TabBin();
@@ -49,7 +49,7 @@ public class TabBinService implements ItabBinService {
     @Override
     public TabBin updateTabBin(String bin, TabBinRequest tabBinRequest) {
         // Check if the new bin already exists
-        if (tabBinRepository.existsById(tabBinRequest.getBin())) {
+        if (tabBinRepository.existsTabBinByBin(tabBinRequest.getBin())) {
             throw new ResourceAlreadyExistsException("TabBin with bin " + tabBinRequest.getBin() + " already exists.");
         }
 
@@ -58,6 +58,7 @@ public class TabBinService implements ItabBinService {
                 .orElseThrow(() -> new ResourceNotFoundException("TabBin", "bin", bin));
 
         // Update the fields
+        tabBin.setBin(tabBinRequest.getBin());
         tabBin.setBankCode(tabBinRequest.getBankCode());
         tabBin.setSystemCode(tabBinRequest.getSystemCode());
         tabBin.setCardType(tabBinRequest.getCardType());

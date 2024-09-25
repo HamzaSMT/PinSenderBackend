@@ -12,6 +12,7 @@ import com.monetique.PinSenderV0.payload.request.*;
 import com.monetique.PinSenderV0.payload.response.JwtResponse;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.TokenRefreshResponse;
+import com.monetique.PinSenderV0.payload.response.UserResponseDTO;
 import com.monetique.PinSenderV0.repository.AgencyRepository;
 import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.RoleRepository;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -89,6 +91,7 @@ public class AuthController {
       if (activeSession != null && activeSession.getLogoutTime() == null) {
         logger.warn("User {} already has an active session.", loginRequest.getUsername());
         return ResponseEntity.status(403).body(new MessageResponse("Error: Another session is already opened for this user.", 403));
+
       }
       Authentication authentication = authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -417,9 +420,118 @@ public class AuthController {
               .body(new MessageResponse("Error updating user details", 500));
     }
   }
+  @GetMapping("/users")
+   // Ensure only admins can access this endpoint
+  public ResponseEntity<?> getUsersByAdmin() {
+    try {
+      List<UserResponseDTO> users = iuserManagementService.getUsersByAdmin();
 
+      // Successful response with users list
+      return ResponseEntity.ok(users);
+    } catch (ResourceNotFoundException e) {
+      // Handle case when no users are found
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body(new MessageResponse(e.getMessage(), 404));
+    } catch (IllegalStateException e) {
+      // Handle case when user is not authenticated
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated", 401));
+    } catch (Exception e) {
+      // Handle any other unexpected errors
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(new MessageResponse("Error retrieving users", 500));
+    }
+  }
 
 }
+/*
+  @PostMapping("/signin2")
+  public ResponseEntity<?> authenticateUser2(@Valid @RequestBody LoginRequest loginRequest) {
+    logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
 
+    try {
+      // Fetch the user by username
+      Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
+
+      // Check if user exists
+      if (!userOptional.isPresent()) {
+        logger.error("User not found for username: {}", loginRequest.getUsername());
+        return ResponseEntity.status(404).body(new MessageResponse("Error: User not found", 404));
+      }
+
+      User user = userOptional.get();
+
+      // Check if the user already has an active session
+      UserSession activeSession = monitoringService.getActiveSessionByUsername(loginRequest.getUsername());
+
+      // Retrieve the refresh token using the user's ID
+      Optional<RefreshToken> refreshTokenOptional = refreshTokenService.findByUserId(user.getId());
+
+      // Check for active session and refresh token
+      if (activeSession != null) {
+        logger.warn("User {} already has an active session.", loginRequest.getUsername());
+        if (refreshTokenOptional.isPresent()) {
+          // Verify expiration of the existing refresh token
+          RefreshToken refreshToken = refreshTokenOptional.get();
+          try {
+            refreshTokenService.verifyExpiration(refreshToken);
+            monitoringService.endSession(activeSession.getId());
+          } catch (TokenRefreshException e) {
+            // If the token is expired, end the session
+            monitoringService.endSession(activeSession.getId());
+            logger.warn("Refresh token for user {} is expired. Ending active session.", loginRequest.getUsername());
+            // Proceed to allow user to reconnect
+          }
+        } else {
+          // No refresh token found, end the active session
+          monitoringService.endSession(activeSession.getId());
+          logger.warn("No refresh token found for user {}. Ending active session.", loginRequest.getUsername());
+          // Proceed to allow user to reconnect
+        }
+      }
+
+      // Authenticate the user
+      Authentication authentication = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+      // Start a new session for the user
+      UserSession session = monitoringService.startSession(userDetails.getId());
+
+      String jwt = jwtUtils.generateJwtToken(authentication, session.getId());  // Pass sessionId
+
+      List<String> roles = userDetails.getAuthorities().stream()
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.toList());
+
+      // Create a new refresh token
+      RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+      logger.info("User {} signed in successfully.", loginRequest.getUsername());
+
+      return ResponseEntity.ok(new JwtResponse(
+              jwt,
+              newRefreshToken.getToken(),
+              userDetails.getId(),
+              userDetails.getUsername(),
+              roles,
+              session.getId()  // Return session ID to track API usage
+      ));
+    } catch (BadCredentialsException e) {
+      // Handle incorrect username or password
+      logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
+      return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid username or password", 401));
+    } catch (TokenRefreshException e) {
+      logger.error("Error during token refresh for user: {}", loginRequest.getUsername(), e);
+      return ResponseEntity.status(403).body(new MessageResponse("Error: " + e.getMessage(), 403));
+    } catch (Exception e) {
+      logger.error("Error during sign-in for username: {}", loginRequest.getUsername(), e);
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
+    }
+  }
+
+*/
 
 

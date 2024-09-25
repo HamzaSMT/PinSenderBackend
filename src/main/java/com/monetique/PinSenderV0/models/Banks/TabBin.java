@@ -1,10 +1,7 @@
 package com.monetique.PinSenderV0.models.Banks;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +13,13 @@ import lombok.Setter;
 @Table(name = "TABBIN")
 public class TabBin {
 
+
     @Id
-    @Column(name = "BIN", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
+    @Column(name = "BIN-Number", nullable = false)
     private String bin;
 
     @Column(name = "CODE-BANQUE")

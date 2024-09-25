@@ -47,7 +47,7 @@ public class TabBinController {
 
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
-            throw new AccessDeniedException("Error: Only Super Admin can create Banks.");
+            throw new AccessDeniedException("Error: Only Super Admin can create Bin.");
         }
 
         try {
@@ -65,10 +65,15 @@ public class TabBinController {
         logger.info("Fetching TabBin with bin: {}", bin);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            logger.error("Unauthorized access attempt to fetch TabBin");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Error: Unauthorized access.", 401));
+        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User currentUser = userRepository.findById(currentUserDetails.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
+
+        if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
+            logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
+            throw new AccessDeniedException("Error: Only Super Admin can get bin.");
         }
+
 
         return tabBinService.getTabBinByBin(bin)
                 .map(tabBin -> {
@@ -84,12 +89,16 @@ public class TabBinController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllTabBins() {
         logger.info("Fetching all TabBins");
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            logger.error("Unauthorized access attempt to fetch all TabBins");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Error: Unauthorized access.", 401));
+        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User currentUser = userRepository.findById(currentUserDetails.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
+
+        if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
+            logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
+            throw new AccessDeniedException("Error: Only Super Admin can get all bins.");
         }
+
 
         List<TabBin> tabBins = tabBinService.getAllTabBins();
         return ResponseEntity.ok(tabBins);
@@ -101,9 +110,13 @@ public class TabBinController {
         logger.info("Updating TabBin with bin: {}", bin);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            logger.error("Unauthorized access attempt to update TabBin");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Error: Unauthorized access.", 401));
+        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User currentUser = userRepository.findById(currentUserDetails.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
+
+        if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
+            logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
+            throw new AccessDeniedException("Error: Only Super Admin can update bin.");
         }
 
         try {
@@ -126,9 +139,13 @@ public class TabBinController {
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> deleteTabBin(@PathVariable String bin) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            logger.error("Unauthorized access attempt to delete TabBin");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Error: Unauthorized access.", 401));
+        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User currentUser = userRepository.findById(currentUserDetails.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
+
+        if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
+            logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
+            throw new AccessDeniedException("Error: Only Super Admin can delete bin.");
         }
 
         try {
