@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class SignupRequest {
   @NotBlank
-  @Size(min = 3, max = 20)
+  @Size(min = 3, max = 30)
   private String username;
 
 

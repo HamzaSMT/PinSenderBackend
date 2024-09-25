@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.IbankService;
@@ -40,22 +41,22 @@ public class BankController {
     private IbankService bankservice;
 
     // Create a new Bank (Only for Super Admin)
-    @PostMapping(path = "/Addbanks", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(path = "/Addbanks")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> createBank(
-            @RequestPart("bankRequest") BankRequest bankRequest,
-            @RequestPart(value = "logo", required = false) MultipartFile logoFile) {
+    public ResponseEntity<?> addBank(
+            @RequestParam("bankRequest") String bankRequestJson, // Accepting JSON string
+            @RequestParam("logo") MultipartFile logo) {
 
-        logger.info("Received Content-Type: {}", request.getContentType());
-        logger.info("Received bankRequest: {}", bankRequest);
+        ObjectMapper objectMapper = new ObjectMapper();
+        BankRequest bankRequest;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         try {
-            logger.info("2Received logo file: {}", logoFile.getOriginalFilename());
-            logger.info("2Logo file size: {}", logoFile.getSize());
+            bankRequest = objectMapper.readValue(bankRequestJson, BankRequest.class);
+            byte[] logoBytes = logo.getBytes();
             // Pass bankRequest and the logo file to the service
-            bankservice.createBank(bankRequest, logoFile);
+            bankservice.createBank(bankRequest, logoBytes);
             logger.info("Bank {} created successfully by user {}", bankRequest.getName(), currentUserDetails.getUsername());
             return ResponseEntity.ok(new MessageResponse("Bank created successfully!", 200));
         } catch (AccessDeniedException e) {
@@ -150,22 +151,28 @@ public class BankController {
     }
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> updatebank(@PathVariable Long id, @RequestBody BankRequest bankRequest) {
+    public ResponseEntity<?> updatebank(@PathVariable Long id, @RequestParam("bankRequest") String bankRequestJson, // Accepting JSON string
+                                        @RequestParam("logo") MultipartFile logo) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Received request to update bank with id: {}", id);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+        BankRequest bankRequest;
 
         try {
-            MessageResponse response = bankservice.updateBank(id, bankRequest);
+            bankRequest = objectMapper.readValue(bankRequestJson, BankRequest.class);
+            byte[] logoBytes = logo.getBytes();
+            MessageResponse response = bankservice.updateBank(id, bankRequest,logoBytes);
 
             return ResponseEntity.ok(response);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
         } catch (ResourceNotFoundException e) {
-            logger.error("Error updating agency: {}", e.getMessage());
+            logger.error("Error updating bank: {}", e.getMessage());
             return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
         }catch (Exception e) {
             logger.error("Error while updating bank: {}", e.getMessage());

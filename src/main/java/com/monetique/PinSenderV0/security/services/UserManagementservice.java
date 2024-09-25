@@ -111,7 +111,7 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
             UserResponseDTO response = new UserResponseDTO();
             response.setId(user.getId());
             response.setUsername(user.getUsername());
-            response.setPassword(user.getPassword());
+            //response.setPassword(user.getPassword());
             response.setEmail(user.getEmail());
             response.setPhoneNumber(user.getPhoneNumber());
 

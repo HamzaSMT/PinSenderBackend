@@ -32,7 +32,8 @@ public class BankService implements IbankService {
     private static final Logger logger = LoggerFactory.getLogger(BankService.class);
 
     @Override
-    public MessageResponse createBank(BankRequest bankRequest, MultipartFile logoFile) throws AccessDeniedException {
+    public MessageResponse createBank(BankRequest bankRequest, byte[] logo) throws AccessDeniedException {
+
         logger.info("Creating bank with name: {}", bankRequest.getName());
 
         UserDetails currentUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -55,16 +56,7 @@ public class BankService implements IbankService {
         bank.setBanqueEtrangere(bankRequest.getBanqueEtrangere());
 
         // Handle logo upload if provided
-        if (logoFile != null && !logoFile.isEmpty()) {
-            try {
-                byte[] logoBytes = logoFile.getBytes();  // Convert MultipartFile to byte array
-                bank.setLogo(logoBytes);  // Set logo to the bank entity
-            } catch (IOException e) {
-                logger.error("Error uploading logo: {}", e.getMessage());
-                throw new RuntimeException("Failed to upload logo", e);
-            }
-
-        }
+        bank.setLogo(logo);
 
         // Save the bank entity
         bankRepository.save(bank);
@@ -107,7 +99,7 @@ public class BankService implements IbankService {
     }
 
     @Override
-    public MessageResponse updateBank(Long id, BankRequest bankRequest) {
+    public MessageResponse updateBank(Long id, BankRequest bankRequest, byte[] logo) {
         logger.info("Updating bank with id: {}", id);
         UserDetails currentUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User currentUser = userRepository.findByUsername(currentUserDetails.getUsername())
@@ -129,11 +121,14 @@ public class BankService implements IbankService {
         bank.setBinAcquereurMcd(bankRequest.getBinAcquereurMcd());
         bank.setCtb(bankRequest.getCtb());
         bank.setBanqueEtrangere(bankRequest.getBanqueEtrangere());
+        if (logo != null) {
+            bank.setLogo(logo);
+        }
 
         bankRepository.save(bank);
 
         logger.info("bank {} updated successfully by Admin {}", bank.getName(), currentUser.getUsername());
-        return new MessageResponse("Agency updated successfully!", 200);
+        return new MessageResponse("bank updated successfully!", 200);
 
     }
 
@@ -147,7 +142,6 @@ public class BankService implements IbankService {
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             throw new AccessDeniedException("Error: Only Super Admin can delete Banks.");
         }
-
 
         // Find the bank to delete
         TabBank bank = getBankById(id);

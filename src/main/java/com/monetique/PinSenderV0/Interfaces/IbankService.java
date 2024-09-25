@@ -11,11 +11,11 @@ import java.util.List;
 public interface IbankService {
 
 
-    MessageResponse createBank(BankRequest bankRequest, MultipartFile logoFile) throws AccessDeniedException;
+    MessageResponse createBank(BankRequest bankRequest, byte[] logo) throws AccessDeniedException;
 
     List<TabBank> listAllBanks();
     TabBank getBankById(Long id);
-    MessageResponse updateBank(Long id, BankRequest bankRequest);
+    MessageResponse updateBank(Long id, BankRequest bankRequest,byte[] logo);
     MessageResponse deleteBank(Long id);
 
 
