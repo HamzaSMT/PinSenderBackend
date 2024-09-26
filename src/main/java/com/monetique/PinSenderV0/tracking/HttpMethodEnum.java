@@ -1,4 +1,4 @@
-package com.monetique.PinSenderV0.models.Users;
+package com.monetique.PinSenderV0.tracking;
 
 public enum HttpMethodEnum {
     GET,

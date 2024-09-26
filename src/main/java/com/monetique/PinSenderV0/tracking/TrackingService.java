@@ -1,16 +1,12 @@
-package com.monetique.PinSenderV0.security.services;
+package com.monetique.PinSenderV0.tracking;
 
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
-import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
-import com.monetique.PinSenderV0.models.Users.HttpMethodEnum;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.repository.UserRepository;
-import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
 import com.monetique.PinSenderV0.models.Users.UserSession;
-import com.monetique.PinSenderV0.payload.response.ApiReportResponse;
-import com.monetique.PinSenderV0.repository.ApiRequestLogRepository;
 import com.monetique.PinSenderV0.repository.UserSessionRepository;
+import com.monetique.PinSenderV0.tracking.payload.ApiReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -21,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MonitoringService implements ImonitoringService {
+public class TrackingService implements ItrackingingService {
 
     @Autowired
     private ApiRequestLogRepository apiRequestLogRepository;

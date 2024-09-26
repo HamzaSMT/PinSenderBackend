@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.payload.response;
 
 
+import com.monetique.PinSenderV0.models.Banks.TabBank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,7 @@ public class UserResponseDTO {
         private String email;
         private String phoneNumber;
         private String role;
-        private String bankName;
+        private TabBank bank;
 
 
 }

@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.models.Users;
 
 
+import com.monetique.PinSenderV0.tracking.ApiRequestLog;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

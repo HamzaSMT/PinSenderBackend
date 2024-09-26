@@ -1,8 +1,8 @@
 package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
-import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
-import com.monetique.PinSenderV0.models.Users.HttpMethodEnum;
+import com.monetique.PinSenderV0.tracking.ItrackingingService;
+import com.monetique.PinSenderV0.tracking.HttpMethodEnum;
 import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.payload.request.CardholderVerificationRequest;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
@@ -38,7 +38,7 @@ public class VerificationController {
     private UserSessionRepository userSessionRepository;
 
     @Autowired
-    private ImonitoringService monitoringService;
+    private ItrackingingService monitoringService;
 
     // Requires JWT authentication
     @PostMapping("/verifyCardholder")

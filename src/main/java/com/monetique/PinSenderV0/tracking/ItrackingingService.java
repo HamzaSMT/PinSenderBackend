@@ -1,15 +1,13 @@
-package com.monetique.PinSenderV0.Interfaces;
+package com.monetique.PinSenderV0.tracking;
 
-import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
-import com.monetique.PinSenderV0.models.Users.HttpMethodEnum;
 import com.monetique.PinSenderV0.models.Users.UserSession;
-import com.monetique.PinSenderV0.payload.response.ApiReportResponse;
+import com.monetique.PinSenderV0.tracking.payload.ApiReportResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public interface ImonitoringService {
+public interface ItrackingingService {
     UserSession getSessionById(Long sessionId);
 
     // Generate report for all API calls by a user

@@ -1,10 +1,8 @@
-package com.monetique.PinSenderV0.controllers;
-import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
+package com.monetique.PinSenderV0.tracking;
 import com.monetique.PinSenderV0.models.Users.UserSession;
-import com.monetique.PinSenderV0.payload.response.ApiReportResponse;
-import com.monetique.PinSenderV0.security.services.MonitoringService;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
+import com.monetique.PinSenderV0.tracking.payload.ApiReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,10 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/monitor")
-public class  MonitoringController {
+public class TrackingController {
 
     @Autowired
-    private MonitoringService monitoringService;
+    private TrackingService trackingService;
 
 
 
@@ -36,7 +34,7 @@ public class  MonitoringController {
             throw new AccessDeniedException("Error: Only Super Admin can access this monitoring API.");
         }
 
-        List<ApiRequestLog> logs = monitoringService.getLogsByAdminId(adminId);
+        List<ApiRequestLog> logs = trackingService.getLogsByAdminId(adminId);
         return ResponseEntity.ok(logs);
     }
 
@@ -52,7 +50,7 @@ public class  MonitoringController {
             throw new AccessDeniedException("Error: Only Super Admin can access this monitoring API.");
         }
 
-        List<ApiRequestLog> logs = monitoringService.getLogsByUserId(userId);
+        List<ApiRequestLog> logs = trackingService.getLogsByUserId(userId);
         return ResponseEntity.ok(logs);
     }
 
@@ -68,7 +66,7 @@ public class  MonitoringController {
             throw new AccessDeniedException("Error: Only Super Admin can access this monitoring API.");
         }
 
-        List<UserSession> activeSessions = monitoringService.getActiveSessions();
+        List<UserSession> activeSessions = trackingService.getActiveSessions();
         return ResponseEntity.ok(activeSessions);
     }
 
@@ -84,7 +82,7 @@ public class  MonitoringController {
             throw new AccessDeniedException("Error: Only Super Admin can access this monitoring API.");
         }
 
-        List<UserSession> allSessions = monitoringService.getAllSessions();
+        List<UserSession> allSessions = trackingService.getAllSessions();
         return ResponseEntity.ok(allSessions);
     }
     // Super Admin can generate a report for any user
@@ -96,7 +94,7 @@ public class  MonitoringController {
         LocalDateTime start = LocalDateTime.parse(startDate);
         LocalDateTime end = LocalDateTime.parse(endDate);
 
-        ApiReportResponse report = monitoringService.generateUserReport(userId, start, end);
+        ApiReportResponse report = trackingService.generateUserReport(userId, start, end);
         return ResponseEntity.ok(report);
     }
 
@@ -109,7 +107,7 @@ public class  MonitoringController {
         LocalDateTime start = LocalDateTime.parse(startDate);
         LocalDateTime end = LocalDateTime.parse(endDate);
 
-        ApiReportResponse report = monitoringService.generateAdminReport(adminId, start, end);
+        ApiReportResponse report = trackingService.generateAdminReport(adminId, start, end);
         return ResponseEntity.ok(report);
     }
 
@@ -117,6 +115,6 @@ public class  MonitoringController {
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/sessionDuration")
     public ResponseEntity<?> getSessionDurations(@RequestParam Long userId) {
-        return ResponseEntity.ok(monitoringService.generateSessionDurations(userId));
+        return ResponseEntity.ok(trackingService.generateSessionDurations(userId));
     }
 }

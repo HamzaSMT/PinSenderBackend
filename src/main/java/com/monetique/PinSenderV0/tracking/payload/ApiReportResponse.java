@@ -1,8 +1,8 @@
-package com.monetique.PinSenderV0.payload.response;
+package com.monetique.PinSenderV0.tracking.payload;
 
 
 
-import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
+import com.monetique.PinSenderV0.tracking.ApiRequestLog;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

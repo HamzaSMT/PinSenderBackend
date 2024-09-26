@@ -3,7 +3,7 @@ package com.monetique.PinSenderV0.security.services;
 
 
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
-import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
+import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import com.monetique.PinSenderV0.models.Users.RefreshToken;
 import com.monetique.PinSenderV0.repository.RefreshTokenRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
@@ -30,7 +30,7 @@ public class RefreshTokenService {
         this.userRepository = userRepository;
     }
     @Autowired
-    ImonitoringService monitoringService;
+    ItrackingingService monitoringService;
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);

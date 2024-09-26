@@ -121,7 +121,7 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
                         response.setRole("No Role Assigned");
                     }
 
-                    response.setBankName(user.getBank() != null ? user.getBank().getName() : null);
+                    response.setBank(user.getBank());
                     return response;
                 })
                 .collect(Collectors.toList());

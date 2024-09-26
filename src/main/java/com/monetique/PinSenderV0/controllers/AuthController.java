@@ -3,7 +3,7 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
-import com.monetique.PinSenderV0.Interfaces.ImonitoringService;
+import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.models.Banks.Agency;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
@@ -77,7 +77,7 @@ public class AuthController {
   JwtUtils jwtUtils;
 
   @Autowired
-  private ImonitoringService monitoringService;
+  private ItrackingingService monitoringService;
 
 
   // Signin method (Login)

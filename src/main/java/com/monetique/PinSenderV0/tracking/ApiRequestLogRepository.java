@@ -1,8 +1,7 @@
-package com.monetique.PinSenderV0.repository;
+package com.monetique.PinSenderV0.tracking;
 
 
 
-import com.monetique.PinSenderV0.models.Users.ApiRequestLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

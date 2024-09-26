@@ -1,7 +1,8 @@
-package com.monetique.PinSenderV0.models.Users;
+package com.monetique.PinSenderV0.tracking;
 
 
 
+import com.monetique.PinSenderV0.models.Users.UserSession;
 import jakarta.persistence.*;
 import lombok.Data;
 
