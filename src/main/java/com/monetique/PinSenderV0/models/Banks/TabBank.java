@@ -49,8 +49,7 @@ public class TabBank {
 
     @Lob // Use @Lob for large objects
     private byte[] logo;
+    private String adminUsername;
 
 
-    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Agency> agencies = new HashSet<>();
 }

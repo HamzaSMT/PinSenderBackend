@@ -318,7 +318,8 @@ public class AuthController {
 
     admin.setBank(bank);
     userRepository.save(admin);
-
+   bank.setAdminUsername(admin.getUsername());
+     bankRepository.save(bank);
     logger.info("Admin {} successfully associated with bank {}", adminId, bankId);
     return ResponseEntity.ok(new MessageResponse("Admin successfully associated with the bank!", 200));
   }

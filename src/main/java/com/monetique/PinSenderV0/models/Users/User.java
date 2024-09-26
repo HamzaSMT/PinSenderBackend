@@ -39,7 +39,7 @@ public class User {
   private User admin;
 
   // Admin has one bank
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "bank_id", nullable = true)
   private TabBank bank;
 
