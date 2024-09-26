@@ -316,9 +316,6 @@ public class AuthController {
     TabBank bank = bankRepository.findById(bankId)
             .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", bankId));
 
-    bank.setAdmin(admin); // Associate the admin with the bank
-    bankRepository.save(bank);
-
     admin.setBank(bank);
     userRepository.save(admin);
 
@@ -443,8 +440,8 @@ public class AuthController {
     }
   }
 
-}
-/*
+
+
   @PostMapping("/signin2")
   public ResponseEntity<?> authenticateUser2(@Valid @RequestBody LoginRequest loginRequest) {
     logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
@@ -532,6 +529,6 @@ public class AuthController {
     }
   }
 
-*/
+}
 
 

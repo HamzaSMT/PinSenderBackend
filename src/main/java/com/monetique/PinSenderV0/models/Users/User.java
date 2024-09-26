@@ -38,8 +38,9 @@ public class User {
   @JoinColumn(name = "admin_id", nullable = true) // Nullable: Super Admin and Admin might not have an Admin
   private User admin;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "bank_id", nullable = true) // Nullable for Super Admin or non-associated Admins
+  // Admin has one bank
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "bank_id", nullable = true)
   private TabBank bank;
 
   @ManyToOne(fetch = FetchType.LAZY)

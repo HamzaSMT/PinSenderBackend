@@ -104,14 +104,14 @@ public class BankController {
     @GetMapping("banks/{id}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> getBankById(@PathVariable Long id) {
-        logger.info("Received request to create bank");
+        logger.info("Received request to get bank");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         try {
             TabBank bank = bankservice.getBankById(id);
-            logger.info(" banks getall is successfully by user {}", currentUserDetails.getUsername());
+            logger.info(" get bank is successfully by user {}", currentUserDetails.getUsername());
             return ResponseEntity.ok(bank);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());

@@ -12,8 +12,10 @@ import java.util.List;
 
 @Repository
 public interface AgencyRepository extends JpaRepository<Agency, Long> {
-    @Query("SELECT a FROM Agency a WHERE a.bank.admin.id = :adminId")
+   /* @Query("SELECT a FROM Agency a WHERE a.bank.admin.id = :adminId")
     List<Agency> findByAdminId(@Param("adminId") Long adminId);
+    @Query("SELECT a FROM Agency a WHERE a.bank.id = (SELECT b.id FROM TabBank b WHERE b.admin.id = :adminId)")
+    List<Agency> findByAdminId(@Param("adminId") Long adminId);*/
     List<Agency> findByBankId(Long bankId);
 
 }

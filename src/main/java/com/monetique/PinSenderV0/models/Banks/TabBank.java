@@ -49,9 +49,7 @@ public class TabBank {
 
     @Lob // Use @Lob for large objects
     private byte[] logo;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = true)
-    private User admin;  // The admin of the bank (an Admin user)
+
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Agency> agencies = new HashSet<>();
