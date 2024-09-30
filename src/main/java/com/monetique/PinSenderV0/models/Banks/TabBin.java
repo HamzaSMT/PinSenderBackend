@@ -33,4 +33,8 @@ public class TabBin {
 
     @Column(name = "SRV-CODE")
     private String serviceCode;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id", nullable = false)
+    private TabBank bank; // Reference to TabBank
 }

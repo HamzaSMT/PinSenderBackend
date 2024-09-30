@@ -11,19 +11,19 @@ public interface ItrackingingService {
     UserSession getSessionById(Long sessionId);
 
     // Generate report for all API calls by a user
-    ApiReportResponse generateUserReport(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+   // ApiReportResponse generateUserReport(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 
     // Generate report for all API calls by all users of an admin
-    ApiReportResponse generateAdminReport(Long adminId, LocalDateTime startDate, LocalDateTime endDate);
+    //ApiReportResponse generateAdminReport(Long adminId, LocalDateTime startDate, LocalDateTime endDate);
 
     // Generate report for session durations
-    Map<Long, Long> generateSessionDurations(Long userId);
+    //Map<Long, Long> generateSessionDurations(Long userId);
 
     // Fetch logs by admin ID
-    List<ApiRequestLog> getLogsByAdminId(Long adminId);
+    //List<ApiRequestLog> getLogsByAdminId(Long adminId);
 
     // Fetch logs by user ID
-    List<ApiRequestLog> getLogsByUserId(Long userId);
+   // List<ApiRequestLog> getLogsByUserId(Long userId);
 
     // Fetch active sessions (users currently logged in)
     List<UserSession> getActiveSessions();
@@ -31,7 +31,18 @@ public interface ItrackingingService {
     // Fetch all sessions
     List<UserSession> getAllSessions();
 
-    void logRequest(UserSession session, String requestPath, HttpMethodEnum method, int statusCode, long responseTimeMs);
+    //void logRequest(UserSession session, String requestPath, HttpMethodEnum method, int statusCode, long responseTimeMs);
+
+    void logRequest(Long sessionid,
+                    String requestPath,
+                    HttpMethodEnum method,
+                    int statusCode,
+                    long responseTimeMs,
+                    String ipAddress,
+                    String userAgent,
+                    long requestSize,
+                    long responseSize,
+                    String exceptionMessage,String requestBody,  String responseBody );
 
     // Method to start a new session when the user logs in
     UserSession startSession(Long userId);
@@ -39,4 +50,6 @@ public interface ItrackingingService {
     void endSession(long sessionId);
 
     UserSession getActiveSessionByUsername(String username);
+
+    List<ApiRequestLog> getAllLogs();
 }

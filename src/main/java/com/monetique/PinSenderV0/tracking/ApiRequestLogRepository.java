@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ApiRequestLogRepository extends JpaRepository<ApiRequestLog, Long> {
-    List<ApiRequestLog> findBySession_User_Id(Long userId);
+    //List<ApiRequestLog> findBySession_User_Id(Long userId);
 
-    List<ApiRequestLog> findBySession_User_Admin_Id(Long adminId);
+    //List<ApiRequestLog> findBySession_User_Admin_Id(Long adminId);
 }

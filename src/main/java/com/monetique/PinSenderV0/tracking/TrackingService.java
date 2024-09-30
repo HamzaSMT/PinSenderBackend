@@ -34,7 +34,7 @@ public class TrackingService implements ItrackingingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Session", "id", sessionId));
     }
 
-@Override
+/*@Override
 public ApiReportResponse generateUserReport(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
         List<ApiRequestLog> logs = apiRequestLogRepository.findBySession_User_Id(userId).stream()
                 .filter(log -> log.getTimestamp().isAfter(startDate) && log.getTimestamp().isBefore(endDate))
@@ -82,7 +82,7 @@ public Map<Long, Long> generateSessionDurations(Long userId) {
     @Override
     public List<ApiRequestLog> getLogsByUserId(Long userId) {
         return apiRequestLogRepository.findBySession_User_Id(userId);
-    }
+    }*/
 
     // Fetch active sessions (users currently logged in)
     @Override
@@ -97,20 +97,51 @@ public Map<Long, Long> generateSessionDurations(Long userId) {
     }
 
 
+    @Override
+    public void logRequest(Long sessionId,
+                           String requestPath,
+                           HttpMethodEnum method,
+                           int statusCode,
+                           long responseTimeMs,
+                           String ipAddress,
+                           String userAgent,
+                           long requestSize,
+                           long responseSize,
+                           String exceptionMessage,
+                           String requestBody,
+                           String responseBody) {
 
-@Override
-public void logRequest(UserSession session, String requestPath, HttpMethodEnum method, int statusCode, long responseTimeMs) {
         ApiRequestLog requestLog = new ApiRequestLog();
-        requestLog.setSession(session);  // Correctly set the UserSession object
+
+        // Fetch the session details if sessionId is valid
+        UserSession session = (sessionId != null && sessionId > 0) ? getSessionById(sessionId) : null;
+        requestLog.setSessionId(sessionId);
+        // Set session details and username in one go
+        if (session != null) {
+            requestLog.setUsername(session.getUser() != null ? session.getUser().getUsername() : null);
+        } else {
+            requestLog.setSessionId(0); // Default session ID if session is not present
+            requestLog.setUsername("user not yet authenticated"); // Username is null if session is not present
+        }
+
+        // Set other details
         requestLog.setRequestPath(requestPath);
-        requestLog.setMethod(method);  // Assuming HttpMethodEnum is defined correctly
+        requestLog.setMethod(method);
         requestLog.setStatusCode(statusCode);
         requestLog.setResponseTimeMs(responseTimeMs);
         requestLog.setTimestamp(LocalDateTime.now());
+        requestLog.setIpAddress(ipAddress);
+        requestLog.setUserAgent(userAgent);
+        requestLog.setRequestSize(requestSize);
+        requestLog.setResponseSize(responseSize);
+        requestLog.setExceptionMessage(exceptionMessage);
+        requestLog.setRequestBody(requestBody);
+        requestLog.setResponseBody(responseBody);
 
         // Save the log to the database
         apiRequestLogRepository.save(requestLog);
     }
+
 
 
 
@@ -152,6 +183,10 @@ public void endSession(long sessionId) {
         // Find the active session for the user (where logoutTime is null)
         return userSessionRepository.findByUserAndLogoutTimeIsNull(user)
                 .orElse(null);  // Return null if no active session is found
+    }
+    @Override
+    public List<ApiRequestLog> getAllLogs() {
+        return apiRequestLogRepository.findAll();
     }
 
 }

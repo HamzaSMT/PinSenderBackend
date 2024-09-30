@@ -23,7 +23,7 @@ public class TrackingController {
 
 
     // API to track all sessions for a specific admin and their users - only accessible by Super Admin
-    @GetMapping("/trackAdmin/{adminId}")
+   /* @GetMapping("/trackAdmin/{adminId}")
     public ResponseEntity<?> trackAdminUsage(@PathVariable Long adminId) {
         // Check if the currently authenticated user is a Super Admin
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,7 +53,7 @@ public class TrackingController {
         List<ApiRequestLog> logs = trackingService.getLogsByUserId(userId);
         return ResponseEntity.ok(logs);
     }
-
+*/
     // API to track active sessions (users currently logged in) - only accessible by Super Admin
     @GetMapping("/activeSessions")
     public ResponseEntity<?> trackActiveSessions() {
@@ -86,7 +86,7 @@ public class TrackingController {
         return ResponseEntity.ok(allSessions);
     }
     // Super Admin can generate a report for any user
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+/*    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/userReport")
     public ResponseEntity<ApiReportResponse> getUserReport(@RequestParam Long userId,
                                                            @RequestParam String startDate,
@@ -116,5 +116,11 @@ public class TrackingController {
     @GetMapping("/sessionDuration")
     public ResponseEntity<?> getSessionDurations(@RequestParam Long userId) {
         return ResponseEntity.ok(trackingService.generateSessionDurations(userId));
+    }
+*/
+
+    @GetMapping("/logs/all")
+    public List<ApiRequestLog> getAllLogs() {
+        return trackingService.getAllLogs();
     }
 }

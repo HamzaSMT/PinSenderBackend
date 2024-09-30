@@ -49,7 +49,16 @@ public class TabBank {
 
     @Lob // Use @Lob for large objects
     private byte[] logo;
+
     private String adminUsername;
 
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TabBin> bins = new HashSet<>();
+
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TabKeys> keys = new HashSet<>();
+
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TabCardHolder> cardHolders = new HashSet<>();
 
 }

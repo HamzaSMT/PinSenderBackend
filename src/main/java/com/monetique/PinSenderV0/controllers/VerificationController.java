@@ -52,7 +52,7 @@ public class VerificationController {
                 request.getCardNumber(), username, roles);
 
         // Fetch the active session for the current user
-        UserSession currentSession = userSessionRepository.findCurrentSessionByUsername(username);
+      //  UserSession currentSession = userSessionRepository.findCurrentSessionByUsername(username);
 
         try {
             boolean isValid = cardholderService.verifyCardholder(
@@ -69,16 +69,16 @@ public class VerificationController {
                 logger.info("OTP sent successfully to phoneNumber: {} by user: {}", request.getPhoneNumber(), username);
 
                 // Log the successful request to monitoring with UserSession
-                monitoringService.logRequest(currentSession, "/verifyCardholder", HttpMethodEnum.POST, 200,
-                        Duration.between(requestTime, LocalDateTime.now()).toMillis());
+                //monitoringService.logRequest(currentSession, "/verifyCardholder", HttpMethodEnum.POST, 200,
+                      //  Duration.between(requestTime, LocalDateTime.now()).toMillis());
 
                 return ResponseEntity.ok(new MessageResponse("OTP sent successfully!", HttpStatus.OK.value()));
             } else {
                 logger.warn("Invalid cardholder information for cardNumber: {} by user: {}", request.getCardNumber(), username);
 
                 // Log the failed request to monitoring
-                monitoringService.logRequest(currentSession, "/verifyCardholder", HttpMethodEnum.POST, 404,
-                        Duration.between(requestTime, LocalDateTime.now()).toMillis());
+                //monitoringService.logRequest(currentSession, "/verifyCardholder", HttpMethodEnum.POST, 404,
+                       // Duration.between(requestTime, LocalDateTime.now()).toMillis());
 
                 throw new ResourceNotFoundException("Cardholder", "cardNumber", request.getCardNumber());
             }
@@ -86,8 +86,8 @@ public class VerificationController {
             logger.error("Error during cardholder verification for cardNumber: {} by user: {}", request.getCardNumber(), username, e);
 
             // Log the error to monitoring
-            monitoringService.logRequest(currentSession, "/verifyCardholder", HttpMethodEnum.POST, 500,
-                    Duration.between(requestTime, LocalDateTime.now()).toMillis());
+           // monitoringService.logRequest(currentSession, "/verifyCardholder", HttpMethodEnum.POST, 500,
+                    //Duration.between(requestTime, LocalDateTime.now()).toMillis());
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Error during verification", HttpStatus.INTERNAL_SERVER_ERROR.value()));
@@ -106,7 +106,7 @@ public class VerificationController {
                 request.getPhoneNumber(), username, roles);
 
         // Fetch the active session for the current user
-        UserSession currentSession = userSessionRepository.findCurrentSessionByUsername(username);
+      //  UserSession currentSession = userSessionRepository.findCurrentSessionByUsername(username);
 
         try {
             boolean isValidOtp = otpService.validateOtp(request.getPhoneNumber(), request.getOtp());
@@ -116,16 +116,16 @@ public class VerificationController {
                 logger.info("PIN sent successfully to phoneNumber: {} by user: {}", request.getPhoneNumber(), username);
 
                 // Log the successful request to monitoring
-                monitoringService.logRequest(currentSession, "/validateOtp", HttpMethodEnum.POST, 200,
-                        Duration.between(requestTime, LocalDateTime.now()).toMillis());
+              //  monitoringService.logRequest(currentSession, "/validateOtp", HttpMethodEnum.POST, 200,
+               //         Duration.between(requestTime, LocalDateTime.now()).toMillis());
 
                 return ResponseEntity.ok(new MessageResponse("OTP validated successfully, PIN sent!", HttpStatus.OK.value()));
             } else {
                 logger.warn("Invalid OTP for phoneNumber: {} by user: {}", request.getPhoneNumber(), username);
 
                 // Log the failed request to monitoring
-                monitoringService.logRequest(currentSession, "/validateOtp", HttpMethodEnum.POST, 400,
-                        Duration.between(requestTime, LocalDateTime.now()).toMillis());
+               // monitoringService.logRequest(currentSession, "/validateOtp", HttpMethodEnum.POST, 400,
+               //         Duration.between(requestTime, LocalDateTime.now()).toMillis());
 
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new MessageResponse("Invalid OTP!", HttpStatus.BAD_REQUEST.value()));
@@ -134,8 +134,8 @@ public class VerificationController {
             logger.error("Error during OTP validation for phoneNumber: {} by user: {}", request.getPhoneNumber(), username, e);
 
             // Log the error to monitoring
-            monitoringService.logRequest(currentSession, "/validateOtp", HttpMethodEnum.POST, 500,
-                    Duration.between(requestTime, LocalDateTime.now()).toMillis());
+           // monitoringService.logRequest(currentSession, "/validateOtp", HttpMethodEnum.POST, 500,
+           //         Duration.between(requestTime, LocalDateTime.now()).toMillis());
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Error during OTP validation", HttpStatus.INTERNAL_SERVER_ERROR.value()));

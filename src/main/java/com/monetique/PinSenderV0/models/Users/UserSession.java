@@ -21,7 +21,7 @@ public class UserSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // The user to whom this session belongs
 
@@ -31,6 +31,4 @@ public class UserSession {
     @Column(name = "logout_time")
     private LocalDateTime logoutTime;  // When the session ended (nullable, ongoing sessions have no logout time)
 
-    @OneToMany(mappedBy = "session") // Refers to the 'session' field in 'ApiRequestLog'
-    private List<ApiRequestLog> requestLogs;
 }

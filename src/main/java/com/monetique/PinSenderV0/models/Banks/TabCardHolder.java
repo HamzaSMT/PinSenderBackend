@@ -1,9 +1,6 @@
 package com.monetique.PinSenderV0.models.Banks;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,5 +68,9 @@ public class TabCardHolder {
     @Column(name = "PORT-EMAIL")
     private String email;
 
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id", nullable = false)
+    private TabBank bank; // Reference to TabBank
 
 }
