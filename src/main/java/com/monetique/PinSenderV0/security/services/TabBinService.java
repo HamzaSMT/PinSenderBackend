@@ -6,6 +6,7 @@ import com.monetique.PinSenderV0.Interfaces.ItabBinService;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
 import com.monetique.PinSenderV0.models.Banks.TabBin;
 import com.monetique.PinSenderV0.payload.request.TabBinRequest;
+import com.monetique.PinSenderV0.payload.response.BinDTOresponse;
 import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.TabBinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TabBinService implements ItabBinService {
@@ -44,13 +46,26 @@ public class TabBinService implements ItabBinService {
         }
 
     @Override
-    public Optional<TabBin> getTabBinByBin(String bin) {
-        return tabBinRepository.findById(bin);
-    }
+    public List<BinDTOresponse> getAllTabBins() {
+        List<TabBin> bins = tabBinRepository.findAll();
 
+        if (bins.isEmpty()) {
+            throw new ResourceNotFoundException("No bins found");
+        }
+
+        return bins.stream()
+                .map(BinDTOresponse::new)
+                .collect(Collectors.toList());
+    }
     @Override
-    public List<TabBin> getAllTabBins() {
-        return tabBinRepository.findAll();
+    public BinDTOresponse getTabBinByBin(String bin) {
+        Optional<TabBin> tabBinOptional = tabBinRepository.findByBin(bin);
+
+        if (tabBinOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Bin not found with bin number: " + bin);
+        }
+
+        return new BinDTOresponse(tabBinOptional.get());
     }
 
     @Override

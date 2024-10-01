@@ -8,6 +8,7 @@ import com.monetique.PinSenderV0.Interfaces.ItabBinService;
 import com.monetique.PinSenderV0.models.Banks.TabBin;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.TabBinRequest;
+import com.monetique.PinSenderV0.payload.response.BinDTOresponse;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
@@ -73,17 +74,15 @@ public class TabBinController {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
             throw new AccessDeniedException("Error: Only Super Admin can get bin.");
         }
+        BinDTOresponse tabBinResponseDTO = tabBinService.getTabBinByBin(bin);
 
-
-        return tabBinService.getTabBinByBin(bin)
-                .map(tabBin -> {
-                    logger.info("TabBin found: {}", tabBin);
-                    return ResponseEntity.ok(tabBin);
-                })
-                .orElseGet(() -> {
-                    logger.warn("TabBin not found with bin: {}", bin);
-                    return ResponseEntity.notFound().build();
-                });
+        if (tabBinResponseDTO != null) {
+            logger.info("TabBin found: {}", tabBinResponseDTO);
+            return ResponseEntity.ok(tabBinResponseDTO);
+        } else {
+            logger.warn("TabBin not found with bin: {}", bin);
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/all")
@@ -100,7 +99,7 @@ public class TabBinController {
         }
 
 
-        List<TabBin> tabBins = tabBinService.getAllTabBins();
+        List<BinDTOresponse> tabBins = tabBinService.getAllTabBins();
         return ResponseEntity.ok(tabBins);
     }
 

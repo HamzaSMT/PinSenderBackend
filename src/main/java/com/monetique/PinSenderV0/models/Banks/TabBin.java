@@ -20,7 +20,7 @@ public class TabBin {
     private Long id;
 
 
-    @Column(name = "BIN-Number", nullable = false)
+    @Column(name = "BIN-Number", nullable = false,unique = true)
     private String bin;
 
     @Column(name = "CODE-SYSTEME")
