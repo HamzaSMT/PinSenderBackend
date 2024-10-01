@@ -70,16 +70,16 @@ public class TabBinService implements ItabBinService {
 
     @Override
     public TabBin updateTabBin(String bin, TabBinRequest tabBinRequest) {
-        // Check if the new bin already exists
-        if (tabBinRepository.existsTabBinByBin(tabBinRequest.getBin())) {
-            throw new ResourceAlreadyExistsException("TabBin with bin " + tabBinRequest.getBin() + " already exists.");
-        }
 
         // Fetch the existing TabBin
         TabBin tabBin = tabBinRepository.findById(bin)
                 .orElseThrow(() -> new ResourceNotFoundException("TabBin", "bin", bin));
+        // Check if the new bin number already exists and it's not the current one
 
-        // Update the fields
+        if (!tabBin.getBin().equals(tabBinRequest.getBin()) && tabBinRepository.existsTabBinByBin(tabBinRequest.getBin())) {
+            throw new ResourceAlreadyExistsException("TabBin with bin " + tabBinRequest.getBin() + " already exists.");
+        }
+
         tabBin.setBin(tabBinRequest.getBin());
         tabBin.setSystemCode(tabBinRequest.getSystemCode());
         tabBin.setCardType(tabBinRequest.getCardType());
