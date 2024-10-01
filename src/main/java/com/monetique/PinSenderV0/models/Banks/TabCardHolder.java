@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.models.Banks;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +36,6 @@ public class TabCardHolder {
     @Column(name = "PORT-RAISON-SOC")
     private String companyName;
 
-    @Column(name = "PORT-CODE-BANQUE", nullable = false)
-    private String bankCode;
-
     @Column(name = "PORT-CODE-AGENCE", nullable = false)
     private String agencyCode;
 
@@ -67,10 +65,8 @@ public class TabCardHolder {
 
     @Column(name = "PORT-EMAIL")
     private String email;
-
-
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "bank_id", nullable = false)
+    @JoinColumn(name = "PORT-CODE-BANQUE", referencedColumnName = "bank_code", nullable = false)
     private TabBank bank; // Reference to TabBank
-
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 public class TabBinRequest {
 
     private String bin;
-    private String bankCode;
+    private Long bankId;
     private String systemCode;
     private String cardType;
     private String serviceCode;

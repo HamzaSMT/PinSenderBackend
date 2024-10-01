@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.models.Banks;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,10 +16,11 @@ import lombok.Setter;
 @Table(name = "PRODKEYS")
 public class TabKeys {
 
-    @Id
-    @Column(name = "CODE-BANQUE", nullable = false)
-    private String bankCode;
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Id
     @Column(name = "CODE-CLE", nullable = false)
     private String keyCode;
@@ -32,8 +34,8 @@ public class TabKeys {
 
     @Column(name = "CODE-SYSTEME", nullable = false)
     private String systemCode;
-
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "bank_code", nullable = false)
+    @JoinColumn(name = "bank_id", nullable = false)
     private TabBank bank; // Reference to TabBank
 }

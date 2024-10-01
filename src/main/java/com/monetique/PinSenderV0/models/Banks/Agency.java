@@ -27,11 +27,12 @@ public class Agency {
 
     private String contactEmail;
 
-   @Column(name = "branch_code", unique = true, nullable = false)
-   private String agencyCode;
-
+    @Column(name = "branch_code", unique = true, nullable = false)
+    private String agencyCode;
 
     private String contactPhoneNumber;
+
+    private String adresse;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id", nullable = true)

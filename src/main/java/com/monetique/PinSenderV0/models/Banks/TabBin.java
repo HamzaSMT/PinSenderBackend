@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.models.Banks;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,6 @@ public class TabBin {
     @Column(name = "BIN-Number", nullable = false)
     private String bin;
 
-    @Column(name = "CODE-BANQUE")
-    private String bankCode;
-
     @Column(name = "CODE-SYSTEME")
     private String systemCode;
 
@@ -33,7 +31,7 @@ public class TabBin {
 
     @Column(name = "SRV-CODE")
     private String serviceCode;
-
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "bank_id", nullable = false)
     private TabBank bank; // Reference to TabBank

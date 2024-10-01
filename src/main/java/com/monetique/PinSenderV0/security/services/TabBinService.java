@@ -3,8 +3,10 @@ package com.monetique.PinSenderV0.security.services;
 import com.monetique.PinSenderV0.Exception.ResourceAlreadyExistsException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.ItabBinService;
+import com.monetique.PinSenderV0.models.Banks.TabBank;
 import com.monetique.PinSenderV0.models.Banks.TabBin;
 import com.monetique.PinSenderV0.payload.request.TabBinRequest;
+import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.TabBinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ public class TabBinService implements ItabBinService {
 
     @Autowired
     private TabBinRepository tabBinRepository;
+    @Autowired
+    private BankRepository bankRepository;
 
     @Override
 
@@ -25,10 +29,13 @@ public class TabBinService implements ItabBinService {
             if (tabBinRepository.existsTabBinByBin(tabBinRequest.getBin())) {
                 throw new ResourceAlreadyExistsException("TabBin with bin " + tabBinRequest.getBin() + " already exists.");
             }
-            TabBin tabBin = new TabBin();
+        TabBank bank = bankRepository.findById(tabBinRequest.getBankId())
+                .orElseThrow(() -> new ResourceNotFoundException("TabBank", "id", tabBinRequest.getBankId()));
+
+        TabBin tabBin = new TabBin();
             // Set attributes from request
             tabBin.setBin(tabBinRequest.getBin());
-            tabBin.setBankCode(tabBinRequest.getBankCode());
+            tabBin.setBank(bank);
             tabBin.setSystemCode(tabBinRequest.getSystemCode());
             tabBin.setCardType(tabBinRequest.getCardType());
             tabBin.setServiceCode(tabBinRequest.getServiceCode());
@@ -59,7 +66,6 @@ public class TabBinService implements ItabBinService {
 
         // Update the fields
         tabBin.setBin(tabBinRequest.getBin());
-        tabBin.setBankCode(tabBinRequest.getBankCode());
         tabBin.setSystemCode(tabBinRequest.getSystemCode());
         tabBin.setCardType(tabBinRequest.getCardType());
         tabBin.setServiceCode(tabBinRequest.getServiceCode());

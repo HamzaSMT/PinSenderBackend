@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.models.Banks;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monetique.PinSenderV0.models.Users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,7 @@ public class TabBank {
     private String name;
 
     @Column(name = "bank_code", unique = true, nullable = false,length = 5)
-    private String codeBanque;
+    private String bankCode;
 
     @Column(name = "LIBELLE_BANQUE", length = 50)
     private String libelleBanque;
@@ -51,13 +52,13 @@ public class TabBank {
     private byte[] logo;
 
     private String adminUsername;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabBin> bins = new HashSet<>();
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabKeys> keys = new HashSet<>();
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabCardHolder> cardHolders = new HashSet<>();
 
