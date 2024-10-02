@@ -46,7 +46,7 @@ public class BankService implements IbankService {
 
         TabBank bank = new TabBank();
         bank.setName(bankRequest.getName());
-        bank.setBankCode(bankRequest.getCodeBanque());
+        bank.setBankCode(bankRequest.getBankCode());
         bank.setLibelleBanque(bankRequest.getLibelleBanque());
         bank.setEnseigneBanque(bankRequest.getEnseigneBanque());
         bank.setIca(bankRequest.getIca());
@@ -113,7 +113,7 @@ public class BankService implements IbankService {
 
         // Update bank details
         bank.setName(bankRequest.getName());
-        bank.setBankCode(bankRequest.getCodeBanque());
+        bank.setBankCode(bankRequest.getBankCode());
         bank.setLibelleBanque(bankRequest.getLibelleBanque());
         bank.setEnseigneBanque(bankRequest.getEnseigneBanque());
         bank.setIca(bankRequest.getIca());

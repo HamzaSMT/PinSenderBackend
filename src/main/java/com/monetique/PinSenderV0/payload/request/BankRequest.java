@@ -9,7 +9,7 @@ public class BankRequest {
 
 
     private String name;
-    private String codeBanque;
+    private String bankCode;
     private String libelleBanque;
     private String enseigneBanque;
     private String ica;
