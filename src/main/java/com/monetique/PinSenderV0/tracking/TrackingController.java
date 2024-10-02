@@ -4,14 +4,19 @@ import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.tracking.payload.ApiReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/monitor")
@@ -22,38 +27,6 @@ public class TrackingController {
 
 
 
-    // API to track all sessions for a specific admin and their users - only accessible by Super Admin
-   /* @GetMapping("/trackAdmin/{adminId}")
-    public ResponseEntity<?> trackAdminUsage(@PathVariable Long adminId) {
-        // Check if the currently authenticated user is a Super Admin
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        if (!currentUserDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
-
-            throw new AccessDeniedException("Error: Only Super Admin can access this monitoring API.");
-        }
-
-        List<ApiRequestLog> logs = trackingService.getLogsByAdminId(adminId);
-        return ResponseEntity.ok(logs);
-    }
-
-    // API to track all sessions for a specific user - only accessible by Super Admin
-    @GetMapping("/trackUser/{userId}")
-    public ResponseEntity<?> trackUserUsage(@PathVariable Long userId) {
-        // Check if the currently authenticated user is a Super Admin
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        if (!currentUserDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
-
-            throw new AccessDeniedException("Error: Only Super Admin can access this monitoring API.");
-        }
-
-        List<ApiRequestLog> logs = trackingService.getLogsByUserId(userId);
-        return ResponseEntity.ok(logs);
-    }
-*/
     // API to track active sessions (users currently logged in) - only accessible by Super Admin
     @GetMapping("/activeSessions")
     public ResponseEntity<?> trackActiveSessions() {
@@ -85,42 +58,76 @@ public class TrackingController {
         List<UserSession> allSessions = trackingService.getAllSessions();
         return ResponseEntity.ok(allSessions);
     }
-    // Super Admin can generate a report for any user
-/*    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @GetMapping("/userReport")
-    public ResponseEntity<ApiReportResponse> getUserReport(@RequestParam Long userId,
-                                                           @RequestParam String startDate,
-                                                           @RequestParam String endDate) {
-        LocalDateTime start = LocalDateTime.parse(startDate);
-        LocalDateTime end = LocalDateTime.parse(endDate);
-
-        ApiReportResponse report = trackingService.generateUserReport(userId, start, end);
-        return ResponseEntity.ok(report);
-    }
-
-    // Super Admin can generate a report for all users under a specific admin
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @GetMapping("/adminReport")
-    public ResponseEntity<ApiReportResponse> getAdminReport(@RequestParam Long adminId,
-                                                            @RequestParam String startDate,
-                                                            @RequestParam String endDate) {
-        LocalDateTime start = LocalDateTime.parse(startDate);
-        LocalDateTime end = LocalDateTime.parse(endDate);
-
-        ApiReportResponse report = trackingService.generateAdminReport(adminId, start, end);
-        return ResponseEntity.ok(report);
-    }
-
-    // Super Admin can generate a session duration report for a user
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @GetMapping("/sessionDuration")
-    public ResponseEntity<?> getSessionDurations(@RequestParam Long userId) {
-        return ResponseEntity.ok(trackingService.generateSessionDurations(userId));
-    }
-*/
 
     @GetMapping("/logs/all")
     public List<ApiRequestLog> getAllLogs() {
         return trackingService.getAllLogs();
     }
+    @GetMapping("/activities/user")
+    public ResponseEntity<?> getActivitiesByUserAndDate(
+            @RequestParam String username,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<ApiRequestLog> activities = trackingService.getActivitiesByUserAndDate(username, date);
+        if (activities.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No activities found for user: " + username + " on date: " + date);
+        }
+        return ResponseEntity.ok(activities);
+    }
+
+    @GetMapping("/most-used-apis")
+    public ResponseEntity<?> getMostUsedApis() {
+        Map<String, Long> mostUsedApis = trackingService.getMostUsedApis();
+        if (mostUsedApis.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No API usage data available.");
+        }
+        return ResponseEntity.ok(mostUsedApis);
+    }
+
+    @GetMapping("/api-performance")
+    public ResponseEntity<?> getApiPerformanceStatistics() {
+        Map<String, Double> performanceStats = trackingService.getApiPerformanceStats();
+        if (performanceStats.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No API performance data available.");
+        }
+        return ResponseEntity.ok(performanceStats);
+    }
+
+    @GetMapping("/average-response-time")
+    public ResponseEntity<String> getAverageResponseTime() {
+        double averageResponseTime = trackingService.getAverageResponseTime();
+        return ResponseEntity.ok("Average response time: " + averageResponseTime + " ms");
+    }
+
+    @GetMapping("/error-count")
+    public ResponseEntity<String> getErrorCount() {
+        long errorCount = trackingService.getErrorCount();
+        return ResponseEntity.ok("Total error count: " + errorCount);
+    }
+
+    @GetMapping("/api-request-distribution/hour")
+    public ResponseEntity<Map<String, Object>> getApiRequestDistributionByHour() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Map<String, Object> result = trackingService.getApiRequestDistributionByHour();
+
+            if (result.isEmpty()) {
+                // If no data found, return an appropriate response
+                response.put("message", "No API requests found for the given period");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            // If data exists, return the result
+            response.put("hourlyDistribution", result);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle any errors
+            response.put("message", "An error occurred while retrieving API request distribution");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

@@ -19,4 +19,7 @@ public interface UserSessionRepository extends JpaRepository<UserSession, Long> 
     UserSession findCurrentSessionByUsername(String username);
 
     Optional<UserSession> findByUserAndLogoutTimeIsNull(User user);
+    // Count active sessions (sessions where logout time is null)
+    @Query("SELECT COUNT(s) FROM UserSession s WHERE s.logoutTime IS NULL")
+    long countActiveSessions();
 }

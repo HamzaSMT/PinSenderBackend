@@ -3,6 +3,7 @@ package com.monetique.PinSenderV0.tracking;
 import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.tracking.payload.ApiReportResponse;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,21 @@ public interface ItrackingingService {
                     long requestSize,
                     long responseSize,
                     String exceptionMessage,String requestBody,  String responseBody );
+
+    long getCountActiveSessions();
+
+    List<ApiRequestLog> getActivitiesByUserAndDate(String username, LocalDate date);
+
+    Map<String, Long> getMostUsedApis();
+
+    Map<String, Double> getApiPerformanceStats();
+
+    double getAverageResponseTime();
+
+    long getErrorCount();
+
+
+    Map<String, Object> getApiRequestDistributionByHour();
 
     // Method to start a new session when the user logs in
     UserSession startSession(Long userId);
