@@ -31,6 +31,9 @@ public class TabBin {
 
     @Column(name = "SRV-CODE")
     private String serviceCode;
+
+    @Column(name = "DATA-CLE")
+    private String keyData;
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "bank_id", nullable = false)

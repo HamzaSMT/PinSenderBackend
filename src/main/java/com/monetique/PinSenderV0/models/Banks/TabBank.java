@@ -55,9 +55,7 @@ public class TabBank {
     @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabBin> bins = new HashSet<>();
-    @JsonManagedReference
-    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TabKeys> keys = new HashSet<>();
+
     @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabCardHolder> cardHolders = new HashSet<>();

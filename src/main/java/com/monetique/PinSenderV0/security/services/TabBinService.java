@@ -41,7 +41,7 @@ public class TabBinService implements ItabBinService {
             tabBin.setSystemCode(tabBinRequest.getSystemCode());
             tabBin.setCardType(tabBinRequest.getCardType());
             tabBin.setServiceCode(tabBinRequest.getServiceCode());
-
+             tabBin.setKeyData(tabBinRequest.getKeyData());
             return tabBinRepository.save(tabBin);
         }
 
@@ -84,6 +84,7 @@ public class TabBinService implements ItabBinService {
         tabBin.setSystemCode(tabBinRequest.getSystemCode());
         tabBin.setCardType(tabBinRequest.getCardType());
         tabBin.setServiceCode(tabBinRequest.getServiceCode());
+        tabBin.setKeyData(tabBinRequest.getKeyData());
 
         // Save the updated TabBin
         return tabBinRepository.save(tabBin);

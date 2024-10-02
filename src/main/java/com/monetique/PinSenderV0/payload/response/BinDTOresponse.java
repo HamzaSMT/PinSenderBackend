@@ -15,6 +15,7 @@ public class BinDTOresponse {
     private String systemCode;
     private String cardType;
     private String serviceCode;
+    private String keyData;
     private String bankName;
     private String bankCode;
 
