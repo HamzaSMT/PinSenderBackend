@@ -1,6 +1,5 @@
-package com.monetique.PinSenderV0.security.services;
+/*package com.monetique.PinSenderV0.security.services;
 
-import com.monetique.PinSenderV0.models.Banks.Cardholder;
 import com.monetique.PinSenderV0.repository.CardholderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,3 +49,4 @@ public class CardholderService {
     }
 
 }
+*/

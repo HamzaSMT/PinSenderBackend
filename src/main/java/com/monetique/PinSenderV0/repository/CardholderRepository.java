@@ -1,7 +1,6 @@
-package com.monetique.PinSenderV0.repository;
+/*package com.monetique.PinSenderV0.repository;
 
 
-import com.monetique.PinSenderV0.models.Banks.Cardholder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +14,4 @@ public interface CardholderRepository extends JpaRepository<Cardholder, Long> {
 
     List<Cardholder> findAllByPhoneNumber(String phoneNumber);
 
-}
+}*/

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, String> {
@@ -14,4 +15,6 @@ public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, St
 
     // Method to find cardholders by bank_code
     List<TabCardHolder> findByBank_BankCode(String bankCode);
+
+    TabCardHolder findByCardNumber(String cardNumber);
 }

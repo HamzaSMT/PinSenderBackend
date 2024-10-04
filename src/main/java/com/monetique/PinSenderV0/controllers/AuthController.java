@@ -20,7 +20,12 @@ import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.security.jwt.JwtUtils;
 import com.monetique.PinSenderV0.security.services.RefreshTokenService;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +41,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.util.WebUtils;
+
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -108,17 +116,25 @@ public class AuthController {
               .map(GrantedAuthority::getAuthority)
               .collect(Collectors.toList());
       RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+      ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
+              .httpOnly(true)
+              .secure(true) // Enable for HTTPS
+              .path("/api/auth/refreshToken")
+              .maxAge(7 * 24 * 60 * 60) // Example: 7 days
+              .sameSite("Strict") // CSRF protection
+              .build();
 
       logger.info("User {} signed in successfully.", loginRequest.getUsername());
-
-      return ResponseEntity.ok(new JwtResponse(
-              jwt,
-              refreshToken.getToken(),
-              userDetails.getId(),
-              userDetails.getUsername(),
-              roles,
-              session.getId()  // Return session ID to track API usage
-      ));
+      return ResponseEntity.ok()
+              .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()) // Set the cookie in the response
+              .body(new JwtResponse(
+                      jwt,
+                      refreshToken.getToken(),
+                      userDetails.getId(),
+                      userDetails.getUsername(),
+                      roles,
+                      session.getId()  // Return session ID to track API usage
+              ));
     } catch (BadCredentialsException e) {
       // Handle incorrect username or password
       logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
@@ -130,10 +146,15 @@ public class AuthController {
   }
 
   // Signout method (Logout)
-  
+
   @PostMapping("/signout")
-  public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String authorizationHeader) {
+  public ResponseEntity<?> logoutUser(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
     logger.info("Received sign-out request.");
+
+    // Check if the Authorization header is present
+    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+      return ResponseEntity.status(401).body(new MessageResponse("Error: Missing or invalid Authorization header", 401));
+    }
 
     try {
       // Extract JWT token from the Authorization header
@@ -150,7 +171,6 @@ public class AuthController {
 
       // Extract user ID from the UserDetailsImpl
       Long userId = userDetails.getId();
-
       // Extract session ID from the JWT token claims
       Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);
 
@@ -177,9 +197,10 @@ public class AuthController {
       return ResponseEntity.ok(new MessageResponse("You've been signed out successfully!", 200));
     } catch (Exception e) {
       logger.error("Error during sign-out: {}", e.getMessage(), e);
-      return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to sign out", 500));
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to sign out due to a server error", 500));
     }
   }
+
 
 
 
@@ -358,8 +379,61 @@ public class AuthController {
     logger.info("User {} successfully associated with agency {}", userId, agencyId);
     return ResponseEntity.ok(new MessageResponse("User successfully associated with the agency!", 200));
   }
-
   @PostMapping("/refreshToken")
+  public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+    logger.info("Received request to refresh token");
+    // Get the refresh token from the cookie
+    Cookie refreshTokenCookie = WebUtils.getCookie(request, "refreshToken");
+
+    if (refreshTokenCookie == null) {
+      throw new TokenRefreshException(null, "Missing refresh token in request");
+    }
+
+    String requestRefreshToken = refreshTokenCookie.getValue();
+
+    return refreshTokenService.findByToken(requestRefreshToken)
+            .map(refreshTokenService::verifyExpiration)
+            .map(refreshToken -> {
+              // Get the authentication from the security context to retrieve the current user details
+              Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+              UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+              // Extract user ID from the UserDetailsImpl
+              Long userId = userDetails.getId();
+
+              // Get the JWT from the request's Authorization header
+              String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
+
+              // Extract session ID from the JWT token claims
+              Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);  // Use your utility method to extract sessionId
+
+              // Generate a new JWT token with the extracted session ID and other claims
+              String newJwtToken = jwtUtils.generateJwtToken(authentication, sessionId);
+
+              // Optionally generate a new refresh token
+              RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(userId);
+              ResponseCookie newRefreshTokenCookie  = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
+                      .httpOnly(true)
+                      .secure(true)  // Enable for HTTPS
+                      .path("/api/auth/refreshToken")
+                      .maxAge(7 * 24 * 60 * 60)  // Example: 7 days
+                      .sameSite("Strict")
+                      .build();
+
+              logger.info("Token refreshed successfully for user {}", userDetails.getUsername());
+
+              // Return new JWT and set new refresh token in an HTTP-only secure cookie
+              return ResponseEntity.ok()
+                      .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString())  // Set new refresh token in the cookie
+                      .body(new TokenRefreshResponse(newJwtToken, newRefreshToken.getToken()));
+            })
+            .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database or expired!"));
+  }
+
+
+
+
+/*  @PostMapping("/refreshToken")
   public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
     logger.info("Received request to refresh token");
 
@@ -374,7 +448,7 @@ public class AuthController {
               return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
             })
             .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database!"));
-  }
+  }*/
 
   @PostMapping("/changePassword")
 

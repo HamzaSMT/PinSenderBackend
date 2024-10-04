@@ -17,7 +17,7 @@ public class ApiRequestLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "session_id")  // Use session_id instead of session
+    @Column(name = "session_id")
     private long sessionId;  // Store the session ID
 
     @Column(name = "request_path")
