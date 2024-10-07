@@ -112,7 +112,8 @@ public class AuthController {
       List<String> roles = userDetails.getAuthorities().stream()
               .map(GrantedAuthority::getAuthority)
               .collect(Collectors.toList());
-      RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+      System.out.println("iduser"+userDetails.getId() );
+      RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId(), session.getId());
       ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
               .httpOnly(true)
               .secure(true) // Enable for HTTPS
@@ -400,7 +401,7 @@ public class AuthController {
               String newJwtToken = jwtUtils.generateTokenFromUsersession(user, sessionId);
 
               // Optionally generate a new refresh token
-              RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
+              RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId(),sessionId);
               ResponseCookie newRefreshTokenCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
                       .httpOnly(true)
                       .secure(true)
@@ -586,7 +587,7 @@ public class AuthController {
               .collect(Collectors.toList());
 
       // Create a new refresh token
-      RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+      RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(userDetails.getId(),session.getId());
 
       logger.info("User {} signed in successfully.", loginRequest.getUsername());
 

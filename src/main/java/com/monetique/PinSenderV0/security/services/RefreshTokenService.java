@@ -36,7 +36,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.findByToken(token);
     }
 
-    public RefreshToken createRefreshToken(Long userId) {
+    public RefreshToken createRefreshToken(Long userId,Long sessionid) {
         // Check if a refresh token already exists for the user
         Optional<RefreshToken> existingToken = findByUserId(userId);
 
@@ -59,7 +59,7 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new RuntimeException("User not found")));
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setSessionId(existingToken.get().getSessionId());
+        refreshToken.setSessionId(sessionid);
         // Save the new token and return it
         return refreshTokenRepository.save(refreshToken);
     }
