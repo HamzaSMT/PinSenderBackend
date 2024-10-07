@@ -59,7 +59,7 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new RuntimeException("User not found")));
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(UUID.randomUUID().toString());
-
+        refreshToken.setSessionId(existingToken.get().getSessionId());
         // Save the new token and return it
         return refreshTokenRepository.save(refreshToken);
     }

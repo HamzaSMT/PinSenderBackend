@@ -15,6 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(apiRequestInterceptor)
                 .addPathPatterns("/api/**")  // Intercept all API requests under /api/
-                .excludePathPatterns("/api/monitor/**");  // Exclude /api/monitor/** from being intercepted
+                .excludePathPatterns("/api/monitor/**")
+                .excludePathPatterns("/api/auth/**");
+        // Exclude /api/monitor/** from being intercepted
     }
 }

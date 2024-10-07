@@ -382,7 +382,8 @@ public class AuthController {
   @PostMapping("/refreshToken")
   public ResponseEntity<?> refreshToken(HttpServletRequest request) {
     logger.info("Received request to refresh token");
-    // Get the refresh token from the cookie
+
+    // Retrieve refresh token from the request cookie
     Cookie refreshTokenCookie = WebUtils.getCookie(request, "refreshToken");
 
     if (refreshTokenCookie == null) {
@@ -394,37 +395,27 @@ public class AuthController {
     return refreshTokenService.findByToken(requestRefreshToken)
             .map(refreshTokenService::verifyExpiration)
             .map(refreshToken -> {
-              // Get the authentication from the security context to retrieve the current user details
-              Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-              UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+              // Get user ID and session ID directly from the refresh token
+              User user = refreshToken.getUser(); // Assuming refreshToken has getUserId() method
+              Long sessionId = refreshToken.getSessionId();
 
-              // Extract user ID from the UserDetailsImpl
-              Long userId = userDetails.getId();
-
-              // Get the JWT from the request's Authorization header
-              String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
-
-              // Extract session ID from the JWT token claims
-              Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);  // Use your utility method to extract sessionId
-
-              // Generate a new JWT token with the extracted session ID and other claims
-              String newJwtToken = jwtUtils.generateJwtToken(authentication, sessionId);
+              // Generate a new JWT token using the user ID
+              String newJwtToken = jwtUtils.generateTokenFromUsersession(user, sessionId);
 
               // Optionally generate a new refresh token
-              RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(userId);
-              ResponseCookie newRefreshTokenCookie  = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
+              RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
+              ResponseCookie newRefreshTokenCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
                       .httpOnly(true)
-                      .secure(true)  // Enable for HTTPS
+                      .secure(true)
                       .path("/api/auth/refreshToken")
-                      .maxAge(7 * 24 * 60 * 60)  // Example: 7 days
+                      .maxAge(7 * 24 * 60 * 60)  // 7 days
                       .sameSite("Strict")
                       .build();
 
-              logger.info("Token refreshed successfully for user {}", userDetails.getUsername());
+              logger.info("Token refreshed successfully for user with ID {}", user.getId());
 
-              // Return new JWT and set new refresh token in an HTTP-only secure cookie
               return ResponseEntity.ok()
-                      .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString())  // Set new refresh token in the cookie
+                      .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString())
                       .body(new TokenRefreshResponse(newJwtToken, newRefreshToken.getToken()));
             })
             .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database or expired!"));

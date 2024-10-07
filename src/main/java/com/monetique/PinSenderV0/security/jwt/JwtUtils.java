@@ -4,11 +4,14 @@ import java.security.Key;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
+import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class JwtUtils {
+  @Autowired
+  IuserManagementService userManagementService;
 
   @Value("${app.jwtSecret}")
   private String jwtSecret;
@@ -54,16 +59,23 @@ public class JwtUtils {
             .signWith(key(), SignatureAlgorithm.HS512)
             .compact();
   }
+    public String generateTokenFromUsersession(User user, Long sessionId) {
 
-  // Generate refresh token with a longer expiration time
-  public String generateRefreshToken(String username) {
     return Jwts.builder()
-            .setSubject(username)
-            .setIssuedAt(new Date())
-            .setExpiration(new Date((new Date()).getTime() + jwtRefreshExpirationMs)) // Refresh token expiration
-            .signWith(key(), SignatureAlgorithm.HS512)
+            .setSubject(user.getId().toString()) // Set userId as the subject
+            .claim("roles", user.getRoles().stream()
+                    .map(role -> role.getName().name()) // Get role names
+                    .collect(Collectors.toList()))
+            .claim("adminId", user.getAdmin() != null ? user.getAdmin().getId() : null) // Set adminId if available
+            .claim("bankId", user.getBank() != null ? user.getBank().getId() : null) // Set bankId if available
+            .claim("agencyId", user.getAgency() != null ? user.getAgency().getId() : null) // Set agencyId if available
+            .claim("sessionId", sessionId) // Set sessionId as a claim
+            .setIssuedAt(new Date()) // Token issued time
+            .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)) // Token expiration time
+            .signWith(key(), SignatureAlgorithm.HS512) // Sign the token with HS512 algorithm and key
             .compact();
   }
+
 
   // Extract the username from the JWT token
   public String getUserNameFromJwtToken(String token) {

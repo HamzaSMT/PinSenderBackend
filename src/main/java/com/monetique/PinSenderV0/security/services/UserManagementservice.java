@@ -44,6 +44,11 @@ public class UserManagementservice implements IuserManagementService {
         return newPassword;
     }
 
+    @Override
+    public User getuserbyId(Long userId) {
+        return userRepository.findById(userId).get();
+    }
+
     public String generateRandomPassword() {
         // Define the length of the password and characters to be included
         int length = 12;
