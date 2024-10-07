@@ -44,10 +44,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.util.WebUtils;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -503,6 +500,25 @@ public class AuthController {
       // Handle any other unexpected errors
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
               .body(new MessageResponse("Error retrieving users", 500));
+    }
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<?> getUserById(@PathVariable("id") Long userId) {
+    logger.info("Received request to get user by ID: {}", userId);
+
+    try {
+      User user = iuserManagementService.getuserbyId(userId);
+      logger.info("User found: {}", user);
+      return ResponseEntity.ok(user); // Return the user object if found
+    } catch (NoSuchElementException e) {
+      logger.error("User not found with ID: {}", userId);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body(new MessageResponse("User not found", 404)); // 404 Not Found
+    } catch (Exception e) {
+      logger.error("Error retrieving user: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(new MessageResponse("Error retrieving user", 500)); // 500 Internal Server Error
     }
   }
 

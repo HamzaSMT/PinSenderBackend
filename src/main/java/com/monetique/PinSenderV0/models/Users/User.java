@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.models.Users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.monetique.PinSenderV0.models.Banks.Agency;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
 import jakarta.persistence.*;
@@ -34,6 +35,7 @@ public class User {
           inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @JsonIgnore // Prevent serialization to avoid infinite recursion
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "admin_id", nullable = true) // Nullable: Super Admin and Admin might not have an Admin
   private User admin;

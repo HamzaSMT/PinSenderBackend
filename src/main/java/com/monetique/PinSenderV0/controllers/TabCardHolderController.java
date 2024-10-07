@@ -1,6 +1,5 @@
 package com.monetique.PinSenderV0.controllers;
 
-import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
 import com.monetique.PinSenderV0.security.services.TabCardHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
