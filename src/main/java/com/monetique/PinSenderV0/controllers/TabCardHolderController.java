@@ -1,8 +1,10 @@
 package com.monetique.PinSenderV0.controllers;
 
+import com.monetique.PinSenderV0.Interfaces.ICardholderService;
+import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
-import com.monetique.PinSenderV0.security.services.TabCardHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,12 +18,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/cardholders")
 public class TabCardHolderController {
 
-    private final TabCardHolderService cardHolderService;
-
     @Autowired
-    public TabCardHolderController(TabCardHolderService cardHolderService) {
-        this.cardHolderService = cardHolderService;
-    }
+    private ICardholderService cardHolderService;
 
     @GetMapping
     public ResponseEntity<List<TabCardHolderresponse>> getAllCardHolders() {
@@ -58,4 +56,15 @@ public class TabCardHolderController {
             return ResponseEntity.status(500).body("Error processing the file.");
         }
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
+        cardHolderService.verifyCardholder(request);
+        return new ResponseEntity<>("Verification request sent to queue.", HttpStatus.ACCEPTED);
+    }
+
+
+
+
+
     }

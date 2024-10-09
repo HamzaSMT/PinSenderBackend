@@ -3,6 +3,7 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
+import com.monetique.PinSenderV0.security.services.AuthenticationService;
 import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.models.Banks.Agency;
@@ -58,6 +59,9 @@ public class AuthController {
   AuthenticationManager authenticationManager;
 
   @Autowired
+  private AuthenticationService authenticationService;
+
+  @Autowired
   IuserManagementService iuserManagementService;
 
   @Autowired
@@ -85,36 +89,16 @@ public class AuthController {
   private ItrackingingService monitoringService;
 
 
-  // Signin method (Login)
+
+
+  // Signout method (Logout)
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-    logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
-
     try {
-      // Check if the user already has an active session
-      UserSession activeSession = monitoringService.getActiveSessionByUsername(loginRequest.getUsername());
-      if (activeSession != null && activeSession.getLogoutTime() == null) {
-        logger.warn("User {} already has an active session.", loginRequest.getUsername());
-        return ResponseEntity.status(403).body(new MessageResponse("Error: Another session is already opened for this user.", 403));
-
-      }
-      Authentication authentication = authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-      // Start a new session for the user
-      UserSession session = monitoringService.startSession(userDetails.getId());
-
-      String jwt = jwtUtils.generateJwtToken(authentication, session.getId());  // Pass sessionId
-
-      List<String> roles = userDetails.getAuthorities().stream()
-              .map(GrantedAuthority::getAuthority)
-              .collect(Collectors.toList());
-      System.out.println("iduser"+userDetails.getId() );
-      RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId(), session.getId());
-      ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
+      // Attempt to authenticate the user
+      JwtResponse jwtResponse = authenticationService.authenticateUser(loginRequest);
+      logger.info("User {} signed in successfully.", loginRequest.getUsername());
+      ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtResponse.getRefreshToken())
               .httpOnly(true)
               .secure(true) // Enable for HTTPS
               .path("/api/auth/refreshToken")
@@ -122,28 +106,22 @@ public class AuthController {
               .sameSite("Strict") // CSRF protection
               .build();
 
-      logger.info("User {} signed in successfully.", loginRequest.getUsername());
+      // Return the response with the refresh token cookie
       return ResponseEntity.ok()
               .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()) // Set the cookie in the response
-              .body(new JwtResponse(
-                      jwt,
-                      refreshToken.getToken(),
-                      userDetails.getId(),
-                      userDetails.getUsername(),
-                      roles,
-                      session.getId()  // Return session ID to track API usage
-              ));
+              .body(jwtResponse);
     } catch (BadCredentialsException e) {
-      // Handle incorrect username or password
+      // Handle invalid username or password
       logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
-      return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid username or password", 401));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("Error: Invalid username or password", 401));
     } catch (Exception e) {
+      // Handle other exceptions
       logger.error("Error during sign-in for username: {}", loginRequest.getUsername(), e);
-      return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(new MessageResponse("Error: Internal server error", 500));
     }
   }
-
-  // Signout method (Logout)
 
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
@@ -154,57 +132,74 @@ public class AuthController {
       return ResponseEntity.status(401).body(new MessageResponse("Error: Missing or invalid Authorization header", 401));
     }
 
+    // Extract JWT token from the Authorization header
+    String jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+
     try {
-      // Extract JWT token from the Authorization header
-      String jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+      // Delegate the sign-out logic to the SignOutService
+      authenticationService.logoutUser(jwtToken);
 
-      // Validate and parse the token
-      if (!jwtUtils.validateJwtToken(jwtToken)) {
-        return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid JWT token", 401));
-      }
+      // Create a cookie to delete the refresh token
+      ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
+              .httpOnly(true)
+              .secure(true) // Enable for HTTPS
+              .path("/api/auth/refreshToken")
+              .maxAge(0) // Set the cookie to expire immediately
+              .sameSite("Strict") // CSRF protection
+              .build();
 
-      // Get the Authentication object from Security Context
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-      // Extract user ID from the UserDetailsImpl
-      Long userId = userDetails.getId();
-      // Extract session ID from the JWT token claims
-      Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);
-
-      // Fetch the session from the database
-      UserSession session = monitoringService.getSessionById(sessionId);
-
-      if (session == null) {
-        return ResponseEntity.status(404).body(new MessageResponse("Error: Session not found", 404));
-      }
-
-      // Check if the session is already ended
-      if (session.getLogoutTime() != null) {
-        return ResponseEntity.status(400).body(new MessageResponse("Error: Session already ended", 400));
-      }
-
-      // Invalidate the session for the user
-      monitoringService.endSession(sessionId);
-
-      // Revoke the refresh token associated with the user
-      refreshTokenService.deleteByUserId(userId);
-
-      logger.info("User with ID {} signed out successfully.", userId);
-
-      return ResponseEntity.ok(new MessageResponse("You've been signed out successfully!", 200));
+      logger.info("User signed out successfully.");
+      return ResponseEntity.ok()
+              .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()) // Set the cookie in the response
+              .body(new MessageResponse("You've been signed out successfully!", 200));
+    } catch (RuntimeException e) {
+      logger.error("Error during sign-out: {}", e.getMessage());
+      return ResponseEntity.status(400).body(new MessageResponse("Error: " + e.getMessage(), 400));
     } catch (Exception e) {
       logger.error("Error during sign-out: {}", e.getMessage(), e);
       return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to sign out due to a server error", 500));
     }
   }
+  @PostMapping("/refreshToken")
+  public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+    logger.info("Received request to refresh token");
 
+    // Retrieve refresh token from the request cookie
+    Cookie refreshTokenCookie = WebUtils.getCookie(request, "refreshToken");
 
+    if (refreshTokenCookie == null) {
+      throw new TokenRefreshException(null, "Missing refresh token in request");
+    }
 
+    String requestRefreshToken = refreshTokenCookie.getValue();
 
+    try {
+      // Delegate the token refresh logic to the TokenRefreshService
+      TokenRefreshResponse response = authenticationService.refreshToken(requestRefreshToken);
 
+      // Create a new cookie for the refresh token (existing refresh token is returned)
+      ResponseCookie newRefreshTokenCookie = ResponseCookie.from("refreshToken", response.getRefreshToken())
+              .httpOnly(true)
+              .secure(true)
+              .path("/api/auth/refreshToken")
+              .maxAge(7 * 24 * 60 * 60) // 7 days
+              .sameSite("Strict")
+              .build();
 
+      // Return the response with the new refresh token cookie
+      return ResponseEntity.ok()
+              .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString()) // Set the cookie in the response
+              .body(response); // Return the new JWT and refresh token details
+    } catch (TokenRefreshException e) {
+      logger.error("Error refreshing token: {}", e.getMessage());
+      return ResponseEntity.status(400).body(new MessageResponse("Error: " + e.getMessage(), 400));
+    } catch (Exception e) {
+      logger.error("Error during token refresh: {}", e.getMessage());
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
+    }
+  }
 
+////////////********************************usermanagement**********************************************/////////////////////////////////////////
 
   // Create Super Admin method
   @PostMapping("/createSuperAdmin")
@@ -244,13 +239,17 @@ public class AuthController {
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     logger.info("Received sign-up request for username: {}", signUpRequest.getUsername());
-
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       logger.error("Username {} is already taken", signUpRequest.getUsername());
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!", 400));
     }
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
     UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
     User currentUser = userRepository.findById(currentUserDetails.getId())
             .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
@@ -309,19 +308,16 @@ public class AuthController {
     return ResponseEntity.ok(new MessageResponse("User registered successfully!", 200));
   }
 
-
-
-
-
-
-
-
   @PostMapping("/associateAdminToBank")
   @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<?> associateAdminToBank(@RequestParam Long adminId, @RequestParam Long bankId) {
     logger.info("Received request to associate admin {} with bank {}", adminId, bankId);
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
     User currentUser = userRepository.findById(currentUserDetails.getId())
             .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
@@ -349,6 +345,10 @@ public class AuthController {
     logger.info("Received request to associate user {} with agency {}", userId, agencyId);
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
     User currentAdmin = userRepository.findById(currentUserDetails.getId())
             .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", currentUserDetails.getId()));
@@ -377,71 +377,15 @@ public class AuthController {
     logger.info("User {} successfully associated with agency {}", userId, agencyId);
     return ResponseEntity.ok(new MessageResponse("User successfully associated with the agency!", 200));
   }
-  @PostMapping("/refreshToken")
-  public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-    logger.info("Received request to refresh token");
-
-    // Retrieve refresh token from the request cookie
-    Cookie refreshTokenCookie = WebUtils.getCookie(request, "refreshToken");
-
-    if (refreshTokenCookie == null) {
-      throw new TokenRefreshException(null, "Missing refresh token in request");
-    }
-
-    String requestRefreshToken = refreshTokenCookie.getValue();
-
-    return refreshTokenService.findByToken(requestRefreshToken)
-            .map(refreshTokenService::verifyExpiration)
-            .map(refreshToken -> {
-              // Get user ID and session ID directly from the refresh token
-              User user = refreshToken.getUser(); // Assuming refreshToken has getUserId() method
-              Long sessionId = refreshToken.getSessionId();
-
-              // Generate a new JWT token using the user ID
-              String newJwtToken = jwtUtils.generateTokenFromUsersession(user, sessionId);
-
-              // Optionally generate a new refresh token
-              RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId(),sessionId);
-              ResponseCookie newRefreshTokenCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
-                      .httpOnly(true)
-                      .secure(true)
-                      .path("/api/auth/refreshToken")
-                      .maxAge(7 * 24 * 60 * 60)  // 7 days
-                      .sameSite("Strict")
-                      .build();
-
-              logger.info("Token refreshed successfully for user with ID {}", user.getId());
-
-              return ResponseEntity.ok()
-                      .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString())
-                      .body(new TokenRefreshResponse(newJwtToken, newRefreshToken.getToken()));
-            })
-            .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database or expired!"));
-  }
-
-
-
-
-/*  @PostMapping("/refreshToken")
-  public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
-    logger.info("Received request to refresh token");
-
-    String requestRefreshToken = request.getRefreshToken();
-
-    return refreshTokenService.findByToken(requestRefreshToken)
-            .map(refreshTokenService::verifyExpiration)
-            .map(RefreshToken::getUser)
-            .map(user -> {
-              String token = jwtUtils.generateTokenFromUsername(user.getUsername());
-              logger.info("Token refreshed successfully for user {}", user.getUsername());
-              return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
-            })
-            .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database!"));
-  }*/
 
   @PostMapping("/changePassword")
 
   public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     try {
       iuserManagementService.changePassword(request.getUserId(), request.getOldPassword(), request.getNewPassword());
       return ResponseEntity.ok(new MessageResponse("Password changed successfully!", 200));
@@ -452,6 +396,11 @@ public class AuthController {
   @PostMapping("/forgetPassword")
   @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     try {
       String newPassword = iuserManagementService.generateRandomPassword(request.getUserId());
       return ResponseEntity.ok(new MessageResponse("Random password generated and saved successfully! New password: " + newPassword, 200));    } catch (Exception e) {
@@ -461,9 +410,14 @@ public class AuthController {
 
   @PutMapping("/update")
   public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest updateUserRequest) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     try {
       // Get authenticated user details
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
       UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
       Long userId = currentUserDetails.getId();
       // Update user details
@@ -482,8 +436,13 @@ public class AuthController {
     }
   }
   @GetMapping("/users")
-   // Ensure only admins can access this endpoint
+  // Ensure only admins can access this endpoint
   public ResponseEntity<?> getUsersByAdmin() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     try {
       List<UserResponseDTO> users = iuserManagementService.getUsersByAdmin();
 
@@ -507,7 +466,11 @@ public class AuthController {
   @GetMapping("/{id}")
   public ResponseEntity<?> getUserById(@PathVariable("id") Long userId) {
     logger.info("Received request to get user by ID: {}", userId);
-
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(new MessageResponse("User is not authenticated!", 401));
+    }
     try {
       User user = iuserManagementService.getuserbyId(userId);
       logger.info("User found: {}", user);
@@ -525,8 +488,163 @@ public class AuthController {
 
 
 
-  @PostMapping("/signin2")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////***************************OLDimpl**********************************************////////////////////////////////
+
+/*
+@PostMapping("/signout")
+  public ResponseEntity<?> logoutUser(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+    logger.info("Received sign-out request.");
+
+    // Check if the Authorization header is present
+    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+      return ResponseEntity.status(401).body(new MessageResponse("Error: Missing or invalid Authorization header", 401));
+    }
+
+    try {
+      // Extract JWT token from the Authorization header
+      String jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+
+      // Validate and parse the token
+      if (!jwtUtils.validateJwtToken(jwtToken)) {
+        return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid JWT token", 401));
+      }
+
+      // Get the Authentication object from Security Context
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+      // Extract user ID from the UserDetailsImpl
+      Long userId = userDetails.getId();
+      // Extract session ID from the JWT token claims
+      Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);
+
+      // Fetch the session from the database
+      UserSession session = monitoringService.getSessionById(sessionId);
+
+      if (session == null) {
+        return ResponseEntity.status(404).body(new MessageResponse("Error: Session not found", 404));
+      }
+
+      // Check if the session is already ended
+      if (session.getLogoutTime() != null) {
+        return ResponseEntity.status(400).body(new MessageResponse("Error: Session already ended", 400));
+      }
+
+      // Invalidate the session for the user
+      monitoringService.endSession(sessionId);
+
+      // Revoke the refresh token associated with the user
+      refreshTokenService.deleteByUserId(userId);
+
+      logger.info("User with ID {} signed out successfully.", userId);
+
+      return ResponseEntity.ok(new MessageResponse("You've been signed out successfully!", 200));
+    } catch (Exception e) {
+      logger.error("Error during sign-out: {}", e.getMessage(), e);
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to sign out due to a server error", 500));
+    }
+
+
+
+
+
+
+  }
+
+
+
+
+@PostMapping("/refreshToken")
+  public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+    logger.info("Received request to refresh token");
+
+    String requestRefreshToken = request.getRefreshToken();
+
+    return refreshTokenService.findByToken(requestRefreshToken)
+            .map(refreshTokenService::verifyExpiration)
+            .map(RefreshToken::getUser)
+            .map(user -> {
+              String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+              logger.info("Token refreshed successfully for user {}", user.getUsername());
+              return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+            })
+            .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in the database!"));
+  }
+   // Signin method (Login)
+  @PostMapping("/signin")
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
+
+    try {
+      // Check if the user already has an active session
+      UserSession activeSession = monitoringService.getActiveSessionByUsername(loginRequest.getUsername());
+      if (activeSession != null && activeSession.getLogoutTime() == null) {
+        logger.warn("User {} already has an active session.", loginRequest.getUsername());
+        return ResponseEntity.status(403).body(new MessageResponse("Error: Another session is already opened for this user.", 403));
+
+      }
+      Authentication authentication = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+      // Start a new session for the user
+      UserSession session = monitoringService.startSession(userDetails.getId());
+
+      String jwt = jwtUtils.generateJwtToken(authentication, session.getId());  // Pass sessionId
+
+      List<String> roles = userDetails.getAuthorities().stream()
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.toList());
+      System.out.println("iduser"+userDetails.getId() );
+      RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId(), session.getId());
+      ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
+              .httpOnly(true)
+              .secure(true) // Enable for HTTPS
+              .path("/api/auth/refreshToken")
+              .maxAge(7 * 24 * 60 * 60) // Example: 7 days
+              .sameSite("Strict") // CSRF protection
+              .build();
+
+      logger.info("User {} signed in successfully.", loginRequest.getUsername());
+      return ResponseEntity.ok()
+              .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()) // Set the cookie in the response
+              .body(new JwtResponse(
+                      jwt,
+                      refreshToken.getToken(),
+                      userDetails.getId(),
+                      userDetails.getUsername(),
+                      roles,
+                      session.getId()  // Return session ID to track API usage
+              ));
+    } catch (BadCredentialsException e) {
+      // Handle incorrect username or password
+      logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
+      return ResponseEntity.status(401).body(new MessageResponse("Error: Invalid username or password", 401));
+    } catch (Exception e) {
+      logger.error("Error during sign-in for username: {}", loginRequest.getUsername(), e);
+      return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
+    }
+  }
+ @PostMapping("/signin2")
   public ResponseEntity<?> authenticateUser2(@Valid @RequestBody LoginRequest loginRequest) {
+
     logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
 
     try {
@@ -611,6 +729,10 @@ public class AuthController {
       return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
     }
   }
+
+  */
+
+
 
 }
 

@@ -15,10 +15,10 @@ import lombok.Setter;
 @Table(name = "BASCRDHL")
 public class TabCardHolder {
     @Id
-    @Column(name = "PORT-NUMCLT", nullable = true)
+    @Column(name = "PORT-NUMCLT", nullable = false)
     private String clientNumber;
 
-    @Column(name = "PORT-NOPORT", nullable = true, unique = true)
+    @Column(name = "PORT-NOPORT", nullable = false, unique = true)
     private String cardNumber;
 
     @Column(name = "PORT-DATCREAENR")
@@ -28,7 +28,7 @@ public class TabCardHolder {
     private String modificationDate;
 
     @Column(name = "PORT-CODANNUL")
-    private String cancellationCode;
+    private boolean cancellationCode;
 
     @Column(name = "PORT-NOM", nullable = true)
     private String name;

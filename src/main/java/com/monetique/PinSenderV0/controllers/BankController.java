@@ -49,6 +49,10 @@ public class BankController {
         BankRequest bankRequest;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
             bankRequest = objectMapper.readValue(bankRequestJson, BankRequest.class);
@@ -80,6 +84,10 @@ public class BankController {
         logger.info("Received request to get banks list");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
 
@@ -106,6 +114,10 @@ public class BankController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
             TabBank bank = bankservice.getBankById(id);
@@ -130,6 +142,10 @@ public class BankController {
         logger.info("Received request to delete bank");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
         try {
 
             bankservice.deleteBank(id);
@@ -157,6 +173,10 @@ public class BankController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         BankRequest bankRequest;
 

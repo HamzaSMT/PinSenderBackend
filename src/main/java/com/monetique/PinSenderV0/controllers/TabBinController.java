@@ -1,6 +1,5 @@
 package com.monetique.PinSenderV0.controllers;
 
-
 import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceAlreadyExistsException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
@@ -23,7 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tabbin")
@@ -33,22 +31,29 @@ public class TabBinController {
 
     @Autowired
     private ItabBinService tabBinService;
+
     @Autowired
     UserRepository userRepository;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> createTabBin(@RequestBody TabBinRequest tabBinRequest) {
+    public ResponseEntity<MessageResponse> createTabBin(@RequestBody TabBinRequest tabBinRequest) {
         logger.info("Received request to create TabBin: {}", tabBinRequest);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
         User currentUser = userRepository.findById(currentUserDetails.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
 
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
-            throw new AccessDeniedException("Error: Only Super Admin can create Bin.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Error: Only Super Admin can create Bin.", 403));
         }
 
         try {
@@ -57,94 +62,130 @@ public class TabBinController {
             return ResponseEntity.ok(new MessageResponse("TabBin created successfully!", 200));
         } catch (ResourceAlreadyExistsException e) {
             logger.error("Error creating TabBin: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse(e.getMessage(), 409));
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageResponse(e.getMessage(), 409));
+        } catch (Exception e) {
+            logger.error("Error while creating TabBin: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error creating TabBin!", 500));
         }
     }
+
     @GetMapping("/{bin}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> getTabBinByBin(@PathVariable String bin) {
+    public ResponseEntity<MessageResponse> getTabBinByBin(@PathVariable String bin) {
         logger.info("Fetching TabBin with bin: {}", bin);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
         User currentUser = userRepository.findById(currentUserDetails.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
 
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
-            throw new AccessDeniedException("Error: Only Super Admin can get bin.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Error: Only Super Admin can get bin.", 403));
         }
-        BinDTOresponse tabBinResponseDTO = tabBinService.getTabBinByBin(bin);
 
+        BinDTOresponse tabBinResponseDTO = tabBinService.getTabBinByBin(bin);
         if (tabBinResponseDTO != null) {
             logger.info("TabBin found: {}", tabBinResponseDTO);
-            return ResponseEntity.ok(tabBinResponseDTO);
+            return ResponseEntity.ok(new MessageResponse("TabBin found successfully! "+tabBinResponseDTO, 200));
         } else {
             logger.warn("TabBin not found with bin: {}", bin);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("TabBin not found with bin: " + bin, 404));
         }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllTabBins() {
+    public ResponseEntity<MessageResponse> getAllTabBins() {
         logger.info("Fetching all TabBins");
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
         User currentUser = userRepository.findById(currentUserDetails.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
 
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
-            throw new AccessDeniedException("Error: Only Super Admin can get all bins.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Error: Only Super Admin can get all bins.", 403));
         }
 
-
         List<BinDTOresponse> tabBins = tabBinService.getAllTabBins();
-        return ResponseEntity.ok(tabBins);
+        return ResponseEntity.ok(new MessageResponse("All TabBins retrieved successfully! " +tabBins, 200));
     }
 
     @PutMapping("/update/{bin}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> updateTabBin(@PathVariable String bin, @RequestBody TabBinRequest tabBinRequest) {
+    public ResponseEntity<MessageResponse> updateTabBin(@PathVariable String bin, @RequestBody TabBinRequest tabBinRequest) {
         logger.info("Updating TabBin with bin: {}", bin);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
         User currentUser = userRepository.findById(currentUserDetails.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
 
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
-            throw new AccessDeniedException("Error: Only Super Admin can update bin.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Error: Only Super Admin can update bin.", 403));
         }
 
         try {
             TabBin updatedTabBin = tabBinService.updateTabBin(bin, tabBinRequest);
             logger.info("TabBin updated successfully with bin: {}", updatedTabBin.getBin());
-            return ResponseEntity.ok(updatedTabBin);
+            return ResponseEntity.ok(new MessageResponse("TabBin updated successfully! "+updatedTabBin , 200));
         } catch (ResourceAlreadyExistsException e) {
             logger.error("Error updating TabBin: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse(e.getMessage(), 409));
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageResponse(e.getMessage(), 409));
         } catch (ResourceNotFoundException e) {
             logger.error("TabBin not found: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse(e.getMessage(), 404));
         } catch (Exception e) {
             logger.error("Error while updating TabBin: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error updating TabBin!", 500));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error updating TabBin!", 500));
         }
     }
 
     @DeleteMapping("/delete/{bin}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> deleteTabBin(@PathVariable String bin) {
+    public ResponseEntity<MessageResponse> deleteTabBin(@PathVariable String bin) {
+        logger.info("Deleting TabBin with bin: {}", bin);
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
         User currentUser = userRepository.findById(currentUserDetails.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
 
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             logger.error("Access denied: User {} is not a Super Admin", currentUserDetails.getUsername());
-            throw new AccessDeniedException("Error: Only Super Admin can delete bin.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Error: Only Super Admin can delete bin.", 403));
         }
 
         try {
@@ -153,10 +194,12 @@ public class TabBinController {
             return ResponseEntity.ok(new MessageResponse("TabBin deleted successfully!", 200));
         } catch (ResourceNotFoundException e) {
             logger.error("TabBin not found: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse(e.getMessage(), 404));
         } catch (Exception e) {
             logger.error("Error while deleting TabBin: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error deleting TabBin!", 500));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error deleting TabBin!", 500));
         }
     }
 }

@@ -1,10 +1,17 @@
-package com.monetique.PinSenderV0.security.services;
+package com.monetique.PinSenderV0.security.services.Cardholder;
 
+import com.monetique.PinSenderV0.Interfaces.ICardholderService;
+import com.monetique.PinSenderV0.RabbitMQ.RabbitMQConfig;
 import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
+import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
 import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.TabBinRepository;
 import com.monetique.PinSenderV0.repository.TabCardHolderRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.Binding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -14,14 +21,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TabCardHolderService {
+public class TabCardHolderService implements ICardholderService {
     @Autowired
     TabCardHolderRepository tabCardHolderRepository;
     @Autowired
     BankRepository bankRepository;
     @Autowired
     TabBinRepository tabBinRepository;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private RabbitMQConfig rabbitMQConfig;
 
+    private static final String EXCHANGE_NAME = "cardholder.exchange";
+    private static final String ROUTING_KEY = "cardholder.routingKey";;
+
+
+
+
+    @Override
     public List<TabCardHolderresponse> getAllCardHolders() {
         List<TabCardHolder> cardHolders = tabCardHolderRepository.findAll();
         List<TabCardHolderresponse> response = cardHolders.stream()
@@ -29,8 +47,8 @@ public class TabCardHolderService {
                 .collect(Collectors.toList());
         return response;
     }
-
-    private TabCardHolder extractCardHolderAttributes(String line) {
+    @Override
+    public TabCardHolder extractCardHolderAttributes(String line) {
         TabCardHolder cardHolder = new TabCardHolder();
 
         // Extract attributes from specific positions in the line
@@ -49,7 +67,7 @@ public class TabCardHolderService {
 
         return cardHolder;
     }
-
+    @Override
     public void processCardHolderLine(String line) {
         // Step 1: Extract the card number from the line
         String cardNumber = line.substring(4, 21);  // Assuming the card number is from position 5 to 21
@@ -69,15 +87,15 @@ public class TabCardHolderService {
             createCardHolder(line);
         }
     }
-
-    private void createCardHolder(String line) {
+@Override
+public void createCardHolder(String line) {
         TabCardHolder newCardHolder = extractCardHolderAttributes(line);  // Extract attributes from the line
 
         // Save the new cardholder
         tabCardHolderRepository.save(newCardHolder);
     }
-
-    private void updateCardHolder(TabCardHolder existingCardHolder, String line) {
+    @Override
+    public void updateCardHolder(TabCardHolder existingCardHolder, String line) {
         TabCardHolder updatedCardHolder = extractCardHolderAttributes(line);  // Extract updated attributes
 
         // Update the fields in the existing cardholder entity
@@ -93,7 +111,7 @@ public class TabCardHolderService {
             // Handle the error (e.g., log it or rethrow it)
         }
     }
-
+    @Override
     public String processCardHolderLines(List<String> lines) {
         int createdCount = 0;
         int updatedCount = 0;
@@ -132,4 +150,11 @@ public class TabCardHolderService {
     }
 
 
+
+    @Override
+    public void verifyCardholder(VerifyCardholderRequest request) {
+        // Send the request to the RabbitMQ exchange using the specific routing key
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, request);  // Message is converted to JSON
+        System.out.println("Verification request sent for cardholder: " + request.getCardNumber());
+    }
 }

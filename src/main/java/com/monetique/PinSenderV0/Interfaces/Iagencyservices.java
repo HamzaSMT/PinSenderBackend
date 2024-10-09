@@ -15,6 +15,5 @@ public interface Iagencyservices {
     List<Agency> listAllAgencies(Long userId);
     MessageResponse deleteAgency(Long id, Long userId);
     Agency getAgencyById(Long agencyId, Long userId);
-
     MessageResponse updateAgency(Long agencyId, AgencyRequest agencyRequest, Long userId);
 }

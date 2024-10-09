@@ -36,7 +36,11 @@ public class AgencyController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-
+        // Check if the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
         try {
             MessageResponse response = agencyService.createAgency(agencyRequest, currentUserDetails.getId());
             return ResponseEntity.ok(response);
@@ -60,6 +64,10 @@ public class AgencyController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
             List<Agency> agencies = agencyService.listAllAgencies(currentUserDetails.getId());
@@ -84,6 +92,10 @@ public class AgencyController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
             MessageResponse response = agencyService.deleteAgency(id, currentUserDetails.getId());
@@ -108,6 +120,10 @@ public class AgencyController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
             Agency agency = agencyService.getAgencyById(id, currentUserDetails.getId());
@@ -131,6 +147,10 @@ public class AgencyController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
 
         try {
             MessageResponse response = agencyService.updateAgency(id, agencyRequest, currentUserDetails.getId());
@@ -142,7 +162,7 @@ public class AgencyController {
             logger.error("Error updating agency: {}", e.getMessage());
             return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
         }catch (Exception e) {
-            logger.error("Error while deleting bank: {}", e.getMessage());
+            logger.error("Error updating agency: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error updating agency!", 500));
         }
 
