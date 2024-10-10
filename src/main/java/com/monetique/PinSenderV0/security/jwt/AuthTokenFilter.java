@@ -2,7 +2,9 @@ package com.monetique.PinSenderV0.security.jwt;
 
 import java.io.IOException;
 
+import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.security.services.UserDetailsServiceImpl;
+import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
   private JwtUtils jwtUtils;
+  @Autowired
+  ItrackingingService trackingingService;
 
   @Autowired
   private UserDetailsServiceImpl userDetailsService;
@@ -32,10 +36,25 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
           throws ServletException, IOException {
     try {
+      // Extract JWT from the request
       String jwt = parseJwt(request);
+
+      // If JWT is present and valid
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwt); // Extract sessionId from JWT
 
+        // Check if the session is valid (i.e., not logged out)
+        UserSession session = trackingingService.getSessionById(sessionId);
+        if (session != null && session.getLogoutTime() != null) {
+          // Session is logged out, reject the request
+          logger.error("Session is logged out: {}");
+          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          response.getWriter().write("Session is invalidated due to logout");
+          return; // Stop further processing
+        }
+
+        // If session is valid, authenticate the user
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -55,8 +74,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       return; // Stop further processing
     }
 
+    // Continue with the filter chain if everything is valid
     filterChain.doFilter(request, response);
   }
+
 
 
 

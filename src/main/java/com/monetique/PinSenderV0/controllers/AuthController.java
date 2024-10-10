@@ -705,7 +705,7 @@ public class AuthController {
 
       logger.info("User {} signed in successfully.", loginRequest.getUsername());
 
-      return ResponseEntity.ok(new JwtResponse(
+      return ResponseEntity.ok(new JwtRe  sponse(
               jwt,
               newRefreshToken.getToken(),
               userDetails.getId(),
