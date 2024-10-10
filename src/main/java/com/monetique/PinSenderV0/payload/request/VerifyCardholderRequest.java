@@ -15,6 +15,10 @@ public class VerifyCardholderRequest {
     private String finalDate;
     private String nationalId;
     private String gsm;
+    private Long agentId;  // Add these fields
+    private Long branchId; // Add these fields
+    private Long bankId;   // Add these fields
+
 
 
 }

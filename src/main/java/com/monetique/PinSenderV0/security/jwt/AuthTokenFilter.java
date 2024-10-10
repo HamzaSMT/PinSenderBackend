@@ -3,6 +3,7 @@ package com.monetique.PinSenderV0.security.jwt;
 import java.io.IOException;
 
 import com.monetique.PinSenderV0.security.services.UserDetailsServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,12 +43,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
+    } catch (ExpiredJwtException e) {
+      logger.error("JWT token is expired: {}", e);
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("JWT Token is expired");
+      return; // Stop further processing
     } catch (Exception e) {
-      log.error("Cannot set user authentication: {}", e);
+      logger.error("Cannot set user authentication: {}", e);
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("Authentication error");
+      return; // Stop further processing
     }
 
     filterChain.doFilter(request, response);
   }
+
+
+
+
 
   private String parseJwt(HttpServletRequest request) {
     String headerAuth = request.getHeader("Authorization");

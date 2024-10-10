@@ -1,11 +1,10 @@
 package com.monetique.PinSenderV0.Interfaces;
 
-import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
 import com.monetique.PinSenderV0.payload.request.BankRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 public interface IbankService {

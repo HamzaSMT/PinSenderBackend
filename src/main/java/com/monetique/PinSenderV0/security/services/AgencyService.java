@@ -1,6 +1,5 @@
 package com.monetique.PinSenderV0.security.services;
 
-import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.Iagencyservices;
 import com.monetique.PinSenderV0.models.Banks.Agency;
@@ -15,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 public class AgencyService implements Iagencyservices {

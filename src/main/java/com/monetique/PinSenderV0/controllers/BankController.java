@@ -1,7 +1,6 @@
 package com.monetique.PinSenderV0.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.IbankService;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
@@ -17,12 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -104,6 +104,18 @@ public class BankController {
             // Log and return a generic error message
             logger.error("Error while listing banks: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error retrieving bank list!", 500));
+        }
+    }
+    @GetMapping("/banks/list1")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<?> listAllBanks1() {
+        try {
+            // Logic to get the list of banks
+            return ResponseEntity.ok(bankservice.listAllBanks());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Access denied", 403));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("An error occurred", 500));
         }
     }
 

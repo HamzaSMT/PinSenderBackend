@@ -1,6 +1,5 @@
 package com.monetique.PinSenderV0.controllers;
 
-import com.monetique.PinSenderV0.Exception.AccessDeniedException;
 import com.monetique.PinSenderV0.Exception.ResourceAlreadyExistsException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.ItabBinService;

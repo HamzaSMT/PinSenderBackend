@@ -61,14 +61,9 @@ public class WebSecurityConfig {
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    // Allow public access to login, registration, and test endpoints
-                    .requestMatchers("/api/**",  "/api/test/**").permitAll()
-                    .requestMatchers("/api/auth/createSuperAdmin").hasRole("SUPER_ADMIN")
-                    .requestMatchers("/api/auth/Listbanks").hasRole("SUPER_ADMIN")
-                    // Protect the VerificationController endpoints
-                    .requestMatchers("/api/auth/verifyCardholder", "/api/auth/validateOtp").authenticated()
-                    // All other endpoints require authentication
-                    .requestMatchers("/api/admin/monitoring/**").hasRole("SUPER_ADMIN")
+                    .requestMatchers("/api/auth/**",  "/api/test/**").permitAll()
+                    .requestMatchers("/api/bank/**").hasRole("SUPER_ADMIN")
+                    .requestMatchers("/api/monitor/**").hasRole("SUPER_ADMIN")
                     .anyRequest().authenticated())
             .cors(cors -> cors.configurationSource(request -> {
               CorsConfiguration corsConfig = new CorsConfiguration();
@@ -86,11 +81,13 @@ public class WebSecurityConfig {
               headers.addHeaderWriter(new StaticHeadersWriter("X-WebKit-CSP", "default-src 'self'"));
             });
 
-    // Add authentication provider
-    http.authenticationProvider(authenticationProvider());
+    // Configure anonymous users behavior
+    http.anonymous(anonymousConfigurer -> anonymousConfigurer.disable());
+
     // Add JWT filter before username/password authentication filter
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
+
 }

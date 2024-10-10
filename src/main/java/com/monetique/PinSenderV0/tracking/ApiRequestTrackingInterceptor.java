@@ -64,9 +64,15 @@ public class ApiRequestTrackingInterceptor implements HandlerInterceptor {
         // Extract JWT token and session ID
         String token = request.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);  // Strip "Bearer " prefix
-            sessionId = jwtUtils.getSessionIdFromJwtToken(token);
+            try {
+                token = token.substring(7);  // Strip "Bearer " prefix
+                sessionId = jwtUtils.getSessionIdFromJwtToken(token);
+            } catch (Exception jwtEx) {
+
+                sessionId = 0L; // Default or handle as needed
+            }
         }
+
 
         String ipAddress = request.getRemoteAddr();
         String userAgent = request.getHeader("User-Agent");

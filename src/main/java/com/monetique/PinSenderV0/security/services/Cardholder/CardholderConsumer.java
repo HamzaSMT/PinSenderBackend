@@ -5,8 +5,12 @@ import com.monetique.PinSenderV0.Interfaces.IOtpService;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 
 import com.monetique.PinSenderV0.repository.TabCardHolderRepository;
+import com.monetique.PinSenderV0.security.services.BillingServicePinOtp;
+import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +20,8 @@ public class CardholderConsumer {
     private TabCardHolderRepository cardholderRepository;
     @Autowired
     private IOtpService otpService;
+    @Autowired
+    BillingServicePinOtp billingServicePinOtp;
 
     @RabbitListener(queues = "cardholder.queue")
     public void handleMessage(VerifyCardholderRequest request) {
@@ -36,6 +42,11 @@ public class CardholderConsumer {
 
             String otp = otpService.sendOtp(request.getGsm());
             System.out.println("OTP sent to phone number: " + request.getGsm()+"with value"+ otp);
+
+
+            // Log the sent OTP using details from the authenticated user
+            billingServicePinOtp.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
+
 
             // Here you can wait for the user to input the OTP or return a success response
         } else {

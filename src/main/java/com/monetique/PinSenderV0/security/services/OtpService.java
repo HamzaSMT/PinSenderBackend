@@ -2,6 +2,8 @@ package com.monetique.PinSenderV0.security.services;
 
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 
+import com.monetique.PinSenderV0.models.Banks.SentitmePinOTP;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -13,6 +15,7 @@ import java.util.Random;
 @Service
 
 public class OtpService implements IOtpService {
+
 
     // A simple in-memory store for OTPs (for demonstration)
     private Map<String, String> otpStore = new HashMap<>();

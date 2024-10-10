@@ -24,16 +24,16 @@ public class SentitmePinOTP {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "agent_id", nullable = false)
+    @Column(name = "agent_id")
     private Long agentId;
 
-    @Column(name = "branch_id", nullable = false)
+    @Column(name = "branch_id")
     private Long branchId;
 
-    @Column(name = "bank_id", nullable = false)
+    @Column(name = "bank_id", nullable = true)
     private Long bankId;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = true)
     private String type; // OTP or PIN
 
     @Column(name = "sent_at", nullable = false)
