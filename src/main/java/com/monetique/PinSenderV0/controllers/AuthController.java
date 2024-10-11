@@ -172,19 +172,9 @@ public class AuthController {
     try {
       // Delegate the token refresh logic to the TokenRefreshService
       TokenRefreshResponse response = authenticationService.refreshToken(requestRefreshToken);
-
-      // Create a new cookie for the refresh token (existing refresh token is returned)
-      ResponseCookie newRefreshTokenCookie = ResponseCookie.from("refreshToken", response.getRefreshToken())
-              .httpOnly(true)
-              .secure(true)
-              .path("/api/auth/refreshToken")
-              .maxAge(7 * 24 * 60 * 60) // 7 days
-              .sameSite("Strict")
-              .build();
-
+      
       // Return the response with the new refresh token cookie
       return ResponseEntity.ok()
-              .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString()) // Set the cookie in the response
               .body(response); // Return the new JWT and refresh token details
     } catch (TokenRefreshException e) {
       logger.error("Error refreshing token: {}", e.getMessage());
