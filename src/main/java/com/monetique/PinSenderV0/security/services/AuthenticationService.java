@@ -76,8 +76,17 @@ public class AuthenticationService {
                 .collect(Collectors.toList());
 
         // Create the response object
-        return new JwtResponse(jwt,refreshToken.getToken(), userDetails.getId(), userDetails.getUsername(), roles, session.getId());
+        Long adminId = (userDetails.getAdmin() != null) ? userDetails.getAdmin().getId() : null;
+        Long bankId = (userDetails.getBank() != null) ? userDetails.getBank().getId() : null;
+        Long agencyId = (userDetails.getAgency() != null) ? userDetails.getAgency().getId() : null;
+
+
+
+        return new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
+                userDetails.getUsername(), roles, adminId,
+                bankId,agencyId, session.getId());
     }
+
 
     public void logoutUser(String jwtToken) {
         // Validate and parse the token
