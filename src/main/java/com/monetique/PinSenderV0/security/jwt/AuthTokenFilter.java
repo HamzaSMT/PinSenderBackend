@@ -42,6 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       // If JWT is present and valid
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        logger.error("Session is logged out: {}"+ username);
         Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwt); // Extract sessionId from JWT
 
         // Check if the session is valid (i.e., not logged out)

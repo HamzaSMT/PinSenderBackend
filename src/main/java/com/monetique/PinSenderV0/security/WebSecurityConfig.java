@@ -67,6 +67,7 @@ public class WebSecurityConfig {
                     .anyRequest().authenticated())
             .cors(cors -> cors.configurationSource(request -> {
               CorsConfiguration corsConfig = new CorsConfiguration();
+              corsConfig.setExposedHeaders(Collections.singletonList("Set-Cookie")); // Allow the Set-Cookie header to be visiblecorsConfig.setAllowCredentials(true); // This is essential for cookies
               corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
               corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
               corsConfig.setAllowedHeaders(Arrays.asList("*"));

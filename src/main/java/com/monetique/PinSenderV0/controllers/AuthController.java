@@ -172,7 +172,7 @@ public class AuthController {
     try {
       // Delegate the token refresh logic to the TokenRefreshService
       TokenRefreshResponse response = authenticationService.refreshToken(requestRefreshToken);
-      
+
       // Return the response with the new refresh token cookie
       return ResponseEntity.ok()
               .body(response); // Return the new JWT and refresh token details

@@ -62,7 +62,7 @@ public class JwtUtils {
     public String generateTokenFromUsersession(User user, Long sessionId) {
 
     return Jwts.builder()
-            .setSubject(user.getId().toString()) // Set userId as the subject
+            .setSubject(user.getUsername())
             .claim("roles", user.getRoles().stream()
                     .map(role -> role.getName().name()) // Get role names
                     .collect(Collectors.toList()))
