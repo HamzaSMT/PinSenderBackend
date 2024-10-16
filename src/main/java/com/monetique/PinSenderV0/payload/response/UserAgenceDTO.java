@@ -21,16 +21,19 @@ public class UserAgenceDTO {
         private String agencyName;
         private String agencyEmail;
         private String agencyCode;
+        private String Region;
+        private String city;
         private String agencyPhoneNumber;
 
         // Constructor
         public UserAgenceDTO(Long userId, String username, String email, String phoneNumber,
-                             Long agencyId, String agencyName, String agencyEmail, String agencyCode, String agencyPhoneNumber) {
+                             Long agencyId,String city,String Region, String agencyName, String agencyEmail, String agencyCode, String agencyPhoneNumber) {
                 this.userId = userId;
                 this.username = username;
                 this.email = email;
                 this.phoneNumber = phoneNumber;
-
+                this.Region=Region;
+                this.city=city;
                 this.agencyId = agencyId;
                 this.agencyName = agencyName;
                 this.agencyEmail = agencyEmail;

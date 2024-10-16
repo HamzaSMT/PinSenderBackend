@@ -105,7 +105,9 @@ public class AgencyService implements Iagencyservices {
                     agency != null ? agency.getName() : null,
                     agency != null ? agency.getContactEmail() : null,
                     agency != null ? agency.getAgencyCode() : null,
-                    agency != null ? agency.getContactPhoneNumber() : null
+                    agency != null ? agency.getContactPhoneNumber() : null,
+                    agency != null ? agency.getCity() : null,
+                    agency != null ? agency.getRegion() : null
             );
         }).collect(Collectors.toList());
     }
