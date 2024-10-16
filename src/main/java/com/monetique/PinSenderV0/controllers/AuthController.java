@@ -109,8 +109,8 @@ public class AuthController {
     } catch (BadCredentialsException e) {
       // Handle invalid username or password
       logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("Error: Invalid username or password", 401));
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+              .body(new MessageResponse("Error: Invalid username or password", 400));
     } catch (Exception e) {
       // Handle other exceptions
       logger.error("Error during sign-in for username: {}", loginRequest.getUsername(), e);
