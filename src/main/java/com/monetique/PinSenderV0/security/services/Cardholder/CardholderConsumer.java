@@ -41,7 +41,7 @@ public class CardholderConsumer {
             // Proceed with OTP generation, sending SMS, etc.
 
             String otp = otpService.sendOtp(request.getGsm());
-            System.out.println("OTP sent to phone number: " + request.getGsm()+"with value"+ otp);
+            System.out.println("OTP will be send to phone number: " + request.getGsm()+"with value"+ otp);
 
 
             // Log the sent OTP using details from the authenticated user

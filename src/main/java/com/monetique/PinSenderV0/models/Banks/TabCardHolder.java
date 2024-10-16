@@ -71,7 +71,6 @@ public class TabCardHolder {
     @JoinColumn(name = "BIN-Number", referencedColumnName = "BIN-Number", nullable = true)
     private TabBin bin;
 
-
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "PORT-CODE-BANQUE", referencedColumnName = "bank_code", nullable = true)

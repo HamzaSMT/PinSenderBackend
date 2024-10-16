@@ -52,6 +52,7 @@ public class TabBank {
     private byte[] logo;
 
     private String adminUsername;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabBin> bins = new HashSet<>();

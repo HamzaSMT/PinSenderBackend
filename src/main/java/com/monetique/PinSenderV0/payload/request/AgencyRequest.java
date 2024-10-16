@@ -10,5 +10,8 @@ public class AgencyRequest {
     private String contactEmail;
     private String contactPhoneNumber;
     private String agencyCode;
+    private String Region;
+    private String city;
+    private String adresse;
 
 }

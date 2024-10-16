@@ -42,14 +42,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       // If JWT is present and valid
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        logger.error("Session is logged out: {}"+ username);
+        logger.info("username from token is "+ username);
         Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwt); // Extract sessionId from JWT
-
         // Check if the session is valid (i.e., not logged out)
         UserSession session = trackingingService.getSessionById(sessionId);
         if (session != null && session.getLogoutTime() != null) {
           // Session is logged out, reject the request
-          logger.error("Session is logged out: {}");
+          logger.info("Session is logged out"+ sessionId);
           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
           response.getWriter().write("Session is invalidated due to logout");
           return; // Stop further processing

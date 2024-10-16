@@ -3,7 +3,9 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.models.Banks.Agency;
 import com.monetique.PinSenderV0.payload.request.AgencyRequest;
+import com.monetique.PinSenderV0.payload.response.AgencyDTO;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
+import com.monetique.PinSenderV0.payload.response.UserAgenceDTO;
 import com.monetique.PinSenderV0.security.services.AgencyService;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
@@ -56,6 +58,33 @@ public class AgencyController {
     }
 
     // List all Agencies
+    @GetMapping("/listassociateduser")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> listAllAgenciesAssociatedUser() {
+        logger.info("Received request to list all agencies");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
+        try {
+            List<UserAgenceDTO> agencies = agencyService.listAllAgenciesAssociatedUser(currentUserDetails.getId());
+            return ResponseEntity.ok(agencies);
+        } catch (AccessDeniedException e) {
+            logger.error("Access denied: {}", e.getMessage());
+            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+        } catch (ResourceNotFoundException e) {
+            logger.error("Error listing agencies: {}", e.getMessage());
+            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+        }catch (Exception e) {
+            logger.error("Error while getting agencys: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error getting agencys!", 500));
+        }
+    }
+
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> listAllAgencies() {
@@ -69,7 +98,7 @@ public class AgencyController {
         }
 
         try {
-            List<Agency> agencies = agencyService.listAllAgencies(currentUserDetails.getId());
+            List<AgencyDTO> agencies = agencyService.listAllAgencies(currentUserDetails.getId());
             return ResponseEntity.ok(agencies);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
@@ -82,6 +111,8 @@ public class AgencyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error getting agencys!", 500));
         }
     }
+
+
 
     // Delete Agency
     @DeleteMapping("/delete/{id}")

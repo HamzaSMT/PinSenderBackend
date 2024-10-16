@@ -15,6 +15,8 @@ import java.util.Random;
 @Service
 
 public class OtpService implements IOtpService {
+    @Autowired
+    SmsService smsService;
 
 
     // A simple in-memory store for OTPs (for demonstration)
@@ -30,13 +32,16 @@ public class OtpService implements IOtpService {
         // Store the OTP against the phone number
         otpStore.put(phoneNumber, otp);
         otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
-
-
-        // Simulate sending the OTP (in reality, integrate with an SMS service like Twilio)
-        System.out.println("OTP " + otp + " sent to phone number: " + phoneNumber);
+        String message = "Your OTP is " + otp;
+        smsService.sendSms(phoneNumber, message)
+                .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
+                .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
+                .subscribe(); // Non-blocking
 
         return otp;
     }
+
+
 
     @Override
     public boolean validateOtp(String phoneNumber, String otp) {

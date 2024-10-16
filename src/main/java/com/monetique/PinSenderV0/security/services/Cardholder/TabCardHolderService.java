@@ -52,15 +52,15 @@ public class TabCardHolderService implements ICardholderService {
         TabCardHolder cardHolder = new TabCardHolder();
 
         // Extract attributes from specific positions in the line
-        cardHolder.setClientNumber(line.substring(0, 30)); // Client number
-        cardHolder.setCardNumber(line.substring(4, 21)); // Card number
-        cardHolder.setName(line.substring(27, 53)); // Name (adjust positions accordingly)
+        cardHolder.setClientNumber(line.substring(446, 469)); // Client number
+        cardHolder.setCardNumber(line.substring(4, 22)); // Card number
+        cardHolder.setName(line.substring(27, 52)); // Name (adjust positions accordingly)
         cardHolder.setNationalId(line.substring(206, 219)); // National ID
         cardHolder.setRib(line.substring(100, 120)); // RIB
         cardHolder.setGsm(line.substring(303, 317)); // GSM
         cardHolder.setEmail(line.substring(160, 180));
         cardHolder.setCompanyName(line.substring(53, 79));// Email
-        cardHolder.setAgencyCode(line.substring(320, 330));
+        cardHolder.setAgencyCode(line.substring(254, 330));
 
 
         // Add other field extractions here (e.g., bin, bank, etc.)

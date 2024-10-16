@@ -29,9 +29,9 @@ public class Agency {
 
     @Column(name = "branch_code", unique = true, nullable = false)
     private String agencyCode;
-
+    private String Region;
+    private String city;
     private String contactPhoneNumber;
-
     private String adresse;
 
     @ManyToOne(fetch = FetchType.LAZY)

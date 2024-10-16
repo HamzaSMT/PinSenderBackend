@@ -36,7 +36,7 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   @JsonIgnore // Prevent serialization to avoid infinite recursion
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "admin_id", nullable = true) // Nullable: Super Admin and Admin might not have an Admin
   private User admin;
 
@@ -45,7 +45,7 @@ public class User {
   @JoinColumn(name = "bank_id", nullable = true)
   private TabBank bank;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "agency_id", nullable = true) // Nullable for users not yet associated with an agency
   private Agency agency;
 
@@ -53,7 +53,6 @@ public class User {
   public User(String username, String password,Set<Role> roles, User admin, TabBank bank, Agency agency) {
     this.username = username;
     this.password = password;
-
     this.roles = roles;
     this.admin = admin;
     this.bank = bank;

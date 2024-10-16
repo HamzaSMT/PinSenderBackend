@@ -16,6 +16,8 @@ public interface AgencyRepository extends JpaRepository<Agency, Long> {
     List<Agency> findByAdminId(@Param("adminId") Long adminId);
     @Query("SELECT a FROM Agency a WHERE a.bank.id = (SELECT b.id FROM TabBank b WHERE b.admin.id = :adminId)")
     List<Agency> findByAdminId(@Param("adminId") Long adminId);*/
-    List<Agency> findByBankId(Long bankId);
+   @Query("SELECT a FROM Agency a LEFT JOIN FETCH a.users WHERE a.bank.id = :bankId")
+   List<Agency> findByBankIdWithUsers(@Param("bankId") Long bankId);
+
 
 }

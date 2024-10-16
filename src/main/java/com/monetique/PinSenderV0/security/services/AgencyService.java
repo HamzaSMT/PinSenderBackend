@@ -5,7 +5,9 @@ import com.monetique.PinSenderV0.Interfaces.Iagencyservices;
 import com.monetique.PinSenderV0.models.Banks.Agency;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.AgencyRequest;
+import com.monetique.PinSenderV0.payload.response.AgencyDTO;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
+import com.monetique.PinSenderV0.payload.response.UserAgenceDTO;
 import com.monetique.PinSenderV0.repository.AgencyRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.access.AccessDeniedException;
 
 @Service
@@ -45,6 +49,9 @@ public class AgencyService implements Iagencyservices {
         agency.setName(agencyRequest.getName());
         agency.setContactEmail(agencyRequest.getContactEmail());
         agency.setContactPhoneNumber(agencyRequest.getContactPhoneNumber());
+        agency.setAdresse(agencyRequest.getAdresse());
+        agency.setCity(agencyRequest.getCity());
+        agency.setRegion(agencyRequest.getRegion());
         agency.setBank(currentUser.getBank());
 
         agencyRepository.save(agency);
@@ -52,20 +59,55 @@ public class AgencyService implements Iagencyservices {
         logger.info("Agency {} created successfully by Admin {}", agencyRequest.getAgencyCode(), currentUser.getUsername());
         return new MessageResponse("Agency created successfully!", 200);
     }
-
     @Override
-    public List<Agency> listAllAgencies(Long userId) {
+    public List<AgencyDTO> listAllAgencies(Long userId) {
         logger.info("Listing all agencies for user id: {}", userId);
 
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        Long bankId = currentUser.getBank().getId();
+        List<Agency> agencies = agencyRepository.findByBankIdWithUsers(bankId);
 
-        if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_ADMIN"))) {
-            logger.error("Access denied: User {} is not an Admin", currentUser.getUsername());
-            throw new AccessDeniedException("Only Admins can list their Agencies.");
-        }
+        // Convert the list of users to UserAgenceDTO
+        return agencies.stream().map(agence -> {
 
-        return agencyRepository.findByBankId(currentUser.getBank().getId());
+
+            return new AgencyDTO(
+                    agence.getId(),
+                    agence.getName(),
+                    agence.getCity(),
+                    agence.getAgencyCode(),
+                    agence.getContactPhoneNumber(),
+                    agence.getAdresse(),
+                    agence.getRegion(),
+                    agence.getContactEmail(),
+                    agence.getBank() != null ? agence.getBank().getName(): null
+
+            );
+        }).collect(Collectors.toList());
+    }
+    public List<UserAgenceDTO> listAllAgenciesAssociatedUser(Long userId) {
+        logger.info("Listing all agencies for user id: {}", userId);
+        List<User> users = userRepository.findByAdminId(userId);
+
+        // Convert the list of users to UserAgenceDTO
+        return users.stream().map(user -> {
+            Agency agency = user.getAgency();
+            // Assuming there's only one role per user
+
+            return new UserAgenceDTO(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+
+                    agency != null ? agency.getId() : null,  // Handle if user has no agency
+                    agency != null ? agency.getName() : null,
+                    agency != null ? agency.getContactEmail() : null,
+                    agency != null ? agency.getAgencyCode() : null,
+                    agency != null ? agency.getContactPhoneNumber() : null
+            );
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -142,10 +184,14 @@ public class AgencyService implements Iagencyservices {
         }
 
         // Update the agency fields
+        agency.setAgencyCode(agencyRequest.getAgencyCode());
         agency.setName(agencyRequest.getName());
         agency.setContactEmail(agencyRequest.getContactEmail());
         agency.setContactPhoneNumber(agencyRequest.getContactPhoneNumber());
-        agency.setAgencyCode(agencyRequest.getAgencyCode());
+        agency.setAdresse(agencyRequest.getAdresse());
+        agency.setCity(agencyRequest.getCity());
+        agency.setRegion(agencyRequest.getRegion());
+
 
         // Save the updated agency
         agencyRepository.save(agency);
