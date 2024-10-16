@@ -19,6 +19,8 @@ public class SignupRequest {
   private String bankname;
 
   private Set<String> role;
+  private String email;
+  private String phoneNumber;
 
   @NotBlank
   @Size(min = 6, max = 40)

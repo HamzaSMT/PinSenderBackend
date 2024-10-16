@@ -261,7 +261,7 @@ public class AuthController {
 
               // Create Admin without mandatory bank association initially
               User adminUser = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()),
-                      roles, currentUser, null, null); // No bank, no agency
+                      roles, currentUser,null, null); // No bank, no agency
               userRepository.save(adminUser);
               logger.info("Admin {} created successfully", signUpRequest.getUsername());
               break;
