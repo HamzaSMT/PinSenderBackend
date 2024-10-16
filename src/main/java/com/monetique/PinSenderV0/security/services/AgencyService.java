@@ -69,22 +69,17 @@ public class AgencyService implements Iagencyservices {
         List<Agency> agencies = agencyRepository.findByBankIdWithUsers(bankId);
 
         // Convert the list of users to UserAgenceDTO
-        return agencies.stream().map(agence -> {
-
-
-            return new AgencyDTO(
-                    agence.getId(),
-                    agence.getName(),
-                    agence.getCity(),
-                    agence.getAgencyCode(),
-                    agence.getContactPhoneNumber(),
-                    agence.getAdresse(),
-                    agence.getRegion(),
-                    agence.getContactEmail(),
-                    agence.getBank() != null ? agence.getBank().getName(): null
-
-            );
-        }).collect(Collectors.toList());
+        return agencies.stream().map(agency -> new AgencyDTO(
+                agency.getId(),
+                agency.getName(),
+                agency.getContactEmail(),
+                agency.getAgencyCode(),  // Ensure this is the correct agency code
+                agency.getContactPhoneNumber(),
+                agency.getAdresse(),
+                agency.getRegion(),       // Correctly map region
+                agency.getCity(),         // Correctly map city
+                agency.getBank() != null ? agency.getBank().getName() : null
+        )).collect(Collectors.toList());
     }
     public List<UserAgenceDTO> listAllAgenciesAssociatedUser(Long userId) {
         logger.info("Listing all agencies for user id: {}", userId);
@@ -94,7 +89,6 @@ public class AgencyService implements Iagencyservices {
         return users.stream().map(user -> {
             Agency agency = user.getAgency();
             // Assuming there's only one role per user
-
             return new UserAgenceDTO(
                     user.getId(),
                     user.getUsername(),
@@ -104,10 +98,10 @@ public class AgencyService implements Iagencyservices {
                     agency != null ? agency.getId() : null,  // Handle if user has no agency
                     agency != null ? agency.getName() : null,
                     agency != null ? agency.getContactEmail() : null,
-                    agency != null ? agency.getAgencyCode() : null,
-                    agency != null ? agency.getContactPhoneNumber() : null,
-                    agency != null ? agency.getCity() : null,
-                    agency != null ? agency.getRegion() : null
+                    agency != null ? agency.getAgencyCode() : null,  // Ensure this is the correct agency code
+                    agency != null ? agency.getCity() : null,        // Correctly map city
+                    agency != null ? agency.getRegion() : null,      // Correctly map region
+                    agency != null ? agency.getContactPhoneNumber() : null
             );
         }).collect(Collectors.toList());
     }
