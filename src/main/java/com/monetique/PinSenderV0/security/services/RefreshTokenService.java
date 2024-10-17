@@ -86,5 +86,11 @@ public class RefreshTokenService {
         refreshTokenRepository.deleteByUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
     }
 
+    @Transactional
+    public void deleteBysessionid(Long sessionid) {
+
+        refreshTokenRepository.deleteBySessionId(sessionid);
+    }
+
 
 }

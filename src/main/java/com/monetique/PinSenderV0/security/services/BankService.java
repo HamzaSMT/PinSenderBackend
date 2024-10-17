@@ -51,7 +51,7 @@ public class BankService implements IbankService {
         bank.setBinAcquereurVisa(bankRequest.getBinAcquereurVisa());
         bank.setBinAcquereurMcd(bankRequest.getBinAcquereurMcd());
         bank.setCtb(bankRequest.getCtb());
-        bank.setBanqueEtrangere(bankRequest.getBanqueEtrangere());
+        bank.setBanqueEtrangere(bankRequest.isBanqueEtrangere());
 
         // Handle logo upload if provided
         bank.setLogo(logo);
@@ -118,7 +118,7 @@ public class BankService implements IbankService {
         bank.setBinAcquereurVisa(bankRequest.getBinAcquereurVisa());
         bank.setBinAcquereurMcd(bankRequest.getBinAcquereurMcd());
         bank.setCtb(bankRequest.getCtb());
-        bank.setBanqueEtrangere(bankRequest.getBanqueEtrangere());
+        bank.setBanqueEtrangere(bankRequest.isBanqueEtrangere());
         if (logo != null) {
             bank.setLogo(logo);
         }

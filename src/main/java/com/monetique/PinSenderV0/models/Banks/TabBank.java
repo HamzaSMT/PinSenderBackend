@@ -46,7 +46,7 @@ public class TabBank {
     private String ctb;
 
     @Column(name = "BANQUE_ETRANGERE")
-    private String banqueEtrangere;
+    private boolean banqueEtrangere;
 
     @Lob // Use @Lob for large objects
     private byte[] logo;

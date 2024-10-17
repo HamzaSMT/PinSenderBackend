@@ -88,20 +88,8 @@ public class AuthenticationService {
     }
 
 
-    public void logoutUser(String jwtToken) {
-        // Validate and parse the token
-        if (!jwtUtils.validateJwtToken(jwtToken)) {
-            throw new RuntimeException("Invalid JWT token");
-        }
+    public void logoutUser(Long sessionId) {
 
-        // Get the Authentication object from Security Context
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        // Extract user ID from the UserDetailsImpl
-        Long userId = userDetails.getId();
-        // Extract session ID from the JWT token claims
-        Long sessionId = jwtUtils.getSessionIdFromJwtToken(jwtToken);
 
         // Fetch the session from the database
         UserSession session = monitoringService.getSessionById(sessionId);
@@ -118,9 +106,9 @@ public class AuthenticationService {
         monitoringService.endSession(sessionId);
 
         // Revoke the refresh token associated with the user
-        refreshTokenService.deleteByUserId(userId);
+        refreshTokenService.deleteBysessionid(sessionId);
 
-        logger.info("User with ID {} signed out successfully.", userId);
+        logger.info("Session ended successfully.", sessionId);
     }
 
     public TokenRefreshResponse refreshToken(String requestRefreshToken) {

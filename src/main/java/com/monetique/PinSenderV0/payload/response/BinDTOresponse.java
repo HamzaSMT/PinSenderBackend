@@ -26,6 +26,7 @@ public class BinDTOresponse {
         this.systemCode = tabBin.getSystemCode();
         this.cardType = tabBin.getCardType();
         this.serviceCode = tabBin.getServiceCode();
+        this.keyData=tabBin.getKeyData();
         this.bankName = tabBin.getBank().getName();  // Bank details
         this.bankCode = tabBin.getBank().getBankCode();
     }

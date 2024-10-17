@@ -47,10 +47,10 @@ public class AgencyController {
             return ResponseEntity.ok(response);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error creating agency: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error creating agency:", 404));
         }catch (Exception e) {
             logger.error("Error while deleting bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error creating branch!", 500));
@@ -75,13 +75,13 @@ public class AgencyController {
             return ResponseEntity.ok(agencies);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error listing agencies: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error listing agencies", 404));
         }catch (Exception e) {
             logger.error("Error while getting agencys: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error getting agencys!", 500));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error while getting agencys!", 500));
         }
     }
 
@@ -102,10 +102,10 @@ public class AgencyController {
             return ResponseEntity.ok(agencies);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error listing agencies: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error listing agencies", 404));
         }catch (Exception e) {
             logger.error("Error while getting agencys: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error getting agencys!", 500));
@@ -132,10 +132,10 @@ public class AgencyController {
             return ResponseEntity.ok(response);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied ", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error deleting agency: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error deleting agency", 404));
         }catch (Exception e) {
             logger.error("Error while deleting bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error deleting agency!", 500));
@@ -163,7 +163,7 @@ public class AgencyController {
             return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error fetching agency: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error fetching agency", 404));
         }catch (Exception e) {
             logger.error("Error while deleting bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error getting agency!", 500));
@@ -187,15 +187,14 @@ public class AgencyController {
             return ResponseEntity.ok(response);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error updating agency: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error updating agency", 404));
         }catch (Exception e) {
             logger.error("Error updating agency: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error updating agency!", 500));
         }
-
     }
     
 }

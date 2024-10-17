@@ -16,7 +16,7 @@ public class BankRequest {
     private String binAcquereurVisa;
     private String binAcquereurMcd;
     private String ctb;
-    private String banqueEtrangere;
+    private boolean banqueEtrangere;
 
 
 

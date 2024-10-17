@@ -120,20 +120,13 @@ public class AuthController {
   }
 
   @PostMapping("/signout")
-  public ResponseEntity<?> logoutUser(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+  public ResponseEntity<?> logoutUser(@RequestParam Long SessionId) {
     logger.info("Received sign-out request.");
 
-    // Check if the Authorization header is present
-    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-      return ResponseEntity.status(401).body(new MessageResponse("Error: Missing or invalid Authorization header", 401));
-    }
-
-    // Extract JWT token from the Authorization header
-    String jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
 
     try {
       // Delegate the sign-out logic to the SignOutService
-      authenticationService.logoutUser(jwtToken);
+      authenticationService.logoutUser(SessionId);
 
       // Create a cookie to delete the refresh token
       ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
@@ -380,7 +373,6 @@ public class AuthController {
     }
   }
   @PostMapping("/forgetPassword")
-  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {

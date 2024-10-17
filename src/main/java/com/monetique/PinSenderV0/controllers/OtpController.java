@@ -2,7 +2,9 @@ package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
+import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +22,15 @@ public class OtpController {
 
     // Endpoint to validate OTP
     @PostMapping("/validate")
-    public ResponseEntity<String> validateOtp(@RequestBody OtpValidationRequest request) {
+    public ResponseEntity<MessageResponse> validateOtp(@RequestBody OtpValidationRequest request) {
         boolean isValid = otpService.validateOtp(request.getPhoneNumber(), request.getOtp());
 
         if (isValid) {
-            return ResponseEntity.ok("Phone number validated successfully.");
+            return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {
-            return ResponseEntity.status(400).body("Invalid OTP.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("Phone number validated successfully.",400));
+
         }
     }
     @PostMapping("/resend")

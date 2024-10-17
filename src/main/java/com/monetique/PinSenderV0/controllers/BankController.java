@@ -63,10 +63,10 @@ public class BankController {
             return ResponseEntity.ok(new MessageResponse("Bank created successfully!", 200));
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
-            logger.error("Error: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            logger.error("Error Something isn't right error message: {}", e.getMessage());
+            return ResponseEntity.status(404).body(new MessageResponse("Error Something isn't right error message", 404));
         } catch (Exception e) {
             logger.error("Error while creating bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error creating bank!", 500));
@@ -99,7 +99,7 @@ public class BankController {
         } catch (AccessDeniedException e) {
             // Log and return an access denied message
             logger.error("Access Denied: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Access Denied", 403));
         } catch (Exception e) {
             // Log and return a generic error message
             logger.error("Error while listing banks: {}", e.getMessage());
@@ -137,10 +137,10 @@ public class BankController {
             return ResponseEntity.ok(bank);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error fetching bank: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Error fetching bank", 404));
         } catch (Exception e) {
             logger.error("Error while fetching bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error getting bank!", 500));
@@ -166,10 +166,10 @@ public class BankController {
             return ResponseEntity.ok(new MessageResponse("Bank deleted successfully!", 200));
         } catch (ResourceNotFoundException e) {
             logger.error("Bank not found: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Bank not found", 404));
         } catch (AccessDeniedException e) {
             logger.error("Access Denied: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Access Denied", 403));
         } catch (Exception e) {
             logger.error("Error while deleting bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error deleting bank!", 500));
@@ -200,10 +200,10 @@ public class BankController {
             return ResponseEntity.ok(response);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error updating bank: {}", e.getMessage());
-            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(404).body(new MessageResponse("Access denied", 404));
         }catch (Exception e) {
             logger.error("Error while updating bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error updating bank!", 500));

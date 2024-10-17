@@ -103,7 +103,7 @@ public class TabBinController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<MessageResponse> getAllTabBins() {
+    public ResponseEntity<?> getAllTabBins() {
         logger.info("Fetching all TabBins");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -123,7 +123,7 @@ public class TabBinController {
         }
 
         List<BinDTOresponse> tabBins = tabBinService.getAllTabBins();
-        return ResponseEntity.ok(new MessageResponse("All TabBins retrieved successfully! " +tabBins, 200));
+        return ResponseEntity.ok(tabBins);
     }
 
     @PutMapping("/update/{bin}")

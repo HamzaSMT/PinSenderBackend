@@ -14,6 +14,7 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false ,unique = true)
     private Long sessionId;
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
