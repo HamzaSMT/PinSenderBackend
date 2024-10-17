@@ -75,7 +75,7 @@ public class TabCardHolderController {
         cardHolderService.verifyCardholder(request);
 
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new MessageResponse("Verification request sent to queue.", 500));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new MessageResponse("Verification request sent to queue.", 202));
 
 
     }
