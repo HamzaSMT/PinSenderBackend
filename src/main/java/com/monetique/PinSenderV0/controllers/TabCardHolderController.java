@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
+import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class TabCardHolderController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<String> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
+    public ResponseEntity<?> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
 
@@ -72,11 +73,11 @@ public class TabCardHolderController {
 
 
         cardHolderService.verifyCardholder(request);
-        return new ResponseEntity<>("Verification request sent to queue.", HttpStatus.ACCEPTED);
+
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new MessageResponse("Verification request sent to queue.", 500));
+
+
     }
-
-
-
-
 
     }

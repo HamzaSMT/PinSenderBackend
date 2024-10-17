@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtpValidationRequest {
+public class
+OtpValidationRequest {
     private String phoneNumber;
     private String otp;
 }

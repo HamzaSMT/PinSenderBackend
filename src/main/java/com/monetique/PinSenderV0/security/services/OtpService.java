@@ -23,7 +23,7 @@ public class OtpService implements IOtpService {
     private Map<String, String> otpStore = new HashMap<>();
     private Map<String, LocalDateTime> otpExpiryStore = new HashMap<>();
 
-    private static final int OTP_VALIDITY_MINUTES = 5; // OTP validity (e.g., 5 minutes)
+    private static final int OTP_VALIDITY_MINUTES = 1; // OTP validity (e.g., 5 minutes)
 
     @Override
     public String sendOtp(String phoneNumber) {
