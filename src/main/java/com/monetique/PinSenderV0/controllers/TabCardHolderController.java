@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
+import com.monetique.PinSenderV0.models.Banks.CardHolderLoadReport;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,35 +33,31 @@ public class TabCardHolderController {
         return ResponseEntity.ok(cardHolders);
     }
 
-
     @PostMapping("/upload")
-    public void uploadCardHolderFile(@RequestParam("file") MultipartFile file) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Send each line to the service for processing
-                cardHolderService.processCardHolderLine(line);
+    public ResponseEntity<?> uploadCardHolderFile(@RequestParam("file") MultipartFile file) {
+        try {
+            // Check if the file is empty
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("File is empty.");
             }
+
+            // Read lines from the uploaded file
+            List<String> lines;
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+                lines = reader.lines().collect(Collectors.toList());
+            }
+
+            // Process the cardholder lines and log the result
+            cardHolderService.processCardHolderLines(lines, file.getOriginalFilename());
+
+            return ResponseEntity.ok("Cardholder file processed successfully.");
         } catch (Exception e) {
-            e.printStackTrace();
+
+            return ResponseEntity.status(500).body(new MessageResponse("Error processing file", 500));
         }
     }
-    @PostMapping("/upload2")
-    public ResponseEntity<String> uploadCardHolderFile2(@RequestParam("file") MultipartFile file) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            // Read all lines from the file and store them in a list
-            List<String> lines = reader.lines().collect(Collectors.toList());
 
-            // Call the service to process the cardholder lines and generate a report
-            String report = cardHolderService.processCardHolderLines(lines);
-
-            // Return the generated report as the response
-            return ResponseEntity.ok(report);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Error processing the file.");
-        }
-    }
 
     @PostMapping("/verify")
     public ResponseEntity<?> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
@@ -79,5 +77,59 @@ public class TabCardHolderController {
 
 
     }
+
+///////////////////////////////////////////////////load cards
+// Endpoint to get all load reports
+@GetMapping("/load-reports")
+public ResponseEntity<List<CardHolderLoadReport>> getAllLoadReports() {
+    List<CardHolderLoadReport> loadReports = cardHolderService.getAllLoadReports();
+    return ResponseEntity.ok(loadReports);
+}
+
+    // Endpoint to get a specific load report by its ID
+    @GetMapping("/load-reports/{id}")
+    public ResponseEntity<CardHolderLoadReport> getLoadReportById(@PathVariable Long id) {
+        CardHolderLoadReport loadReport = cardHolderService.getLoadReportById(id);
+
+        return ResponseEntity.ok(loadReport);
+    }
+
+
+
+
+    ////////////////////////////////////////////////////////
+
+
+
+/*
+    @PostMapping("/upload")
+    public void uploadCardHolderFile(@RequestParam("file") MultipartFile file) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Send each line to the service for processing
+                cardHolderService.processCardHolderLine(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @PostMapping("/upload2")
+    public ResponseEntity<String> uploadCardHolderFile2(@RequestParam("file") MultipartFile file) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            // Read all lines from the file and store them in a list
+            List<String> lines = reader.lines().collect(Collectors.toList());
+
+            // Call the service to process the cardholder lines and generate a report
+            String report = cardHolderService.processCardHolderLines(lines, file.getName());
+
+            // Return the generated report as the response
+            return ResponseEntity.ok(report);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error processing the file.");
+        }
+    }
+*/
 
     }

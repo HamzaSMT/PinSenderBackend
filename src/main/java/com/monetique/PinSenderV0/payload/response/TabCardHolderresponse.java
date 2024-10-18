@@ -11,9 +11,6 @@ import lombok.Setter;
     public class TabCardHolderresponse {
         private String clientNumber;
         private String cardNumber;
-        private String creationDate;
-        private String modificationDate;
-        private boolean cancellationCode;
         private String name;
         private String companyName;
         private String agencyCode;
@@ -32,14 +29,10 @@ import lombok.Setter;
         public TabCardHolderresponse(TabCardHolder tabCardHolder) {
             this.clientNumber = tabCardHolder.getClientNumber();
             this.cardNumber = tabCardHolder.getCardNumber();
-            this.creationDate = tabCardHolder.getCreationDate();
-            this.modificationDate = tabCardHolder.getModificationDate();
-            this.cancellationCode = tabCardHolder.isCancellationCode();
             this.name = tabCardHolder.getName();
             this.companyName = tabCardHolder.getCompanyName();
             this.agencyCode = tabCardHolder.getAgencyCode();
             this.rib = tabCardHolder.getRib();
-            this.validationDate = tabCardHolder.getValidationDate();
             this.finalDate = tabCardHolder.getFinalDate();
             this.cardType = tabCardHolder.getCardType();
             this.countryCode = tabCardHolder.getCountryCode();

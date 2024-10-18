@@ -81,7 +81,7 @@ public class BankService implements IbankService {
 
     @Override
     public TabBank getBankById(Long id) {
-        logger.info("Fetching agency with id: {}", id);
+        logger.info("Fetching bank with id: {}", id);
         UserDetails currentUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User currentUser = userRepository.findByUsername(currentUserDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUserDetails.getUsername()));
@@ -92,6 +92,15 @@ public class BankService implements IbankService {
 
       TabBank bank =  bankRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", id));
+
+        return bank;
+    }
+
+    @Override
+    public TabBank getbankbybancode(String bankCode){
+        logger.info("Fetching bank with bankCode: {}", bankCode);
+        TabBank bank =  bankRepository.findBybankCode(bankCode)
+                    .orElseThrow(() -> new ResourceNotFoundException("Bank", "bankCode", bankCode));
 
         return bank;
     }

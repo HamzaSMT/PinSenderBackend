@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.Interfaces;
 
+import com.monetique.PinSenderV0.models.Banks.CardHolderLoadReport;
 import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
@@ -11,13 +12,17 @@ public interface ICardholderService {
 
     TabCardHolder extractCardHolderAttributes(String line);
 
+    void updateCardHolder(TabCardHolder existingCardHolder, TabCardHolder updatedCardHolder);
+
     void processCardHolderLine(String line);
 
-    void createCardHolder(String line);
 
-    void updateCardHolder(TabCardHolder existingCardHolder, String line);
 
-    String processCardHolderLines(List<String> lines);
+    void processCardHolderLines(List<String> lines, String fileName);
 
     void verifyCardholder(VerifyCardholderRequest request);
+
+    CardHolderLoadReport getLoadReportById(Long id);
+
+    List<CardHolderLoadReport> getAllLoadReports();
 }

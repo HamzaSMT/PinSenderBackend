@@ -21,15 +21,6 @@ public class TabCardHolder {
     @Column(name = "PORT-NOPORT", nullable = false, unique = true)
     private String cardNumber;
 
-    @Column(name = "PORT-DATCREAENR")
-    private String creationDate;
-
-    @Column(name = "PORT-DATMODENR")
-    private String modificationDate;
-
-    @Column(name = "PORT-CODANNUL")
-    private boolean cancellationCode;
-
     @Column(name = "PORT-NOM", nullable = true)
     private String name;
 
@@ -41,9 +32,6 @@ public class TabCardHolder {
 
     @Column(name = "PORT-RIB", nullable = true)
     private String rib;
-
-    @Column(name = "PORT-DATVAL", nullable = true)
-    private String validationDate;
 
     @Column(name = "PORT-FINVAL", nullable = true)
     private String finalDate;

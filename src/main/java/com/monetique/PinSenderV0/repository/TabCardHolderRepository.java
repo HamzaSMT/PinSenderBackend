@@ -18,4 +18,6 @@ public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, St
     boolean existsByCardNumberAndFinalDateAndNationalIdAndGsm(String cardNumber, String finalDate, String nationalId, String gsm);
 
     TabCardHolder findByCardNumber(String cardNumber);
+
+    TabCardHolder findByClientNumber(String clientNumber);
 }

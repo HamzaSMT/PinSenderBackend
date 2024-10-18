@@ -19,5 +19,7 @@ public interface ItabBinService {
 
     TabBin updateTabBin(String bin, TabBinRequest tabBinRequest);
 
+    TabBin getbinbybinnumber(String binNumber);
+
     void deleteTabBin(String bin);
 }

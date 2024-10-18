@@ -9,6 +9,8 @@ import com.monetique.PinSenderV0.payload.request.TabBinRequest;
 import com.monetique.PinSenderV0.payload.response.BinDTOresponse;
 import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.TabBinRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TabBinService implements ItabBinService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BankService.class);
 
     @Autowired
     private TabBinRepository tabBinRepository;
@@ -88,6 +92,18 @@ public class TabBinService implements ItabBinService {
 
         // Save the updated TabBin
         return tabBinRepository.save(tabBin);
+    }
+
+
+
+
+    @Override
+    public TabBin getbinbybinnumber(String binNumber){
+        logger.info("Fetching bin with binNumber: {}", binNumber);
+        TabBin bin =  tabBinRepository.findByBin(binNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("bin", "binNumber", binNumber));
+
+        return bin;
     }
 
     @Override
