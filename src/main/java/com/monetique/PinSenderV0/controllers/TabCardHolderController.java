@@ -33,30 +33,7 @@ public class TabCardHolderController {
         return ResponseEntity.ok(cardHolders);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadCardHolderFile(@RequestParam("file") MultipartFile file) {
-        try {
-            // Check if the file is empty
-            if (file.isEmpty()) {
-                return ResponseEntity.badRequest().body("File is empty.");
-            }
 
-            // Read lines from the uploaded file
-            List<String> lines;
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
-                lines = reader.lines().collect(Collectors.toList());
-            }
-
-            // Process the cardholder lines and log the result
-            cardHolderService.processCardHolderLines(lines, file.getOriginalFilename());
-
-            return ResponseEntity.ok("Cardholder file processed successfully.");
-        } catch (Exception e) {
-
-            return ResponseEntity.status(500).body(new MessageResponse("Error processing file", 500));
-        }
-    }
 
 
     @PostMapping("/verify")
@@ -79,6 +56,30 @@ public class TabCardHolderController {
     }
 
 ///////////////////////////////////////////////////load cards
+@PostMapping("/upload")
+public ResponseEntity<?> uploadCardHolderFile(@RequestParam("file") MultipartFile file) {
+    try {
+        // Check if the file is empty
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is empty.");
+        }
+
+        // Read lines from the uploaded file
+        List<String> lines;
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+            lines = reader.lines().collect(Collectors.toList());
+        }
+
+        // Process the cardholder lines and log the result
+        cardHolderService.processCardHolderLines(lines, file.getOriginalFilename());
+
+        return ResponseEntity.ok("Cardholder file processed successfully.");
+    } catch (Exception e) {
+
+        return ResponseEntity.status(500).body(new MessageResponse("Error processing file", 500));
+    }
+}
 // Endpoint to get all load reports
 @GetMapping("/load-reports")
 public ResponseEntity<List<CardHolderLoadReport>> getAllLoadReports() {
