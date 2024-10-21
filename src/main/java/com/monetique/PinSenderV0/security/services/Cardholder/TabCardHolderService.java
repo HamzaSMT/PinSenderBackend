@@ -4,6 +4,7 @@ import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
 import com.monetique.PinSenderV0.Interfaces.IbankService;
 import com.monetique.PinSenderV0.Interfaces.ItabBinService;
+import com.monetique.PinSenderV0.models.Banks.CardHolderErrorDetail;
 import com.monetique.PinSenderV0.models.Banks.CardHolderLoadReport;
 import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
@@ -136,8 +137,8 @@ public class TabCardHolderService implements ICardholderService {
         int createdCount = 0;
         int updatedCount = 0;
         int errorCount = 0;
-        List<String> errorCardNumbers = new ArrayList<>();  // To track card numbers with errors
-        StringBuilder errorDetails = new StringBuilder();  // To track error messages
+        List<CardHolderErrorDetail> errorDetails = new ArrayList<>();  // List to track errors
+
 
         // Loop through each line to process cardholders
         for (String line : lines) {
@@ -155,18 +156,19 @@ public class TabCardHolderService implements ICardholderService {
             } catch (DataIntegrityViolationException e) {
                 errorCount++;
                 String cardNumber = line.substring(24, 43);  // Assuming card number is in these positions
-                errorCardNumbers.add(cardNumber);
-                errorDetails.append("Card Number: ").append(cardNumber).append(", Error: ").append(e.getMessage()).append("\n");
+                errorDetails.add(new CardHolderErrorDetail(cardNumber, e.getMessage()));
+
+                //errorDetails.append("Card Number: ").append(cardNumber).append(", Error: ").append(e.getMessage()).append("\n");
             } catch (Exception e) {
                 errorCount++;
                 String cardNumber = line.substring(24, 43);  // Assuming card number is in these positions
-                errorCardNumbers.add(cardNumber);
-                errorDetails.append("Card Number: ").append(cardNumber).append(", Error: ").append(e.getMessage()).append("\n");
+                errorDetails.add(new CardHolderErrorDetail(cardNumber, e.getMessage()));
+
             }
         }
 
         // Save the report after processing the batch
-        CardHolderLoadReport report = new CardHolderLoadReport(fileName, createdCount, updatedCount, errorCardNumbers, errorDetails.toString());
+        CardHolderLoadReport report = new CardHolderLoadReport(fileName, createdCount, updatedCount, errorDetails);
         cardHolderLoadReportRepository.save(report);
     }
 

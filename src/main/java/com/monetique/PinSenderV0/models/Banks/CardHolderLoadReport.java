@@ -25,24 +25,24 @@ public class CardHolderLoadReport {
 
     private int createdCount;  // Number of cards created
 
-    private int updatedCount;  // Number of cards updated
+    private int updatedCount;  // Number of cards updated  errorCount
+
 
     @ElementCollection
-    private List<String> errorCardNumbers = new ArrayList<>();  // List of card numbers that encountered errors
+    private List<CardHolderErrorDetail> errorDetails = new ArrayList<>();  // List of errors
 
-    private String errorDetails;  // Details of errors if any
+
 
     public CardHolderLoadReport() {
         this.loadDate = LocalDateTime.now();  // Automatically set the load date
     }
 
 
-    public CardHolderLoadReport(String fileName, int createdCount, int updatedCount, List<String> errorCardNumbers, String errorDetails) {
+    public CardHolderLoadReport(String fileName, int createdCount, int updatedCount, List<CardHolderErrorDetail> errorDetails) {
         this.fileName = fileName;
         this.loadDate = LocalDateTime.now();
         this.createdCount = createdCount;
         this.updatedCount = updatedCount;
-        this.errorCardNumbers = errorCardNumbers;
         this.errorDetails = errorDetails;
     }
 
