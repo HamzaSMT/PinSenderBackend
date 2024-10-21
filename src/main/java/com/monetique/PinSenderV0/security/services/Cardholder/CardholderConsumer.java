@@ -46,7 +46,7 @@ public class CardholderConsumer {
             String otp = otpService.sendOtp(request.getGsm());
             System.out.println("OTP will be send to phone number: " + request.getGsm()+"with value"+ otp);
 
-            webSocketController.notifyClient(request.getCardNumber(), "Vérification réussie. OTP envoyé.");
+            webSocketController.notifyClient(request.getCardNumber(), "Cardholder verified successfully . OTP sent.",200);
 
             // Log the sent OTP using details from the authenticated user
             billingServicePinOtp.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
@@ -55,7 +55,7 @@ public class CardholderConsumer {
             // Here you can wait for the user to input the OTP or return a success response
         } else {
             System.out.println("Verification failed for cardholder: " + request.getCardNumber());
-            webSocketController.notifyClient(request.getCardNumber(), "Échec de la vérification.");
+            webSocketController.notifyClient(request.getCardNumber(), "Verification failed.",404);
 
         }
     }

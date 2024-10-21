@@ -8,9 +8,11 @@ import lombok.Setter;
 public class WebSocketResponse {
     private String cardNumber;
     private String message;
+    private int status;
 
-    public WebSocketResponse(String cardNumber, String message) {
+    public WebSocketResponse(String cardNumber, String message, int status) {
         this.cardNumber = cardNumber;
         this.message = message;
+        this.status = 0;
     }
 }

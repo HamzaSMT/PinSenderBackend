@@ -11,8 +11,8 @@ public class WebSocketController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    public void notifyClient(String cardNumber, String message) {
-        messagingTemplate.convertAndSend("/topic/verification-status", new WebSocketResponse(cardNumber, message));
+    public void notifyClient(String cardNumber, String message,int status) {
+        messagingTemplate.convertAndSend("/topic/verification-status", new WebSocketResponse(cardNumber, message,status));
     }
 }
 

@@ -28,7 +28,7 @@ public class OtpController {
         if (isValid) {
             return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new MessageResponse("Invalid OTP",400));
 
         }
