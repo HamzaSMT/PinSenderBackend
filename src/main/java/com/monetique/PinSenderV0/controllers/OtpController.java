@@ -29,14 +29,14 @@ public class OtpController {
             return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MessageResponse("Phone number validated successfully.",400));
+                    .body(new MessageResponse("Invalid OTP",400));
 
         }
     }
     @PostMapping("/resend")
     public ResponseEntity<String> resendOtp(@RequestBody String gsmnumber) {
         String otp = otpService.resendOtp(gsmnumber);
-        return ResponseEntity.ok("OTP resent to " + gsmnumber);
+        return ResponseEntity.ok("OTP "+ otp +"resent to " + gsmnumber);
     }
 
 }

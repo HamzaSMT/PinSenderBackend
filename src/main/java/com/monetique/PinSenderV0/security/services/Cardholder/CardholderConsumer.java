@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.security.services.Cardholder;
 
 
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
+import com.monetique.PinSenderV0.controllers.WebSocketController;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 
 import com.monetique.PinSenderV0.repository.TabCardHolderRepository;
@@ -22,6 +23,8 @@ public class CardholderConsumer {
     private IOtpService otpService;
     @Autowired
     BillingServicePinOtp billingServicePinOtp;
+    @Autowired
+    private WebSocketController webSocketController;
 
     @RabbitListener(queues = "cardholder.queue")
     public void handleMessage(VerifyCardholderRequest request) {
@@ -43,6 +46,7 @@ public class CardholderConsumer {
             String otp = otpService.sendOtp(request.getGsm());
             System.out.println("OTP will be send to phone number: " + request.getGsm()+"with value"+ otp);
 
+            webSocketController.notifyClient(request.getCardNumber(), "Vérification réussie. OTP envoyé.");
 
             // Log the sent OTP using details from the authenticated user
             billingServicePinOtp.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
@@ -51,6 +55,8 @@ public class CardholderConsumer {
             // Here you can wait for the user to input the OTP or return a success response
         } else {
             System.out.println("Verification failed for cardholder: " + request.getCardNumber());
+            webSocketController.notifyClient(request.getCardNumber(), "Échec de la vérification.");
+
         }
     }
 }
