@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Console Appender: Logs output to the console -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender: Logs output to a file -->
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Log file location -->
+        <file>logs/app-log.log</file>
+
+        <!-- Archive older log files -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Daily rolling log files -->
+            <fileNamePattern>logs/app-log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Keep logs for 30 days -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <!-- Log pattern: You can modify the log format -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger: Logs at the INFO level (adjust as needed) -->
+    <root level="INFO">
+        <!-- Log to both console and file -->
+        <appender-ref ref="console" />
+        <appender-ref ref="fileAppender" />
+    </root>
+
+</configuration>

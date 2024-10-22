@@ -1,0 +1,167 @@
+2024-10-22 13:28:09 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.0.Final
+2024-10-22 13:28:09 [restartedMain] INFO  c.m.P.SpringBootSecurityJwtApplication - Starting SpringBootSecurityJwtApplication using Java 17.0.12 with PID 14276 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-10-22 13:28:09 [restartedMain] INFO  c.m.P.SpringBootSecurityJwtApplication - No active profile set, falling back to 1 default profile: "default"
+2024-10-22 13:28:09 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-10-22 13:28:09 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-10-22 13:28:10 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-22 13:28:10 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 132 ms. Found 11 JPA repository interfaces.
+2024-10-22 13:28:10 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-10-22 13:28:10 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-10-22 13:28:10 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-10-22 13:28:10 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-10-22 13:28:10 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-10-22 13:28:10 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1147 ms
+2024-10-22 13:28:10 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-22 13:28:10 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.2.2.Final
+2024-10-22 13:28:10 [restartedMain] INFO  org.hibernate.cfg.Environment - HHH000406: Using bytecode reflection optimizer
+2024-10-22 13:28:11 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-10-22 13:28:11 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-22 13:28:11 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-10-22 13:28:11 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 94a0371f-31e9-4d80-902e-37485aac4ef7
+2024-10-22 13:28:11 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-10-22 13:28:11 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-10-22 13:28:11 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-10-22 13:28:12 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-10-22 13:28:13 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-22 13:28:13 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-10-22 13:28:14 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BillingController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-10-22 13:28:14 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@28a4949c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1f533c40, org.springframework.security.web.context.SecurityContextHolderFilter@7dc6b3d6, org.springframework.security.web.header.HeaderWriterFilter@281b607b, org.springframework.web.filter.CorsFilter@15a6b967, org.springframework.security.web.authentication.logout.LogoutFilter@c977009, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@6cfa6dda, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@45457240, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@538aee33, org.springframework.security.web.session.SessionManagementFilter@991b4b7, org.springframework.security.web.access.ExceptionTranslationFilter@4f0b30ed, org.springframework.security.web.access.intercept.AuthorizationFilter@537bf0a9]
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-10-22 13:28:14 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-10-22 13:28:14 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#535617db:0/SimpleConnection@672d4359 [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60747]
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@10296a5f]]
+2024-10-22 13:28:14 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-10-22 13:28:14 [restartedMain] INFO  c.m.P.SpringBootSecurityJwtApplication - Started SpringBootSecurityJwtApplication in 5.275 seconds (process running for 5.784)
+2024-10-22 13:28:25 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-22 13:28:25 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-10-22 13:28:25 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-10-22 13:28:25 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/download
+2024-10-22 13:28:25 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-10-22 13:28:25 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/download
+2024-10-22 13:29:14 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 1, completed tasks = 0]
+2024-10-22 13:29:45 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2024-10-22 13:29:45 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-10-22 13:29:45 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@10296a5f]]
+2024-10-22 13:29:45 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2024-10-22 13:29:45 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-10-22 13:29:46 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-10-22 13:29:46 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-10-22 13:29:46 [SpringApplicationShutdownHook] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-10-22 13:29:46 [SpringApplicationShutdownHook] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-10-22 13:29:46 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-10-22 13:29:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-10-22 13:29:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-10-22 13:29:51 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.0.Final
+2024-10-22 13:29:51 [restartedMain] INFO  c.m.P.SpringBootSecurityJwtApplication - Starting SpringBootSecurityJwtApplication using Java 17.0.12 with PID 13772 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-10-22 13:29:51 [restartedMain] INFO  c.m.P.SpringBootSecurityJwtApplication - No active profile set, falling back to 1 default profile: "default"
+2024-10-22 13:29:51 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-10-22 13:29:51 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-10-22 13:29:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-22 13:29:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 129 ms. Found 11 JPA repository interfaces.
+2024-10-22 13:29:52 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-10-22 13:29:52 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-10-22 13:29:52 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-10-22 13:29:52 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-10-22 13:29:52 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-10-22 13:29:52 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1150 ms
+2024-10-22 13:29:52 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-22 13:29:52 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.2.2.Final
+2024-10-22 13:29:52 [restartedMain] INFO  org.hibernate.cfg.Environment - HHH000406: Using bytecode reflection optimizer
+2024-10-22 13:29:52 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-10-22 13:29:52 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-22 13:29:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-10-22 13:29:52 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 4420a1f7-cfc6-4d90-b9f4-f0ef6e832322
+2024-10-22 13:29:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-10-22 13:29:52 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-10-22 13:29:53 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-10-22 13:29:53 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-10-22 13:29:54 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-22 13:29:54 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-10-22 13:29:55 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BillingController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-10-22 13:29:55 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-10-22 13:29:55 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@59efa22, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@32f5fc9b, org.springframework.security.web.context.SecurityContextHolderFilter@5045c85c, org.springframework.security.web.header.HeaderWriterFilter@53d06d86, org.springframework.web.filter.CorsFilter@5441d058, org.springframework.security.web.authentication.logout.LogoutFilter@4d6106e0, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@33966e7b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1ae28cf5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7abef62e, org.springframework.security.web.session.SessionManagementFilter@67466be9, org.springframework.security.web.access.ExceptionTranslationFilter@5604197e, org.springframework.security.web.access.intercept.AuthorizationFilter@7e20e3ff]
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-10-22 13:29:56 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-10-22 13:29:56 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#4a964b28:0/SimpleConnection@31d1be5 [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60789]
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@16fed674]]
+2024-10-22 13:29:56 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-10-22 13:29:56 [restartedMain] INFO  c.m.P.SpringBootSecurityJwtApplication - Started SpringBootSecurityJwtApplication in 5.324 seconds (process running for 5.84)
+2024-10-22 13:30:21 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-22 13:30:21 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-10-22 13:30:21 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2024-10-22 13:30:21 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/download
+2024-10-22 13:30:21 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-10-22 13:30:21 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/download
+2024-10-22 13:30:55 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 1, completed tasks = 0]
+2024-10-22 13:31:26 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/download
+2024-10-22 13:31:26 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-10-22 13:31:26 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/download
