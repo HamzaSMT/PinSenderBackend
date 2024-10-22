@@ -20,17 +20,18 @@ public class OtpController {
 
 
 
+
     // Endpoint to validate OTP
     @PostMapping("/validate")
     public ResponseEntity<MessageResponse> validateOtp(@RequestBody OtpValidationRequest request) {
-        boolean isValid = otpService.validateOtp(request.getPhoneNumber(), request.getOtp());
+        boolean isValid = otpService.validateOtp(request);
 
         if (isValid) {
+
             return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new MessageResponse("Invalid OTP",400));
-
         }
     }
     @PostMapping("/resend")

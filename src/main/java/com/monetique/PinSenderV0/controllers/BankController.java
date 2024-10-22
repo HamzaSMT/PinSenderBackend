@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monetique.PinSenderV0.Exception.ResourceAlreadyExistsException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.IbankService;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
@@ -61,6 +62,10 @@ public class BankController {
             bankservice.createBank(bankRequest, logoBytes);
             logger.info("Bank {} created successfully by user {}", bankRequest.getName(), currentUserDetails.getUsername());
             return ResponseEntity.ok(new MessageResponse("Bank created successfully!", 200));
+        } catch (ResourceAlreadyExistsException e) {
+            logger.error("Error creating Bank: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageResponse(e.getMessage(), 409));
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(403).body(new MessageResponse("Access denied", 403));

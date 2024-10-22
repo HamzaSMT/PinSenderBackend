@@ -8,11 +8,12 @@ import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.repository.UserSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class TrackingService implements ItrackingingService {
@@ -27,10 +28,6 @@ public class TrackingService implements ItrackingingService {
     private UserSessionRepository userSessionRepository;
 
 
-    @Override
-    public List<ApiRequestLog> getAllLogs() {
-        return apiRequestLogRepository.findAll();
-    }
     @Override
     public void logRequest(Long sessionId,
                            String requestPath,
@@ -189,8 +186,19 @@ public class TrackingService implements ItrackingingService {
         result.put("hourlyDistribution", hourlyDistribution);
         return result;
     }
+    @Override
+    public Page<ApiRequestLog> getAllNonGetLogs(Pageable pageable) {
+        return apiRequestLogRepository.findByMethodNot(HttpMethodEnum.GET,pageable);
+    }
+    @Override
+    public List<ApiRequestLog> getAllLogs() {
+        return apiRequestLogRepository.findAll();
+    }
 
-
+    @Override
+    public void deleteAllLogs() {
+        apiRequestLogRepository.deleteAll();
+    }
 
     // Method to start a new session when the user logs in
     @Override

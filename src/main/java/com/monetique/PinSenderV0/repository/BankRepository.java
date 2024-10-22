@@ -13,4 +13,7 @@ public interface BankRepository extends JpaRepository<TabBank, Long> {
 
     Optional<TabBank>  findBybankCode(String bankCode);
 
+
+    boolean existsTabBankBybankCode(String bankCode);
+
 }

@@ -4,14 +4,10 @@ package com.monetique.PinSenderV0.security.services.Cardholder;
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 import com.monetique.PinSenderV0.controllers.WebSocketController;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
-
 import com.monetique.PinSenderV0.repository.TabCardHolderRepository;
 import com.monetique.PinSenderV0.security.services.BillingServicePinOtp;
-import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service

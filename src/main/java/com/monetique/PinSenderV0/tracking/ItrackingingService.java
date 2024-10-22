@@ -1,12 +1,10 @@
 package com.monetique.PinSenderV0.tracking;
-
 import com.monetique.PinSenderV0.models.Users.UserSession;
-import com.monetique.PinSenderV0.tracking.payload.ApiReportResponse;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ItrackingingService {
     UserSession getSessionById(Long sessionId);
@@ -60,6 +58,14 @@ public interface ItrackingingService {
 
     Map<String, Object> getApiRequestDistributionByHour();
 
+
+
+    Page<ApiRequestLog> getAllNonGetLogs(Pageable pageable);
+
+    List<ApiRequestLog> getAllLogs();
+
+    void deleteAllLogs();
+
     // Method to start a new session when the user logs in
     UserSession startSession(Long userId);
 
@@ -67,5 +73,5 @@ public interface ItrackingingService {
 
     UserSession getActiveSessionByUsername(String username);
 
-    List<ApiRequestLog> getAllLogs();
+
 }

@@ -10,6 +10,8 @@ import java.util.List;
 public interface ICardholderService {
     List<TabCardHolderresponse> getAllCardHolders();
 
+    TabCardHolder getCardHolderByCardNumber(String cardNumber);
+
     TabCardHolder extractCardHolderAttributes(String line);
 
     void updateCardHolder(TabCardHolder existingCardHolder, TabCardHolder updatedCardHolder);

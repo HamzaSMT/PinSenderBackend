@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.security.services;
 
+import com.monetique.PinSenderV0.Exception.ResourceAlreadyExistsException;
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.IbankService;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
@@ -41,7 +42,9 @@ public class BankService implements IbankService {
         if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
             throw new AccessDeniedException("Error: Only Super Admin can create Banks.");
         }
-
+        if (bankRepository.existsTabBankBybankCode(bankRequest.getBankCode())) {
+            throw new ResourceAlreadyExistsException("TabBin with bin " + bankRequest.getBankCode()+ " already exists.");
+        }
         TabBank bank = new TabBank();
         bank.setName(bankRequest.getName());
         bank.setBankCode(bankRequest.getBankCode());

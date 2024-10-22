@@ -61,6 +61,22 @@ public class TabCardHolderService implements ICardholderService {
                 .collect(Collectors.toList());
         return response;
     }
+
+    @Override
+    public TabCardHolder getCardHolderByCardNumber(String cardNumber) {
+        // Rechercher le cardholder par numéro de carte
+        TabCardHolder cardHolder = tabCardHolderRepository.findByCardNumber(cardNumber);
+
+        // Gérer le cas où le cardholder n'est pas trouvé
+        if (cardHolder == null) {
+            throw new ResourceNotFoundException("CardHolder", "cardNumber", cardNumber);
+        }
+
+        return cardHolder;
+    }
+
+
+
     @Override
     public TabCardHolder extractCardHolderAttributes(String line) {
         TabCardHolder cardHolder = new TabCardHolder();

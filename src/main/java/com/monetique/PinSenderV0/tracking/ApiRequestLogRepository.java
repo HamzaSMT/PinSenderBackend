@@ -2,10 +2,11 @@ package com.monetique.PinSenderV0.tracking;
 
 
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,4 +31,6 @@ public interface ApiRequestLogRepository extends JpaRepository<ApiRequestLog, Lo
     // Find API request distribution by hour
     @Query("SELECT HOUR(log.timestamp), COUNT(log) FROM ApiRequestLog log GROUP BY HOUR(log.timestamp)")
     List<Object[]> findApiRequestDistributionByHour();
+
+    Page<ApiRequestLog> findByMethodNot(HttpMethodEnum method, Pageable pageable);
 }

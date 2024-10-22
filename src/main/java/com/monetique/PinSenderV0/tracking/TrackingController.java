@@ -1,16 +1,26 @@
 package com.monetique.PinSenderV0.tracking;
 import com.monetique.PinSenderV0.models.Users.UserSession;
+import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +28,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/monitor")
 public class TrackingController {
-
+    private static final int FIXED_PAGE_SIZE = 50;
     @Autowired
-    private TrackingService trackingService;
+    private ItrackingingService trackingService;
+    @Autowired
+    LogScheduler logScheduler;
 
 
 
@@ -57,10 +69,46 @@ public class TrackingController {
     }
 
     @GetMapping("/logs/all")
-    public List<ApiRequestLog> getAllLogs() {
-        return trackingService.getAllLogs();
+    public ResponseEntity<?> getAllNonGetLogs(@RequestParam(defaultValue = "0") int page) {
+        try {
+            Pageable pageable = PageRequest.of(page, FIXED_PAGE_SIZE);
+            Page<ApiRequestLog> logs = trackingService.getAllNonGetLogs(pageable);
+
+            if (logs.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("No non-GET logs found.", 404));
+            }
+
+            return ResponseEntity.ok(logs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error retrieving logs.", 500));
+        }
     }
-    @GetMapping("/activities/user")
+    @GetMapping("/logs/download")
+    public ResponseEntity<InputStreamResource> generateAndDownloadLogs() throws IOException {
+        List<ApiRequestLog> logs = trackingService.getAllLogs();
+        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String fileName = "Pinsender_api_request_logs_" + currentDate + ".txt";
+
+        // Generate log file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (ApiRequestLog log : logs) {
+                writer.write(logScheduler.formatLogEntry(log));
+                writer.newLine();
+            }
+        }
+
+        // Create an InputStreamResource for file download
+        File logFile = new File(fileName);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(logFile));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + logFile.getName())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(logFile.length())
+                .body(resource);
+    }
+
+
     public ResponseEntity<?> getActivitiesByUserAndDate(
             @RequestParam String username,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {

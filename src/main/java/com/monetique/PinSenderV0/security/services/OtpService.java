@@ -2,7 +2,7 @@ package com.monetique.PinSenderV0.security.services;
 
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 
-import com.monetique.PinSenderV0.models.Banks.SentitmePinOTP;
+import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,8 @@ import java.util.Random;
 public class OtpService implements IOtpService {
     @Autowired
     SmsService smsService;
+    @Autowired
+    HSMService hsmService;
 
 
     // A simple in-memory store for OTPs (for demonstration)
@@ -44,8 +46,12 @@ public class OtpService implements IOtpService {
 
 
     @Override
-    public boolean validateOtp(String phoneNumber, String otp) {
+    public boolean validateOtp(OtpValidationRequest otpValidationRequest) {
         // Check if the OTP matches the one we sent
+        String phoneNumber =otpValidationRequest.getPhoneNumber();
+        String otp =otpValidationRequest.getOtp();
+        String cardNumber =otpValidationRequest.getCardNumber();
+
         if (isOtpExpired(phoneNumber)) {
             System.out.println("OTP for phone number " + phoneNumber + " has expired.");
             return false;
@@ -54,6 +60,9 @@ public class OtpService implements IOtpService {
         String storedOtp = otpStore.get(phoneNumber);
         if (storedOtp != null && storedOtp.equals(otp)) {
             System.out.println("OTP validated successfully for phone number: " + phoneNumber);
+            String pin = hsmService.generatePin(cardNumber);
+            // Envoyer le PIN au téléphone
+            smsService.sendSms(phoneNumber, "Votre PIN est : " + pin);
             return true;
         } else {
             System.out.println("Invalid OTP for phone number: " + phoneNumber);
