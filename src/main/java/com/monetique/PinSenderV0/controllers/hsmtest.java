@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.controllers;
 
 
+import com.monetique.PinSenderV0.HSM.HSMCommunication;
 import com.monetique.PinSenderV0.Services.HSMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,8 @@ import java.io.IOException;
 public class hsmtest {
     @Autowired
     HSMService hsmService;
+    @Autowired
+    HSMCommunication hsmCommunication;
 
 
     @PostMapping("/test")
@@ -30,4 +33,24 @@ public class hsmtest {
 
 
     }
+    @PostMapping("/conect")
+    public String connectHsmService(@RequestParam String cardNumber) {
+            try {
+                // 1. Connecter au HSM
+                hsmCommunication.connect();
+
+                // 2. Envoyer la commande reçue via la requête
+
+
+                // 3. Obtenir la réponse du HSM
+                String response = hsmCommunication.getResponse();
+
+                // 4. Fermer la connexion
+                hsmCommunication.close();
+
+                return "Réponse du HSM : " + response;
+            } catch (IOException e) {
+                return "Erreur lors de la communication avec le HSM : " + e.getMessage();
+            }
+        }
 }
