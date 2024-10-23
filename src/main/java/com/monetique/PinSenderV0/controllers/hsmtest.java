@@ -33,16 +33,29 @@ public class hsmtest {
 
 
     }
+    @PostMapping("/calculatePin")
+    public String calculatePin(@RequestParam String cardNumber) {
+        try {
+            // 1. Calculer le PIN chiffré à partir du numéro de carte
+            String encryptedPin = hsmService.generateEncryptedPin(cardNumber);
+
+            // 2. Calculer le PIN en clair à partir du PIN chiffré
+            String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);
+
+            return "PIN en clair : " + clearPin;
+        } catch (Exception e) {
+            return "Erreur lors du calcul du PIN : " + e.getMessage();
+        }
+    }
+
+
+
     @PostMapping("/conect")
     public String connectHsmService(@RequestParam String cardNumber) {
             try {
                 // 1. Connecter au HSM
                 hsmCommunication.connect();
 
-                // 2. Envoyer la commande reçue via la requête
-
-
-                // 3. Obtenir la réponse du HSM
                 String response = hsmCommunication.getResponse();
 
                 // 4. Fermer la connexion
