@@ -21,8 +21,10 @@ public class hsmtest {
     public String testHsmService(@RequestParam String cardNumber) {
 
         String encryptedPin = hsmService.generateEncryptedPin(cardNumber);
+        System.out.println(encryptedPin);
 
         String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);
+        System.out.println(clearPin);
 
         return "PIN calculer avec succès au numéro : " + clearPin + encryptedPin;
 
