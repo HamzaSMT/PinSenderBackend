@@ -2,7 +2,7 @@ package com.monetique.PinSenderV0.security;
 
 import com.monetique.PinSenderV0.security.jwt.AuthEntryPointJwt;
 import com.monetique.PinSenderV0.security.jwt.AuthTokenFilter;
-import com.monetique.PinSenderV0.security.services.UserDetailsServiceImpl;
+import com.monetique.PinSenderV0.security.jwt.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

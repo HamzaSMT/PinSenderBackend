@@ -2,7 +2,7 @@ package com.monetique.PinSenderV0.controllers;
 
 
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
-import com.monetique.PinSenderV0.security.services.BillingServicePinOtp;
+import com.monetique.PinSenderV0.Services.BillingServicePinOtp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

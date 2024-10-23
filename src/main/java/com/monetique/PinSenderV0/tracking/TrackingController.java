@@ -1,7 +1,7 @@
 package com.monetique.PinSenderV0.tracking;
 import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
-import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -68,21 +68,19 @@ public class TrackingController {
         return ResponseEntity.ok(allSessions);
     }
 
-    @GetMapping("/logs/all")
-    public ResponseEntity<?> getAllNonGetLogs(@RequestParam(defaultValue = "0") int page) {
+    @GetMapping("/logs/all")public ResponseEntity<?> getAllNonGetLogs(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "50") int size) {
         try {
-            Pageable pageable = PageRequest.of(page, FIXED_PAGE_SIZE);
+            Pageable pageable = PageRequest.of(page, size);
             Page<ApiRequestLog> logs = trackingService.getAllNonGetLogs(pageable);
-
             if (logs.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("No non-GET logs found.", 404));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new MessageResponse("No non-GET logs found.", 404));
             }
-
             return ResponseEntity.ok(logs);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error retrieving logs.", 500));
-        }
-    }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error retrieving logs.", 500));    }}
+
     @GetMapping("/logs/download")
     public ResponseEntity<InputStreamResource> generateAndDownloadLogs() throws IOException {
         List<ApiRequestLog> logs = trackingService.getAllLogs();

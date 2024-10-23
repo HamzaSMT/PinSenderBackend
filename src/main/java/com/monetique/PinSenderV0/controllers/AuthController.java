@@ -2,7 +2,7 @@ package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Exception.TokenRefreshException;
-import com.monetique.PinSenderV0.security.services.AuthenticationService;
+import com.monetique.PinSenderV0.security.jwt.AuthenticationService;
 import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.models.Banks.Agency;
@@ -18,8 +18,8 @@ import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.RoleRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.security.jwt.JwtUtils;
-import com.monetique.PinSenderV0.security.services.RefreshTokenService;
-import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+import com.monetique.PinSenderV0.security.jwt.RefreshTokenService;
+import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

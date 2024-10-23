@@ -3,7 +3,6 @@ package com.monetique.PinSenderV0.security.jwt;
 import java.io.IOException;
 
 import com.monetique.PinSenderV0.models.Users.UserSession;
-import com.monetique.PinSenderV0.security.services.UserDetailsServiceImpl;
 import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

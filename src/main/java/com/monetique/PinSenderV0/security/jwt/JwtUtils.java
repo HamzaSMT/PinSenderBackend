@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.models.Users.User;
-import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

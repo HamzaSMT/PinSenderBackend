@@ -5,7 +5,7 @@ import com.monetique.PinSenderV0.models.Banks.CardHolderLoadReport;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
-import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -9,7 +9,7 @@ import com.monetique.PinSenderV0.payload.request.TabBinRequest;
 import com.monetique.PinSenderV0.payload.response.BinDTOresponse;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.repository.UserRepository;
-import com.monetique.PinSenderV0.security.services.UserDetailsImpl;
+import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

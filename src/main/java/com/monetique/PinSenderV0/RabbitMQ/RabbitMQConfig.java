@@ -1,6 +1,6 @@
 package com.monetique.PinSenderV0.RabbitMQ;
 
-import com.monetique.PinSenderV0.security.services.Cardholder.CardholderConsumer;
+import com.monetique.PinSenderV0.Services.Cardholder.CardholderConsumer;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
