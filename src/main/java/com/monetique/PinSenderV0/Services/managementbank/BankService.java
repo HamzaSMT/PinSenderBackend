@@ -43,7 +43,7 @@ public class BankService implements IbankService {
             throw new AccessDeniedException("Error: Only Super Admin can create Banks.");
         }
         if (bankRepository.existsTabBankBybankCode(bankRequest.getBankCode())) {
-            throw new ResourceAlreadyExistsException("TabBin with bin " + bankRequest.getBankCode()+ " already exists.");
+            throw new ResourceAlreadyExistsException("Bank with bank code " + bankRequest.getBankCode()+ " already exists.");
         }
         TabBank bank = new TabBank();
         bank.setName(bankRequest.getName());

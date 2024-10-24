@@ -24,10 +24,8 @@ public class hsmtest {
     public String testHsmService(@RequestParam String cardNumber) {
 
         String encryptedPin = hsmService.generateEncryptedPin(cardNumber);
-        System.out.println(encryptedPin);
 
         String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);
-        System.out.println(clearPin);
 
         return "PIN calculer avec succès au numéro : " + clearPin + encryptedPin;
 
@@ -51,7 +49,7 @@ public class hsmtest {
 
 
     @PostMapping("/conect")
-    public String connectHsmService(@RequestParam String cardNumber) {
+    public String connectHsmService() {
             try {
                 // 1. Connecter au HSM
                 hsmCommunication.connect();
