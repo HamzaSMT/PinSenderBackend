@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.HSM;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 import com.monetique.PinSenderV0.Services.HSMService;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ public class HSMCommunication {
     private static final Logger logger = LoggerFactory.getLogger(HSMCommunication.class);
     private Socket socket;
     private String response;
+    private String request;
 
     @Value("${hsm.ip}")
     private String hsmIp;
@@ -21,30 +23,57 @@ public class HSMCommunication {
     @Value("${hsm.port}")
     private int hsmPort;
 
-    public void connect() throws IOException {
+    public void connect(String hsmIp, int hsmPort) throws IOException {
         try {
             socket = new Socket(hsmIp, hsmPort);
-            System.out.println("Connected to " + hsmIp + ":" + hsmPort);
-            socket.setSoTimeout(5000);  // Timeout
-            logger.info("connect");
+            System.out.println("Successfully connected to HSM at " + hsmIp + ":" + hsmPort);
+            socket.setSoTimeout(5000);
         } catch (IOException e) {
-            throw new IOException("Erreur de connexion au HSM : " + e.getMessage());
+            throw new IOException("Connection error to HSM: " + e.getMessage());
         }
     }
 
-    public void sendCommand(String request) throws IOException {
-        logger.info("sendCommand");
-        try (OutputStream out = socket.getOutputStream(); InputStream in = socket.getInputStream()) {
-            logger.info("OutputStream +InputStream");
-            byte[] requestBytes = request.getBytes();
-            out.write(requestBytes);
+    public void sendCommand() throws IOException {
+        if (socket == null || socket.isClosed()) {
+            throw new IOException("Socket is not connected.");
+        }
+
+        try {
+            // Prepare the command bytes array
+            byte[] commandBytes = new byte[255];
+            commandBytes[0] = 0;  // Placeholder identifier
+            commandBytes[1] = (byte) request.length();  // Length of the command
+
+            byte[] requestBytes = request.getBytes(StandardCharsets.US_ASCII);
+            System.arraycopy(requestBytes, 0, commandBytes, 2, requestBytes.length);
+            // Fill remaining bytes with 0
+            for (int i = requestBytes.length + 2; i < commandBytes.length; i++) {
+                commandBytes[i] = 0;
+            }
+
+            // Send the command
+            OutputStream out = socket.getOutputStream();
+            out.write(commandBytes);
             out.flush();
-            byte[] buffer = new byte[256];
-            int bytesRead = in.read(buffer);
-            response = new String(buffer, 0, bytesRead);
-            logger.info(response);
-        } catch (IOException e) {
-            throw new IOException("Erreur lors de l'envoi de la commande au HSM : " + e.getMessage());
+            System.out.println("Command sent successfully.");
+
+            // Wait for a response
+            Thread.sleep(2000);  // Adjust sleep time as needed
+
+            // Define the response buffer
+            byte[] responseBuffer = new byte[1024];  // Adjust size as necessary
+            InputStream in = socket.getInputStream();
+            int bytesRead = in.read(responseBuffer);
+
+            if (bytesRead > 0) {
+                // Convert the response to a string
+                response = new String(responseBuffer, 0, bytesRead, StandardCharsets.US_ASCII);
+                System.out.println("Received response from HSM: " + response);
+            } else {
+                System.out.println("No data received from HSM.");
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new IOException("Error during communication with HSM: " + e.getMessage());
         }
     }
 
@@ -53,10 +82,16 @@ public class HSMCommunication {
     }
 
     public void close() throws IOException {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            throw new IOException("Erreur lors de la fermeture de la connexion HSM : " + e.getMessage());
+        if (socket != null && !socket.isClosed()) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new IOException("Error closing HSM connection: " + e.getMessage());
+            }
         }
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
     }
 }
