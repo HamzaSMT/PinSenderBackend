@@ -47,7 +47,7 @@ public class hsmtest {
     }
 
 
-
+/*
     @PostMapping("/conect")
     public String connectHsmService() {
             try {
@@ -63,5 +63,6 @@ public class hsmtest {
             } catch (IOException e) {
                 return "Erreur lors de la communication avec le HSM : " + e.getMessage();
             }
-        }
+        }*/
+
 }

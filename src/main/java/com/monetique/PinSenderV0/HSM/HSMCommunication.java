@@ -41,41 +41,43 @@ public class HSMCommunication {
         try {
             // Prepare the command bytes array
             byte[] commandBytes = new byte[255];
-            commandBytes[0] = 0;  // Placeholder identifier
+            commandBytes[0] = 0;  // Placeholder for identifier
             commandBytes[1] = (byte) request.length();  // Length of the command
 
+            // Fill the command bytes
             byte[] requestBytes = request.getBytes(StandardCharsets.US_ASCII);
             System.arraycopy(requestBytes, 0, commandBytes, 2, requestBytes.length);
+
             // Fill remaining bytes with 0
             for (int i = requestBytes.length + 2; i < commandBytes.length; i++) {
                 commandBytes[i] = 0;
             }
 
+            // Log the command being sent for debugging
+            logger.info("Sending command (hex)");
+
             // Send the command
             OutputStream out = socket.getOutputStream();
             out.write(commandBytes);
-            out.flush();
-            System.out.println("Command sent successfully.");
+            out.flush();  // Ensure all data is sent
+            logger.info("Command sent successfully.");
 
-            // Wait for a response
-            Thread.sleep(2000);  // Adjust sleep time as needed
-
-            // Define the response buffer
-            byte[] responseBuffer = new byte[1024];  // Adjust size as necessary
+            // Wait for response
             InputStream in = socket.getInputStream();
+            byte[] responseBuffer = new byte[1024];  // Adjust size as necessary
             int bytesRead = in.read(responseBuffer);
 
             if (bytesRead > 0) {
-                // Convert the response to a string
                 response = new String(responseBuffer, 0, bytesRead, StandardCharsets.US_ASCII);
-                System.out.println("Received response from HSM: " + response);
+                logger.info("Received response: {}", response);
             } else {
-                System.out.println("No data received from HSM.");
+                logger.warn("No data received from HSM.");
             }
-        } catch (IOException | InterruptedException e) {
-            throw new IOException("Error during communication with HSM: " + e.getMessage());
+        } catch (IOException e) {
+            throw new IOException("Error sending command to HSM: " + e.getMessage());
         }
     }
+
 
     public String getResponse() {
         return response;
