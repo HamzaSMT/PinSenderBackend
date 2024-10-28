@@ -35,9 +35,9 @@ public class HSMCalculPinService {
 
             // Additional detailed logging for debugging
             if (response.length() >= 13) {
-                String status = response.substring(0, 2);
-                String resultCode = response.substring(2, 4);
-                String encryptedPin = response.substring(4, 13);
+                String status = response.substring(4,6);
+                String resultCode = response.substring(6, 8);
+                String encryptedPin = response.substring(8, response.length());
                 logger.info("Status code: {}", status);
                 logger.info("Result code: {}", resultCode);
                 logger.info("Encrypted PIN extracted: {}", encryptedPin);
@@ -71,9 +71,14 @@ public class HSMCalculPinService {
             logger.info("Command sent.");
             String response = hsmCommunication.getResponse();
             logger.info("Received response: {}", response);
-
-            if (response.startsWith("NH") && response.substring(2, 4).equals("00")) {
-                return response.substring(4, 52);  // Le PIN clair commence à la position 5
+            String status = response.substring(4,6);
+            String resultCode = response.substring(6, 8);
+            String Pin = response.substring(8, 12);
+            logger.info("Status code: {}", status);
+            logger.info("Result code: {}", resultCode);
+            logger.info("Encrypted PIN extracted: {}", encryptedPin);
+            if ("NH".equals(status) && "00".equals(resultCode)) {
+                return Pin;  // Le PIN clair
             } else {
                 throw new RuntimeException("Erreur dans la réponse du HSM : " + response);
             }

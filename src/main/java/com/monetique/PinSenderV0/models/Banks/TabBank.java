@@ -1,5 +1,6 @@
 package com.monetique.PinSenderV0.models.Banks;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monetique.PinSenderV0.models.Users.User;
 import jakarta.persistence.*;
@@ -51,13 +52,15 @@ public class TabBank {
     @Lob // Use @Lob for large objects
     private byte[] logo;
 
-    private String adminUsername;
+    private String logoFilePath ;
 
+    private String adminUsername;
+    @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TabBin> bins = new HashSet<>();
-
+ @JsonIgnore
     @JsonManagedReference
-    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<TabCardHolder> cardHolders = new HashSet<>();
 }

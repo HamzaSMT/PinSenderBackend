@@ -11,7 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class
 OtpValidationRequest {
-    private String CardNumber;
+
+    private String cardNumber;
     private String phoneNumber;
     private String otp;
 }

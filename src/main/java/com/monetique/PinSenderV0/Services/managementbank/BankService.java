@@ -17,11 +17,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.access.AccessDeniedException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
 public class BankService implements IbankService {
-
+    private final String storageDirectory = "logos/";
     @Autowired
     private BankRepository bankRepository;
 
@@ -131,8 +136,10 @@ public class BankService implements IbankService {
         bank.setBinAcquereurMcd(bankRequest.getBinAcquereurMcd());
         bank.setCtb(bankRequest.getCtb());
         bank.setBanqueEtrangere(bankRequest.isBanqueEtrangere());
-        if (logo != null) {
-            bank.setLogo(logo);
+        if (logo != null && logo.length > 0) {
+            // Save logo file and get the file path
+            String logoPath = saveLogoFile(logo, bankRequest.getBankCode());
+            bank.setLogoFilePath(logoPath); // Save only the path in the database
         }
 
         bankRepository.save(bank);
@@ -160,4 +167,76 @@ public class BankService implements IbankService {
         return new MessageResponse("Bank deleted successfully!", 200);
     }
 
+
+
+    public String saveLogoFile(byte[] logoBytes, String bankCode) {
+        try {
+            // Ensure the directory exists
+            Files.createDirectories(Paths.get(storageDirectory));
+
+            // Generate a unique filename based on the bank code and timestamp
+            String fileName = bankCode + "_" + System.currentTimeMillis() + ".png";
+            Path filePath = Paths.get(storageDirectory + fileName);
+
+            // Write the bytes to a file
+            Files.write(filePath, logoBytes);
+
+            // Return the file path for storage in the database
+            return filePath.toString();
+        } catch (IOException e) {
+            logger.error("Error saving logo file for bank code {}: {}", bankCode, e.getMessage());
+            throw new RuntimeException("Failed to save logo file", e);
+        }
+    }
+
+    public MessageResponse createBanklogoinfile(BankRequest bankRequest, byte[] logo) {
+        try {
+            logger.info("Creating bank with name: {}", bankRequest.getName());
+
+            UserDetails currentUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User currentUser = userRepository.findByUsername(currentUserDetails.getUsername())
+                    .orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUserDetails.getUsername()));
+
+            if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().name().equals("ROLE_SUPER_ADMIN"))) {
+                throw new AccessDeniedException("Error: Only Super Admin can create Banks.");
+            }
+
+            if (bankRepository.existsTabBankBybankCode(bankRequest.getBankCode())) {
+                throw new ResourceAlreadyExistsException("Bank with bank code " + bankRequest.getBankCode() + " already exists.");
+            }
+
+            TabBank bank = new TabBank();
+            bank.setName(bankRequest.getName());
+            bank.setBankCode(bankRequest.getBankCode());
+            bank.setLibelleBanque(bankRequest.getLibelleBanque());
+            bank.setEnseigneBanque(bankRequest.getEnseigneBanque());
+            bank.setIca(bankRequest.getIca());
+            bank.setBinAcquereurVisa(bankRequest.getBinAcquereurVisa());
+            bank.setBinAcquereurMcd(bankRequest.getBinAcquereurMcd());
+            bank.setCtb(bankRequest.getCtb());
+            bank.setBanqueEtrangere(bankRequest.isBanqueEtrangere());
+
+            // Handle logo upload if provided
+            if (logo != null && logo.length > 0) {
+                String logoPath = saveLogoFile(logo, bankRequest.getBankCode());
+                bank.setLogoFilePath(logoPath); // Save only the path in the database
+            }
+
+            // Save the bank entity
+            bankRepository.save(bank);
+
+            logger.info("Bank {} created successfully by Admin {}", bankRequest.getName(), currentUser.getUsername());
+            return new MessageResponse("Bank created successfully!", 200);
+
+        } catch (AccessDeniedException e) {
+            logger.error("Access denied: {}", e.getMessage());
+            throw e;
+        } catch (ResourceAlreadyExistsException e) {
+            logger.error("Bank creation error: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("An error occurred during bank creation: {}", e.getMessage());
+            return new MessageResponse("Failed to create bank: " + e.getMessage(), 500);
+        }
+    }
 }

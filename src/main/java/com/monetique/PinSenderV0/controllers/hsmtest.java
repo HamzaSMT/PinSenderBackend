@@ -27,7 +27,7 @@ public class hsmtest {
 
         String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);
 
-        return "PIN calculer avec succès au numéro : " + clearPin + encryptedPin;
+        return "PIN calculer avec succès au numéro : " + clearPin +"   "+ encryptedPin;
 
 
     }

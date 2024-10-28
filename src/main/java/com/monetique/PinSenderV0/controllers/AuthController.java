@@ -297,6 +297,7 @@ public class AuthController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body(new MessageResponse("User is not authenticated!", 401));
     }
+
     UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
     User currentUser = userRepository.findById(currentUserDetails.getId())
             .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
@@ -305,17 +306,24 @@ public class AuthController {
       throw new AccessDeniedException("Error: Only Super Admin can associate Admins with Banks.");
     }
 
-    User admin = userRepository.findById(adminId)
-            .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", adminId));
-    TabBank bank = bankRepository.findById(bankId)
-            .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", bankId));
-
-    admin.setBank(bank);
-    userRepository.save(admin);
-   bank.setAdminUsername(admin.getUsername());
-     bankRepository.save(bank);
-    logger.info("Admin {} successfully associated with bank {}", adminId, bankId);
-    return ResponseEntity.ok(new MessageResponse("Admin successfully associated with the bank!", 200));
+    try {
+      // Call the service to associate the admin with the bank
+      iuserManagementService.associateAdminWithBank(adminId, bankId);
+      logger.info("Admin {} successfully associated with bank {}", adminId, bankId);
+      return ResponseEntity.ok(new MessageResponse("Admin successfully associated with the bank!", 200));
+    } catch (AccessDeniedException e) {
+      logger.error("bad data: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body(new MessageResponse(e.getMessage(), 403));
+    } catch (ResourceNotFoundException e) {
+      logger.error("Resource not found: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+    } catch (Exception e) {
+      logger.error("Unexpected error while associating admin to bank: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(new MessageResponse("Error associating admin to bank", 500));
+    }
   }
 
 
@@ -328,33 +336,29 @@ public class AuthController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body(new MessageResponse("User is not authenticated!", 401));
     }
+
     UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
     User currentAdmin = userRepository.findById(currentUserDetails.getId())
             .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", currentUserDetails.getId()));
 
-    if (!currentAdmin.getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_ADMIN))) {
-      throw new AccessDeniedException("Error: Only Admins can associate Users with Agencies.");
+    try {
+      // Call the service to associate the user with the agency
+      iuserManagementService.associateUserWithAgency(userId, agencyId, currentAdmin);
+      logger.info("User {} successfully associated with agency {}", userId, agencyId);
+      return ResponseEntity.ok(new MessageResponse("User successfully associated with the agency!", 200));
+    } catch (AccessDeniedException e) {
+      logger.error("Access denied: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body(new MessageResponse(e.getMessage(), 403));
+    } catch (ResourceNotFoundException e) {
+      logger.error("Resource not found: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+    } catch (Exception e) {
+      logger.error("Unexpected error while associating user to agency: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(new MessageResponse("Error associating user to agency", 500));
     }
-
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
-    if (!user.getAdmin().getId().equals(currentAdmin.getId())) {
-      throw new AccessDeniedException("Error: You can only associate your own users.");
-    }
-
-    Agency agency = agencyRepository.findById(agencyId)
-            .orElseThrow(() -> new ResourceNotFoundException("Agency", "id", agencyId));
-
-    if (!agency.getBank().getId().equals(currentAdmin.getBank().getId())) {
-      throw new AccessDeniedException("Error: You can only associate users with agencies in your bank.");
-    }
-
-    user.setAgency(agency);
-    userRepository.save(user);
-
-    logger.info("User {} successfully associated with agency {}", userId, agencyId);
-    return ResponseEntity.ok(new MessageResponse("User successfully associated with the agency!", 200));
   }
 
   @PostMapping("/changePassword")

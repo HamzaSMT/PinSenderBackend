@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -46,8 +47,8 @@ public class BankController {
             @RequestParam("bankRequest") String bankRequestJson, // Accepting JSON string
             @RequestParam("logo") MultipartFile logo) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        BankRequest bankRequest;
+            ObjectMapper objectMapper = new ObjectMapper();
+            BankRequest bankRequest;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -215,5 +216,50 @@ public class BankController {
         }
     }
 
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<?> addBank1(
+            @RequestParam("bankRequest") String bankRequestJson, // Accepting JSON string
+            @RequestParam(value = "logo", required = false) MultipartFile logo) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        // Get authentication details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
+
+        try {
+            // Convert JSON string to BankRequest object
+            BankRequest bankRequest = objectMapper.readValue(bankRequestJson, BankRequest.class);
+            byte[] logoBytes = (logo != null && !logo.isEmpty()) ? logo.getBytes() : null;
+
+            // Pass bankRequest and the logo file to the service
+            bankservice.createBanklogoinfile(bankRequest, logoBytes);
+
+            logger.info("Bank '{}' created successfully by user '{}'", bankRequest.getName(), authentication.getName());
+            return ResponseEntity.ok(new MessageResponse("Bank created successfully!", 200));
+        } catch (ResourceAlreadyExistsException e) {
+            logger.error("Bank creation failed: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageResponse(e.getMessage(), 409));
+        } catch (AccessDeniedException e) {
+            logger.error("Access denied: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("Access denied", 403));
+        } catch (ResourceNotFoundException e) {
+            logger.error("Resource not found: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+        } catch (IOException e) {
+            logger.error("Error processing logo file: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Invalid bankRequest data or error reading logo file", 400));
+        } catch (Exception e) {
+            logger.error("Unexpected error while creating bank: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error creating bank", 500));
+        }
+    }
 
 }

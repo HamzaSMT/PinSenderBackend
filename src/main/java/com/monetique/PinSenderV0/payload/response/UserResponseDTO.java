@@ -16,7 +16,8 @@ public class UserResponseDTO {
         private String email;
         private String phoneNumber;
         private String role;
-        private TabBank bank;
+        private String bankName;
+        private String bankCode;
 
 
 }

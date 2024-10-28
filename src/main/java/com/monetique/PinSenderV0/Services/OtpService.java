@@ -50,7 +50,9 @@ public class OtpService implements IOtpService {
         // Check if the OTP matches the one we sent
         String phoneNumber =otpValidationRequest.getPhoneNumber();
         String otp =otpValidationRequest.getOtp();
-        String cardNumber =otpValidationRequest.getCardNumber();
+        String cartnumber= otpValidationRequest.getCardNumber();
+
+        System.out.println("cardnummber " + cartnumber );
 
         if (isOtpExpired(phoneNumber)) {
             System.out.println("OTP for phone number " + phoneNumber + " has expired.");
@@ -60,13 +62,14 @@ public class OtpService implements IOtpService {
         String storedOtp = otpStore.get(phoneNumber);
         if (storedOtp != null && storedOtp.equals(otp)) {
             System.out.println("OTP validated successfully for phone number: " + phoneNumber);
-            // 1. Calculer le PIN chiffré à partir du numéro de carte
-            String encryptedPin = hsmService.generateEncryptedPin(cardNumber);
-
-            // 2. Calculer le PIN en clair à partir du PIN chiffré
-            String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);
+            // 2. Calculer le PIN en clair
+            String clearPin = hsmService.clearpin(cartnumber);
             // Envoyer le PIN au téléphone
-            smsService.sendSms(phoneNumber, "Votre PIN est : " + clearPin);
+            String message = "Votre PIN est *" + ": " + clearPin;
+            smsService.sendSms(phoneNumber, message)
+                    .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
+                    .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
+                    .subscribe(); // Non-blocking
             return true;
         } else {
             System.out.println("Invalid OTP for phone number: " + phoneNumber);

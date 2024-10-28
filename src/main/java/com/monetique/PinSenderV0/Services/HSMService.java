@@ -72,6 +72,17 @@ public class HSMService {
             throw new RuntimeException("Error calculating clear PIN", e);
         }
     }
+    public String clearpin(String cardNumber) {
+        logger.info("calculateClearPin");
+
+        // Appeler generateEncryptedPin pour obtenir le PIN chiffré
+        String encryptedPin = generateEncryptedPin(cardNumber);
+
+        // Appeler generateClearPin pour obtenir le PIN clair à partir du PIN chiffré
+        String clearPin = generateClearPin(cardNumber, encryptedPin);
+
+        return clearPin;
+    }
 
 
 }

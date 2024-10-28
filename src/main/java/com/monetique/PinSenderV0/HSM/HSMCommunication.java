@@ -80,8 +80,9 @@ public class HSMCommunication {
 
 
     public String getResponse() {
-        return response;
+        return response.replaceAll("[^\\p{Print}]", "").trim();  // Supprime les caractères non imprimables
     }
+
 
     public void close() throws IOException {
         if (socket != null && !socket.isClosed()) {

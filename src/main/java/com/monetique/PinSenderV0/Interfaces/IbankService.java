@@ -20,6 +20,8 @@ public interface IbankService {
     MessageResponse updateBank(Long id, BankRequest bankRequest, byte[] logo);
     MessageResponse deleteBank(Long id);
 
+    MessageResponse createBanklogoinfile(BankRequest bankRequest, byte[] logo) throws org.springframework.security.access.AccessDeniedException;
+
 
     // List<Bank> listAllBanks();
     // void createAgency(AgencyRequest agencyRequest) throws AccessDeniedException;

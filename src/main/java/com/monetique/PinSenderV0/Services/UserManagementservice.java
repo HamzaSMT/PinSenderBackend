@@ -2,16 +2,21 @@ package com.monetique.PinSenderV0.Services;
 
 import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Services.managementbank.BankService;
+import com.monetique.PinSenderV0.models.Banks.Agency;
+import com.monetique.PinSenderV0.models.Banks.TabBank;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.InvalidPasswordException;
 import com.monetique.PinSenderV0.payload.response.UserResponseDTO;
+import com.monetique.PinSenderV0.repository.AgencyRepository;
+import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +36,10 @@ public class UserManagementservice implements IuserManagementService {
 
 
     private static final Logger logger = LoggerFactory.getLogger(BankService.class);
+    @Autowired
+    private BankRepository bankRepository;
+    @Autowired
+    private AgencyRepository agencyRepository;
 
     @Override
     public String generateRandomPassword(Long userId) {
@@ -126,8 +135,15 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
                     } else {
                         response.setRole("No Role Assigned");
                     }
+                    if (user.getBank() != null) {
+                        response.setBankName(user.getBank().getName());
+                        response.setBankCode(user.getBank().getBankCode());
 
-                    response.setBank(user.getBank());
+                    } else {
+                        response.setBankName("No bank Assigned");
+                        response.setBankCode("No bank Assigned");
+
+                    }
                     return response;
                 })
                 .collect(Collectors.toList());
@@ -136,7 +152,57 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
         logger.info("All users are listed for admin ID: {}", adminId);
         return responseList;
 
-
-
     }
+@Override
+public void associateAdminWithBank(Long adminId, Long bankId)
+            throws ResourceNotFoundException, AccessDeniedException {
+
+        // Fetch the admin user
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", adminId));
+
+        // Check if the admin already has a bank associated
+        if (admin.getBank() != null) {
+            throw new AccessDeniedException("Error: This admin already has a bank associated and cannot change it!");
+        }
+
+        // Fetch the bank
+        TabBank bank = bankRepository.findById(bankId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", bankId));
+
+        // Associate the admin with the bank
+        admin.setBank(bank);
+        userRepository.save(admin);
+
+        // Update the bank with the admin's username
+        bank.setAdminUsername(admin.getUsername());
+        bankRepository.save(bank);
+    }
+    @Override
+    public void associateUserWithAgency(Long userId, Long agencyId, User currentAdmin)
+            throws ResourceNotFoundException, AccessDeniedException {
+
+        // Fetch the user to be associated
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        // Check if the user belongs to the current admin
+        if (!user.getAdmin().getId().equals(currentAdmin.getId())) {
+            throw new AccessDeniedException("Error: You can only associate your own users.");
+        }
+
+        // Fetch the agency
+        Agency agency = agencyRepository.findById(agencyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Agency", "id", agencyId));
+
+        // Check if the agency belongs to the same bank as the current admin
+        if (!agency.getBank().getId().equals(currentAdmin.getBank().getId())) {
+            throw new AccessDeniedException("Error: You can only associate users with agencies in your bank.");
+        }
+
+        // Associate the user with the agency
+        user.setAgency(agency);
+        userRepository.save(user);
+    }
+
 }
