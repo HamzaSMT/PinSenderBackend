@@ -105,6 +105,16 @@ public class BankService implements IbankService {
     }
 
     @Override
+    public TabBank getBankByIdforall(Long id) {
+        logger.info("Fetching bank with id: {}", id);
+
+        TabBank bank =  bankRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", id));
+
+        return bank;
+    }
+
+    @Override
     public TabBank getbankbybancode(String bankCode){
         logger.info("Fetching bank with bankCode: {}", bankCode);
         TabBank bank =  bankRepository.findBybankCode(bankCode)

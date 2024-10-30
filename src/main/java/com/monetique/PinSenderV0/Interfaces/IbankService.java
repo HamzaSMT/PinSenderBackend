@@ -15,6 +15,8 @@ public interface IbankService {
     List<TabBank> listAllBanks();
     TabBank getBankById(Long id);
 
+    TabBank getBankByIdforall(Long id);
+
     TabBank getbankbybancode(String bankCode);
 
     MessageResponse updateBank(Long id, BankRequest bankRequest, byte[] logo);

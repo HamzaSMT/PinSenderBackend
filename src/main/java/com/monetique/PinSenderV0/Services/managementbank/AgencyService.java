@@ -153,6 +153,15 @@ public class AgencyService implements Iagencyservices {
 
         return agency;
     }
+    @Override
+    public Agency getAgencyByIdforall(Long agencyId) {
+        logger.info("Fetching agency with id: {}", agencyId);
+
+
+        Agency agency = agencyRepository.findById(agencyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Agency", "id", agencyId));
+        return agency;
+    }
 
 
     @Override

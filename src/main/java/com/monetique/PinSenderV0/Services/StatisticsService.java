@@ -1,6 +1,9 @@
 package com.monetique.PinSenderV0.Services;
 
 import com.monetique.PinSenderV0.Interfaces.IStatisticsService;
+import com.monetique.PinSenderV0.Interfaces.Iagencyservices;
+import com.monetique.PinSenderV0.Interfaces.IbankService;
+import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
 import com.monetique.PinSenderV0.models.Statistique.SentItemKey;
 import com.monetique.PinSenderV0.models.Statistique.SentItemStatistics;
 import com.monetique.PinSenderV0.models.Statistique.SentitmePinOTP;
@@ -24,6 +27,12 @@ public class StatisticsService implements IStatisticsService {
     private SentItemStatisticsRepository statisticsRepository;
     @Autowired
     private SentItemRepository sentItemRepository;
+    @Autowired
+    IbankService bankService;
+    @Autowired
+    Iagencyservices agencyServices;
+    @Autowired
+    IuserManagementService userManagementService;
 
 
     @Scheduled(fixedRate = 3600000) // Every hour
@@ -39,6 +48,17 @@ public class StatisticsService implements IStatisticsService {
 
         // Update the summary table
         for (Map.Entry<SentItemKey, Long> entry : summaryMap.entrySet()) {
+            // Retrieve the names based on IDs
+            String bankName = entry.getKey().getBankId() != null
+                    ? bankService.getBankByIdforall(entry.getKey().getBankId()).getName()
+                    : "Unknown";
+
+            String branchName = entry.getKey().getBranchId() != null
+                    ? agencyServices.getAgencyByIdforall(entry.getKey().getBranchId()).getName()
+                    : "Unknown";
+            String agentName = userManagementService.getuserbyId(entry.getKey().getAgentId()).getUsername();
+
+            // Find or create the SentItemStatistics object
             SentItemStatistics stats = statisticsRepository
                     .findByBankIdAndBranchIdAndAgentIdAndTypeAndDate(
                             entry.getKey().getBankId(),
@@ -51,16 +71,24 @@ public class StatisticsService implements IStatisticsService {
                             entry.getKey().getBankId(),
                             entry.getKey().getBranchId(),
                             entry.getKey().getAgentId(),
+                            bankName,
+                            branchName,
+                            agentName,
                             entry.getKey().getType(),
                             LocalDate.now(),
                             0L // Initial total sent count
                     ));
 
+            // Update total sent count and names
             stats.setTotalSent(stats.getTotalSent() + entry.getValue());
+            stats.setBankName(bankName); // Set the bank name
+            stats.setBranchName(branchName); // Set the branch name
+            stats.setAgentName(agentName); // Set the agent name
+
             statisticsRepository.save(stats);
         }
-
     }
+
 
 
 

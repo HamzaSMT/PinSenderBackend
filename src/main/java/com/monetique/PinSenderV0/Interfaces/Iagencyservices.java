@@ -17,5 +17,8 @@ public interface Iagencyservices {
     List<UserAgenceDTO> listAllAgenciesAssociatedUser(Long userId);
     MessageResponse deleteAgency(Long id, Long userId);
     Agency getAgencyById(Long agencyId, Long userId);
+
+    Agency getAgencyByIdforall(Long agencyId);
+
     MessageResponse updateAgency(Long agencyId, AgencyRequest agencyRequest, Long userId);
 }

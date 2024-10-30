@@ -32,19 +32,19 @@ public interface SentItemStatisticsRepository extends JpaRepository<SentItemStat
     List<Object[]> countPinsByDateForBank(@Param("bankId") Long bankId);
 
     // Total OTPs grouped by branch for a specific bank
-    @Query("SELECT s.branchId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' AND s.bankId = :bankId GROUP BY s.branchId")
+    @Query("SELECT s.branchName, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' AND s.bankId = :bankId GROUP BY s.branchName")
     List<Object[]> countOtpsByBranchForBank(@Param("bankId") Long bankId);
 
     // Total PINs grouped by branch for a specific bank
-    @Query("SELECT s.branchId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' AND s.bankId = :bankId GROUP BY s.branchId")
+    @Query("SELECT s.branchName, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' AND s.bankId = :bankId GROUP BY s.branchName")
     List<Object[]> countPinsByBranchForBank(@Param("bankId") Long bankId);
 
     // Total OTPs grouped by agent for a specific bank
-    @Query("SELECT s.agentId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' AND s.bankId = :bankId GROUP BY s.agentId")
+    @Query("SELECT s.agentName, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' AND s.bankId = :bankId GROUP BY  s.agentName")
     List<Object[]> countOtpsByAgentForBank(@Param("bankId") Long bankId);
 
     // Total PINs grouped by agent for a specific bank
-    @Query("SELECT s.agentId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' AND s.bankId = :bankId GROUP BY s.agentId")
+    @Query("SELECT s.agentName, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' AND s.bankId = :bankId GROUP BY s.agentName")
     List<Object[]> countPinsByAgentForBank(@Param("bankId") Long bankId);
 
     // Agent-specific total OTPs
@@ -72,18 +72,18 @@ public interface SentItemStatisticsRepository extends JpaRepository<SentItemStat
     Long countAllPins();
 
     // Counts grouped by each bank for OTPs
-    @Query("SELECT s.bankId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' GROUP BY s.bankId")
+    @Query("SELECT s.bankName,s.bankId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' GROUP BY s.bankId, s.bankName")
     List<Object[]> countOtpsGroupedByBank();
 
     // Counts grouped by each bank for PINs
-    @Query("SELECT s.bankId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' GROUP BY s.bankId")
+    @Query("SELECT s.bankName,s.bankId, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' GROUP BY s.bankId, s.bankName")
     List<Object[]> countPinsGroupedByBank();
 
     // Counts grouped by each bank for OTPs and by date
-    @Query("SELECT s.date, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' GROUP BY s.bankId, s.date")
+    @Query("SELECT s.date, s.bankName,s.bankId , SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'OTP' GROUP BY s.date, s.bankId, s.bankName")
     List<Object[]> countOtpsGroupedByBankAndDate();
 
     // Counts grouped by each bank for PINs and by date
-    @Query("SELECT s.date, SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' GROUP BY s.bankId, s.date")
+    @Query("SELECT s.date, s.bankName,s.bankId ,SUM(s.totalSent) FROM SentItemStatistics s WHERE s.type = 'PIN' GROUP BY s.date, s.bankId, s.bankName")
     List<Object[]> countPinsGroupedByBankAndDate();
 }
