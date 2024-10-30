@@ -13,7 +13,6 @@ public interface Iagencyservices {
 
 
     MessageResponse createAgency(AgencyRequest agencyRequest, Long userId);
-
     List<AgencyDTO> listAllAgencies(Long userId);
     List<UserAgenceDTO> listAllAgenciesAssociatedUser(Long userId);
     MessageResponse deleteAgency(Long id, Long userId);

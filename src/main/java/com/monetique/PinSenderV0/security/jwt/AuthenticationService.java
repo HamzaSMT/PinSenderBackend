@@ -9,6 +9,7 @@ import com.monetique.PinSenderV0.payload.request.LoginRequest;
 import com.monetique.PinSenderV0.payload.response.JwtResponse;
 import com.monetique.PinSenderV0.payload.response.TokenRefreshResponse;
 
+import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +39,8 @@ public class AuthenticationService {
 
     @Autowired
     private RefreshTokenService refreshTokenService;
+    @Autowired
+    UserRepository  userRepository;
 
 
 
@@ -44,6 +48,15 @@ public class AuthenticationService {
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
+
+
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + loginRequest.getUsername()));
+
+        if (!user.isActive()) {
+            logger.error("Attempted sign-in for inactive user: {}", loginRequest.getUsername());
+            throw new RuntimeException("User account is inactive.");
+        }
 
         // Check if the user already has an active session
         UserSession activeSession = monitoringService.getActiveSessionByUsername(loginRequest.getUsername());

@@ -24,4 +24,8 @@ public interface IuserManagementService {
 
     void associateUserWithAgency(Long userId, Long agencyId, User currentAdmin)
             throws ResourceNotFoundException, AccessDeniedException;
+
+
+
+    void toggleUserActiveStatus(Long userId);
 }

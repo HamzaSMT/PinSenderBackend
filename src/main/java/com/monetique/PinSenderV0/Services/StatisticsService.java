@@ -1,0 +1,119 @@
+package com.monetique.PinSenderV0.Services;
+
+import com.monetique.PinSenderV0.Interfaces.IStatisticsService;
+import com.monetique.PinSenderV0.models.Statistique.SentItemKey;
+import com.monetique.PinSenderV0.models.Statistique.SentItemStatistics;
+import com.monetique.PinSenderV0.models.Statistique.SentitmePinOTP;
+import com.monetique.PinSenderV0.payload.response.AgentStatisticsResponse;
+import com.monetique.PinSenderV0.payload.response.BankStatisticsResponse;
+import com.monetique.PinSenderV0.payload.response.OverallStatisticsResponse;
+import com.monetique.PinSenderV0.repository.SentItemRepository;
+import com.monetique.PinSenderV0.repository.SentItemStatisticsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class StatisticsService implements IStatisticsService {
+    @Autowired
+    private SentItemStatisticsRepository statisticsRepository;
+    @Autowired
+    private SentItemRepository sentItemRepository;
+
+
+    @Scheduled(fixedRate = 3600000) // Every hour
+    public void updateStatistics() {
+        List<SentitmePinOTP> sentItems = sentItemRepository.findAll();
+
+        // Aggregate statistics
+        Map<SentItemKey, Long> summaryMap = new HashMap<>();
+        for (SentitmePinOTP item : sentItems) {
+            SentItemKey key = new SentItemKey(item.getBankId(), item.getBranchId(), item.getAgentId(), item.getType());
+            summaryMap.put(key, summaryMap.getOrDefault(key, 0L) + 1);
+        }
+
+        // Update the summary table
+        for (Map.Entry<SentItemKey, Long> entry : summaryMap.entrySet()) {
+            SentItemStatistics stats = statisticsRepository
+                    .findByBankIdAndBranchIdAndAgentIdAndTypeAndDate(
+                            entry.getKey().getBankId(),
+                            entry.getKey().getBranchId(),
+                            entry.getKey().getAgentId(),
+                            entry.getKey().getType(),
+                            LocalDate.now()
+                    )
+                    .orElse(new SentItemStatistics(
+                            entry.getKey().getBankId(),
+                            entry.getKey().getBranchId(),
+                            entry.getKey().getAgentId(),
+                            entry.getKey().getType(),
+                            LocalDate.now(),
+                            0L // Initial total sent count
+                    ));
+
+            stats.setTotalSent(stats.getTotalSent() + entry.getValue());
+            statisticsRepository.save(stats);
+        }
+
+    }
+
+
+
+    // Log the sent item (OTP or PIN)
+    @Override
+    public void logSentItem(Long agentId, Long branchId, Long bankId, String type) {
+        SentitmePinOTP sentItem = new SentitmePinOTP();
+        sentItem.setAgentId(agentId);
+        sentItem.setBranchId(branchId);
+        sentItem.setBankId(bankId);
+        sentItem.setType(type);
+        sentItemRepository.save(sentItem);
+    }
+
+
+    // Bank-specific statistics
+    @Override
+    public BankStatisticsResponse getStatisticsForBank(Long bankId) {
+        Long totalOtps = statisticsRepository.countOtpsByBank(bankId);
+        Long totalPins = statisticsRepository.countPinsByBank(bankId);
+        List<Object[]> otpsByDate = statisticsRepository.countOtpsByDateForBank(bankId);
+        List<Object[]> pinsByDate = statisticsRepository.countPinsByDateForBank(bankId);
+        List<Object[]> otpsByBranch = statisticsRepository.countOtpsByBranchForBank(bankId);
+        List<Object[]> pinsByBranch = statisticsRepository.countPinsByBranchForBank(bankId);
+        List<Object[]> otpsByAgent = statisticsRepository.countOtpsByAgentForBank(bankId);
+        List<Object[]> pinsByAgent = statisticsRepository.countPinsByAgentForBank(bankId);
+
+        return new BankStatisticsResponse(totalOtps, totalPins, otpsByDate, pinsByDate, otpsByBranch, pinsByBranch, otpsByAgent, pinsByAgent);
+    }
+
+    // Agent-specific statistics
+    @Override
+    public AgentStatisticsResponse getStatisticsForAgent(Long agentId) {
+        Long totalOtps = statisticsRepository.countOtpsByAgent(agentId);
+        Long totalPins = statisticsRepository.countPinsByAgent(agentId);
+        List<Object[]> otpsByDate = statisticsRepository.countOtpsByDateForAgent(agentId);
+        List<Object[]> pinsByDate = statisticsRepository.countPinsByDateForAgent(agentId);
+
+        return new AgentStatisticsResponse(totalOtps, totalPins, otpsByDate, pinsByDate);
+    }
+
+    // Overall statistics
+    @Override
+    public OverallStatisticsResponse getOverallStatistics() {
+        Long overallOtps = statisticsRepository.countAllOtps();
+        Long overallPins = statisticsRepository.countAllPins();
+        List<Object[]> otpsGroupedByBank = statisticsRepository.countOtpsGroupedByBank();
+        List<Object[]> pinsGroupedByBank = statisticsRepository.countPinsGroupedByBank();
+        List<Object[]> otpsGroupedByBankAndDate = statisticsRepository.countOtpsGroupedByBankAndDate();
+        List<Object[]> pinsGroupedByBankAndDate = statisticsRepository.countPinsGroupedByBankAndDate();
+
+        return new OverallStatisticsResponse(overallOtps, overallPins, otpsGroupedByBank, pinsGroupedByBank, otpsGroupedByBankAndDate, pinsGroupedByBankAndDate);
+    }
+
+
+}

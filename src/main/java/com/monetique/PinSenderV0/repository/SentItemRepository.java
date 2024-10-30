@@ -1,6 +1,6 @@
 package com.monetique.PinSenderV0.repository;
 
-import com.monetique.PinSenderV0.models.Banks.SentitmePinOTP;
+import com.monetique.PinSenderV0.models.Statistique.SentitmePinOTP;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

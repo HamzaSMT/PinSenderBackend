@@ -4,6 +4,7 @@ import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Services.managementbank.BankService;
 import com.monetique.PinSenderV0.models.Banks.Agency;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
+import com.monetique.PinSenderV0.models.Users.ERole;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.InvalidPasswordException;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -74,6 +76,7 @@ public class UserManagementservice implements IuserManagementService {
 
         return sb.toString();
     }
+
     @Override
     public void changePassword(Long userId, String oldPassword, String newPassword) {
         User user = userRepository.findById(userId)
@@ -87,8 +90,8 @@ public class UserManagementservice implements IuserManagementService {
         userRepository.save(user);
     }
 
-@Override
-public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
+    @Override
+    public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
         // Find user by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
@@ -100,6 +103,7 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
         // Save updated user
         return userRepository.save(user);
     }
+
     @Override
     public List<UserResponseDTO> getUsersByAdmin() {
         // Get the authenticated user
@@ -123,12 +127,12 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
 
         // Map user entities to response DTOs with only necessary data
         List<UserResponseDTO> responseList = users.stream().map(user -> {
-            UserResponseDTO response = new UserResponseDTO();
-            response.setId(user.getId());
-            response.setUsername(user.getUsername());
-            //response.setPassword(user.getPassword());
-            response.setEmail(user.getEmail());
-            response.setPhoneNumber(user.getPhoneNumber());
+                    UserResponseDTO response = new UserResponseDTO();
+                    response.setId(user.getId());
+                    response.setUsername(user.getUsername());
+                    //response.setPassword(user.getPassword());
+                    response.setEmail(user.getEmail());
+                    response.setPhoneNumber(user.getPhoneNumber());
 
                     if (!user.getRoles().isEmpty()) {
                         response.setRole(user.getRoles().iterator().next().getName().toString());
@@ -153,8 +157,9 @@ public User updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
         return responseList;
 
     }
-@Override
-public void associateAdminWithBank(Long adminId, Long bankId)
+
+    @Override
+    public void associateAdminWithBank(Long adminId, Long bankId)
             throws ResourceNotFoundException, AccessDeniedException {
 
         // Fetch the admin user
@@ -178,6 +183,7 @@ public void associateAdminWithBank(Long adminId, Long bankId)
         bank.setAdminUsername(admin.getUsername());
         bankRepository.save(bank);
     }
+
     @Override
     public void associateUserWithAgency(Long userId, Long agencyId, User currentAdmin)
             throws ResourceNotFoundException, AccessDeniedException {
@@ -205,4 +211,45 @@ public void associateAdminWithBank(Long adminId, Long bankId)
         userRepository.save(user);
     }
 
+
+    @Override
+    public void toggleUserActiveStatus(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            System.out.println("Roles for user " + userId + ": " + user.getRoles());
+
+            // Toggle active status
+            boolean newStatus = !user.isActive();
+            user.setActive(newStatus);
+            userRepository.save(user);
+            System.out.println("User " + user.getUsername() + " active status set to: " + newStatus);
+
+            // If the user is an admin, toggle the status of all associated users
+            if (isAdmin(user)) {
+                System.out.println("Toggling active status for associated users of admin: " + user.getUsername());
+                toggleAssociatedUsersStatus(user, newStatus);
+            }
+        } else {
+            System.out.println("User not found for ID: " + userId);
+        }
+    }
+
+
+    // Helper method to check if the user has an admin role
+    private boolean isAdmin(User user) {
+        return user.getRoles().stream().anyMatch(role -> role.getName().equals(ERole.ROLE_ADMIN));
+    }
+
+    // Helper method to deactivate all users associated with an admin
+    private void toggleAssociatedUsersStatus(User admin, boolean newStatus) {
+        List<User> associatedUsers = userRepository.findByAdminId(admin.getId());
+        for (User user : associatedUsers) {
+            System.out.println("Setting active status for associated user: " + user.getUsername() + " to " + newStatus);
+            user.setActive(newStatus);
+            userRepository.save(user);
+        }
+
+    }
 }

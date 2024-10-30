@@ -51,38 +51,48 @@ public class AuthController {
 
   private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-  @Autowired
-  AuthenticationManager authenticationManager;
 
   @Autowired
   private AuthenticationService authenticationService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  IuserManagementService iuserManagementService;
+  @PostMapping("/createSuperAdmin")
+  public ResponseEntity<?> createSuperAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
+    logger.info("Received Super Admin creation request for username: {}", signUpRequest.getUsername());
 
-  @Autowired
-  UserRepository userRepository;
+    // Check if the username already exists
+    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+      logger.error("Username {} is already taken", signUpRequest.getUsername());
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!", 400));
+    }
+    if (userRepository.countByRole(ERole.ROLE_SUPER_ADMIN) > 0) {
+      logger.error("A Super Admin already exists, cannot create another.");
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: A Super Admin already exists!", 400));
+    }
+    // Add the Super Admin role to the new user
+    Set<Role> roles = new HashSet<>();
+    Role superAdminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN)
+            .orElseThrow(() -> new ResourceNotFoundException("Role", "name", "ROLE_SUPER_ADMIN"));
+    roles.add(superAdminRole);
 
-  @Autowired
-  BankRepository bankRepository;
+    // Create the new Super Admin user without admin, bank, or agency
+    User superAdmin = new User(
+            signUpRequest.getUsername(),
+            passwordEncoder.encode(signUpRequest.getPassword()),  // Encode the password
+            roles
+    );
 
-  @Autowired
-  RefreshTokenService refreshTokenService;
+    // Save the new Super Admin to the repository
+    userRepository.save(superAdmin);
 
-  @Autowired
-  AgencyRepository agencyRepository;
-
-  @Autowired
-  RoleRepository roleRepository;
-
-  @Autowired
-  PasswordEncoder encoder;
-
-  @Autowired
-  JwtUtils jwtUtils;
-
-  @Autowired
-  private ItrackingingService monitoringService;
+    logger.info("Super Admin {} created successfully", signUpRequest.getUsername());
+    return ResponseEntity.ok(new MessageResponse("Super Admin created successfully!", 200));
+  }
 
 
 
@@ -111,6 +121,13 @@ public class AuthController {
       logger.error("Invalid username or password for username: {}", loginRequest.getUsername());
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
               .body(new MessageResponse("Error: Invalid username or password", 400));
+    } catch (RuntimeException e) {
+      if (e.getMessage().equals("User account is inactive.")) {
+        logger.warn("Inactive account for username: {}", loginRequest.getUsername());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new MessageResponse("Error: User account is inactive", 403));
+      }
+      throw e;
     } catch (Exception e) {
       // Handle other exceptions
       logger.error("Error during sign-in for username: {}", loginRequest.getUsername(), e);
@@ -180,293 +197,6 @@ public class AuthController {
 
 ////////////********************************usermanagement**********************************************/////////////////////////////////////////
 
-  // Create Super Admin method
-  @PostMapping("/createSuperAdmin")
-  public ResponseEntity<?> createSuperAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
-    logger.info("Received Super Admin creation request for username: {}", signUpRequest.getUsername());
-
-    // Check if the username already exists
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      logger.error("Username {} is already taken", signUpRequest.getUsername());
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!", 400));
-    }
-    if (userRepository.countByRole(ERole.ROLE_SUPER_ADMIN) > 0) {
-      logger.error("A Super Admin already exists, cannot create another.");
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: A Super Admin already exists!", 400));
-    }
-    // Add the Super Admin role to the new user
-    Set<Role> roles = new HashSet<>();
-    Role superAdminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN)
-            .orElseThrow(() -> new ResourceNotFoundException("Role", "name", "ROLE_SUPER_ADMIN"));
-    roles.add(superAdminRole);
-
-    // Create the new Super Admin user without admin, bank, or agency
-    User superAdmin = new User(
-            signUpRequest.getUsername(),
-            encoder.encode(signUpRequest.getPassword()),  // Encode the password
-            roles
-    );
-
-    // Save the new Super Admin to the repository
-    userRepository.save(superAdmin);
-
-    logger.info("Super Admin {} created successfully", signUpRequest.getUsername());
-    return ResponseEntity.ok(new MessageResponse("Super Admin created successfully!", 200));
-  }
-
-  // Signup method (Register)
-  @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    logger.info("Received sign-up request for username: {}", signUpRequest.getUsername());
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      logger.error("Username {} is already taken", signUpRequest.getUsername());
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!", 400));
-    }
-
-
-    UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-    User currentUser = userRepository.findById(currentUserDetails.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
-
-    Set<String> strRoles = signUpRequest.getRole();
-    Set<Role> roles = new HashSet<>();
-
-    try {
-      if (strRoles == null || strRoles.isEmpty()) {
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "name", "ROLE_USER"));
-        roles.add(userRole);
-      } else {
-        strRoles.forEach(role -> {
-          switch (role) {
-            case "admin":
-              if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_SUPER_ADMIN))) {
-                throw new AccessDeniedException("Error: Only Super Admins can create Admins.");
-              }
-              Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                      .orElseThrow(() -> new ResourceNotFoundException("Role", "name", "ROLE_ADMIN"));
-              roles.add(adminRole);
-
-              // Create Admin without mandatory bank association initially
-              User adminUser = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()),
-                      roles, currentUser,null, null); // No bank, no agency
-              userRepository.save(adminUser);
-              logger.info("Admin {} created successfully", signUpRequest.getUsername());
-              break;
-
-            case "user":
-              if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_ADMIN))) {
-                throw new AccessDeniedException("Error: Only Admins can create Users.");
-              }
-              Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                      .orElseThrow(() -> new ResourceNotFoundException("Role", "name", "ROLE_USER"));
-              roles.add(userRole);
-
-              // Create User without mandatory bank and agency association initially
-              User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()),
-                      roles, currentUser, currentUser.getBank(), null); // Auto-associated to Admin's bank
-              userRepository.save(user);
-              logger.info("User {} created successfully", signUpRequest.getUsername());
-              break;
-
-            default:
-              throw new AccessDeniedException("Error: Role not recognized.");
-          }
-        });
-      }
-    } catch (Exception e) {
-      logger.error("Error during user registration: {}", signUpRequest.getUsername(), e);
-      return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to register user", 500));
-    }
-
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!", 200));
-  }
-
-  @PostMapping("/associateAdminToBank")
-  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-  public ResponseEntity<?> associateAdminToBank(@RequestParam Long adminId, @RequestParam Long bankId) {
-    logger.info("Received request to associate admin {} with bank {}", adminId, bankId);
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-
-    UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-    User currentUser = userRepository.findById(currentUserDetails.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUserDetails.getId()));
-
-    if (!currentUser.getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_SUPER_ADMIN))) {
-      throw new AccessDeniedException("Error: Only Super Admin can associate Admins with Banks.");
-    }
-
-    try {
-      // Call the service to associate the admin with the bank
-      iuserManagementService.associateAdminWithBank(adminId, bankId);
-      logger.info("Admin {} successfully associated with bank {}", adminId, bankId);
-      return ResponseEntity.ok(new MessageResponse("Admin successfully associated with the bank!", 200));
-    } catch (AccessDeniedException e) {
-      logger.error("bad data: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(new MessageResponse(e.getMessage(), 403));
-    } catch (ResourceNotFoundException e) {
-      logger.error("Resource not found: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-              .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
-    } catch (Exception e) {
-      logger.error("Unexpected error while associating admin to bank: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("Error associating admin to bank", 500));
-    }
-  }
-
-
-  @PostMapping("/associateUserToAgency")
-  public ResponseEntity<?> associateUserToAgency(@RequestParam Long userId, @RequestParam Long agencyId) {
-    logger.info("Received request to associate user {} with agency {}", userId, agencyId);
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-
-    UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-    User currentAdmin = userRepository.findById(currentUserDetails.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", currentUserDetails.getId()));
-
-    try {
-      // Call the service to associate the user with the agency
-      iuserManagementService.associateUserWithAgency(userId, agencyId, currentAdmin);
-      logger.info("User {} successfully associated with agency {}", userId, agencyId);
-      return ResponseEntity.ok(new MessageResponse("User successfully associated with the agency!", 200));
-    } catch (AccessDeniedException e) {
-      logger.error("Access denied: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(new MessageResponse(e.getMessage(), 403));
-    } catch (ResourceNotFoundException e) {
-      logger.error("Resource not found: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-              .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
-    } catch (Exception e) {
-      logger.error("Unexpected error while associating user to agency: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("Error associating user to agency", 500));
-    }
-  }
-
-  @PostMapping("/changePassword")
-
-  public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-    try {
-      iuserManagementService.changePassword(request.getUserId(), request.getOldPassword(), request.getNewPassword());
-      return ResponseEntity.ok(new MessageResponse("Password changed successfully!", 200));
-    } catch (Exception e) {
-      return ResponseEntity.status(400).body(new MessageResponse(e.getMessage(), 400));
-    }
-  }
-  @PostMapping("/forgetPassword")
-  public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-    try {
-      String newPassword = iuserManagementService.generateRandomPassword(request.getUserId());
-      return ResponseEntity.ok(new MessageResponse("Random password generated and saved successfully! New password: " + newPassword, 200));    } catch (Exception e) {
-      return ResponseEntity.status(400).body(new MessageResponse(e.getMessage(), 400));
-    }
-  }
-
-  @PutMapping("/update")
-  public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest updateUserRequest) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-    try {
-      // Get authenticated user details
-
-      UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
-      Long userId = currentUserDetails.getId();
-      // Update user details
-      User updatedUser = iuserManagementService.updateUser(userId, updateUserRequest);
-      logger.info("User {} updated successfully", updatedUser.getUsername());
-
-      // Return success message
-      return ResponseEntity.ok(new MessageResponse("User updated successfully!", 200));
-    } catch (ResourceNotFoundException e) {
-      logger.error("User not found: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage(), 404));
-    } catch (Exception e) {
-      logger.error("Error updating user details: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("Error updating user details", 500));
-    }
-  }
-  @GetMapping("/users")
-  // Ensure only admins can access this endpoint
-  public ResponseEntity<?> getUsersByAdmin() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-    try {
-      List<UserResponseDTO> users = iuserManagementService.getUsersByAdmin();
-
-      // Successful response with users list
-      return ResponseEntity.ok(users);
-    } catch (ResourceNotFoundException e) {
-      // Handle case when no users are found
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-              .body(new MessageResponse(e.getMessage(), 404));
-    } catch (IllegalStateException e) {
-      // Handle case when user is not authenticated
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated", 401));
-    } catch (Exception e) {
-      // Handle any other unexpected errors
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("Error retrieving users", 500));
-    }
-  }
-
-  @GetMapping("/{id}")
-  public ResponseEntity<?> getUserById(@PathVariable("id") Long userId) {
-    logger.info("Received request to get user by ID: {}", userId);
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(new MessageResponse("User is not authenticated!", 401));
-    }
-    try {
-      User user = iuserManagementService.getuserbyId(userId);
-      logger.info("User found: {}", user);
-      return ResponseEntity.ok(user); // Return the user object if found
-    } catch (NoSuchElementException e) {
-      logger.error("User not found with ID: {}", userId);
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-              .body(new MessageResponse("User not found", 404)); // 404 Not Found
-    } catch (Exception e) {
-      logger.error("Error retrieving user: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("Error retrieving user", 500)); // 500 Internal Server Error
-    }
-  }
 
 
 

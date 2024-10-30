@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class SpringBootSecurityJwtApplication {
+public class PinSenderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootSecurityJwtApplication.class, args);
+		SpringApplication.run(PinSenderApplication.class, args);
 	}
 }
