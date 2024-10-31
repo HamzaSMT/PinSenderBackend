@@ -62,7 +62,7 @@ public class BankService implements IbankService {
         bank.setBanqueEtrangere(bankRequest.isBanqueEtrangere());
 
         // Handle logo upload if provided
-        bank.setLogo(logo);
+
 
         // Save the bank entity
         bankRepository.save(bank);
@@ -249,4 +249,7 @@ public class BankService implements IbankService {
             return new MessageResponse("Failed to create bank: " + e.getMessage(), 500);
         }
     }
+
+
+
 }

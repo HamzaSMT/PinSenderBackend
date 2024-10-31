@@ -1,4 +1,4 @@
-package com.monetique.PinSenderV0.models.Banks;
+package com.monetique.PinSenderV0.models.Card;
 
 import jakarta.persistence.*;
 import lombok.Getter;

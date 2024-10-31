@@ -1,11 +1,10 @@
 package com.monetique.PinSenderV0.repository;
 
-import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
+import com.monetique.PinSenderV0.models.Card.TabCardHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, String> {

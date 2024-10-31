@@ -3,8 +3,7 @@ package com.monetique.PinSenderV0.Services;
 
 import com.monetique.PinSenderV0.HSM.HSMCalculPinService;
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
-import com.monetique.PinSenderV0.Services.managementbank.BankService;
-import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
+import com.monetique.PinSenderV0.models.Card.TabCardHolder;
 import com.monetique.PinSenderV0.payload.request.PinRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 
 @Service
 public class HSMService {

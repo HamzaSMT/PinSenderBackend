@@ -2,13 +2,17 @@ package com.monetique.PinSenderV0.models.Banks;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.monetique.PinSenderV0.models.Users.User;
+import com.monetique.PinSenderV0.models.Card.TabCardHolder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,8 +53,8 @@ public class TabBank {
     @Column(name = "BANQUE_ETRANGERE")
     private boolean banqueEtrangere;
 
-    @Lob // Use @Lob for large objects
-    private byte[] logo;
+    @Transient // This field is not persisted in the database
+    private byte[] logoContent;
 
     private String logoFilePath ;
 
@@ -63,4 +67,19 @@ public class TabBank {
     @JsonManagedReference
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<TabCardHolder> cardHolders = new HashSet<>();
+
+
+    public byte[] getLogoContent() {
+        if (logoFilePath != null) {
+            try {
+                Path path = Paths.get(logoFilePath);
+                logoContent = Files.readAllBytes(path);
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading logo file", e);
+            }
+        }
+        return logoContent;
+    }
+
+
 }

@@ -1,6 +1,8 @@
-package com.monetique.PinSenderV0.models.Banks;
+package com.monetique.PinSenderV0.models.Card;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.monetique.PinSenderV0.models.Banks.TabBank;
+import com.monetique.PinSenderV0.models.Banks.TabBin;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

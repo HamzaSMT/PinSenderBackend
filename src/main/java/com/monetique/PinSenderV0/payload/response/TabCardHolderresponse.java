@@ -2,7 +2,7 @@ package com.monetique.PinSenderV0.payload.response;
 
 
 import com.monetique.PinSenderV0.models.Banks.TabBin;
-import com.monetique.PinSenderV0.models.Banks.TabCardHolder;
+import com.monetique.PinSenderV0.models.Card.TabCardHolder;
 import lombok.Getter;
 import lombok.Setter;
 

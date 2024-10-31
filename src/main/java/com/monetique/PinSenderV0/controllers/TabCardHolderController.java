@@ -1,7 +1,7 @@
 package com.monetique.PinSenderV0.controllers;
 
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
-import com.monetique.PinSenderV0.models.Banks.CardHolderLoadReport;
+import com.monetique.PinSenderV0.models.Card.CardHolderLoadReport;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.TabCardHolderresponse;
