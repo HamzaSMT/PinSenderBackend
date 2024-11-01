@@ -28,7 +28,7 @@ public class User {
   private String password;
   private String email;
   private String phoneNumber;
-  private boolean active;
+  private boolean active=true;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_roles",

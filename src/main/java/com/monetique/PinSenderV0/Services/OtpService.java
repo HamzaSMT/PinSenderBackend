@@ -3,6 +3,8 @@ package com.monetique.PinSenderV0.Services;
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +21,20 @@ public class OtpService implements IOtpService {
     SmsService smsService;
     @Autowired
     HSMService hsmService;
+    private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
 
 
-    // A simple in-memory store for OTPs (for demonstration)
+    // A simple in-memory store for OTPs (
     private Map<String, String> otpStore = new HashMap<>();
     private Map<String, LocalDateTime> otpExpiryStore = new HashMap<>();
 
-    private static final int OTP_VALIDITY_MINUTES = 1; // OTP validity (e.g., 1 minutes)
+    private static final int OTP_VALIDITY_MINUTES = 2; // OTP validity (e.g., 1 minutes)
 
     @Override
     public String sendOtp(String phoneNumber) {
         // Generate a 6-digit OTP
         String otp = generateOtp();
+        logger.info("Generate a 6-digit OTP : "+otp);
         // Store the OTP against the phone number
         otpStore.put(phoneNumber, otp);
         otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
@@ -39,7 +43,7 @@ public class OtpService implements IOtpService {
                 .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
                 .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
                 .subscribe(); // Non-blocking
-
+        logger.info("sending OTP SMS"+otp);
         return otp;
     }
 

@@ -18,6 +18,8 @@ public class UserResponseDTO {
         private String role;
         private String bankName;
         private String bankCode;
+        private byte[] logoContent;
+        private boolean status;
 
 
 }

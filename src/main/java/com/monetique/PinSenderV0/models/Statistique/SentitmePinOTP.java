@@ -39,5 +39,7 @@ public class SentitmePinOTP {
     @Column(name = "sent_at", nullable = false)
     private LocalDateTime sentAt = LocalDateTime.now();
 
+    @Column(name = "is_counted", nullable = false)
+    private boolean counted = false;
     // Constructors, Getters, Setters
 }

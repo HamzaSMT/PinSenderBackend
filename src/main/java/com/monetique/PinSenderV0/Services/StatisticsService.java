@@ -34,10 +34,9 @@ public class StatisticsService implements IStatisticsService {
     @Autowired
     IuserManagementService userManagementService;
 
-
-    @Scheduled(fixedRate = 3600000) // Every hour
+    @Scheduled(cron = "0 0 0 * * ?") // Every hour
     public void updateStatistics() {
-        List<SentitmePinOTP> sentItems = sentItemRepository.findAll();
+        List<SentitmePinOTP> sentItems = sentItemRepository.findAllByCountedFalse();
 
         // Aggregate statistics
         Map<SentItemKey, Long> summaryMap = new HashMap<>();
@@ -87,8 +86,11 @@ public class StatisticsService implements IStatisticsService {
 
             statisticsRepository.save(stats);
         }
+        for (SentitmePinOTP item : sentItems) {
+            item.setCounted(true); // Marquer comme comptabilisé
+        }
+        sentItemRepository.saveAll(sentItems);
     }
-
 
 
 

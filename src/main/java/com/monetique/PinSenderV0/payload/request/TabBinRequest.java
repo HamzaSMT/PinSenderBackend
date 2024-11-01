@@ -10,6 +10,7 @@ public class TabBinRequest {
     private String systemCode;
     private String cardType;
     private String serviceCode;
-    private String keyData;
+    private String keyDataA;
+    private String keyDataB;
     // Getters and Setters
 }

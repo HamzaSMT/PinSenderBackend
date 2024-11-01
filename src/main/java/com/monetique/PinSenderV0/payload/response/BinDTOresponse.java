@@ -15,7 +15,8 @@ public class BinDTOresponse {
     private String systemCode;
     private String cardType;
     private String serviceCode;
-    private String keyData;
+    private String keyDataA;
+    private String keyDataB;
     private String bankName;
     private String bankCode;
 
@@ -26,7 +27,8 @@ public class BinDTOresponse {
         this.systemCode = tabBin.getSystemCode();
         this.cardType = tabBin.getCardType();
         this.serviceCode = tabBin.getServiceCode();
-        this.keyData=tabBin.getKeyData();
+        this.keyDataA=tabBin.getKeyDataA();
+        this.keyDataB=tabBin.getKeyDataB();
         this.bankName = tabBin.getBank().getName();  // Bank details
         this.bankCode = tabBin.getBank().getBankCode();
     }

@@ -130,7 +130,7 @@ public class UserManagementservice implements IuserManagementService {
                     UserResponseDTO response = new UserResponseDTO();
                     response.setId(user.getId());
                     response.setUsername(user.getUsername());
-                    //response.setPassword(user.getPassword());
+                    response.setStatus(user.isActive());
                     response.setEmail(user.getEmail());
                     response.setPhoneNumber(user.getPhoneNumber());
 
@@ -142,10 +142,13 @@ public class UserManagementservice implements IuserManagementService {
                     if (user.getBank() != null) {
                         response.setBankName(user.getBank().getName());
                         response.setBankCode(user.getBank().getBankCode());
+                        response.setLogoContent(user.getBank().getLogoContent());
 
                     } else {
                         response.setBankName("No bank Assigned");
                         response.setBankCode("No bank Assigned");
+                        response.setLogoContent(null);
+
 
                     }
                     return response;

@@ -248,13 +248,38 @@ public class UserManagementController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new MessageResponse("User is not authenticated!", 401));
+            }
+            if (request == null || request.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new MessageResponse("User ID is required.", 400));
+            }
+
+            try {
+                // Generate a random password for the specified user
+                String newPassword = userManagementService.generateRandomPassword(request.getUserId());
+
+                // Check if password generation was successful
+                if (newPassword == null || newPassword.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(new MessageResponse("Failed to generate a new password.", 500));
+                }
+
+                // Successfully generated and saved the password
+                return ResponseEntity.ok(newPassword);
+
+            } catch (ResourceNotFoundException e) {
+                // Handle the case where the user is not found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new MessageResponse("User not found with ID: " + request.getUserId(), 404));
+
+            } catch (Exception e) {
+                // Handle any other unexpected exceptions
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new MessageResponse("An error occurred: " + e.getMessage(), 500));
+            }
         }
-        try {
-            String newPassword = userManagementService.generateRandomPassword(request.getUserId());
-            return ResponseEntity.ok(new MessageResponse("Random password generated and saved successfully! New password: " + newPassword, 200));    } catch (Exception e) {
-            return ResponseEntity.status(400).body(new MessageResponse(e.getMessage(), 400));
-        }
-    }
+
+
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest updateUserRequest) {

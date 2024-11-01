@@ -28,7 +28,7 @@ public class HSMService {
         if (cardholder!= null) {
 
             PinRequest pinRequest = new PinRequest();
-            pinRequest.setPvka(cardholder.getBin().getKeyData());
+            pinRequest.setPvka(cardholder.getBin().getKeyDataA());
             pinRequest.setOffset(cardholder.getPinOffset());
             pinRequest.setPinLength("04");
             String right12Pan = cardNumber.substring(cardNumber.length() - 13, cardNumber.length() - 1);
@@ -71,14 +71,12 @@ public class HSMService {
         }
     }
     public String clearpin(String cardNumber) {
-        logger.info("calculateClearPin");
+         logger.info("calculateClearPin");
 
         // Appeler generateEncryptedPin pour obtenir le PIN chiffré
         String encryptedPin = generateEncryptedPin(cardNumber);
-
         // Appeler generateClearPin pour obtenir le PIN clair à partir du PIN chiffré
         String clearPin = generateClearPin(cardNumber, encryptedPin);
-
         return clearPin;
     }
 
