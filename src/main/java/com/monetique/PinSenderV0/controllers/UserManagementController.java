@@ -40,13 +40,13 @@ public class UserManagementController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagementController.class);
     @Autowired
-    IuserManagementService userManagementService;
+    private IuserManagementService userManagementService;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<?> deactivateUser(@PathVariable Long id) {

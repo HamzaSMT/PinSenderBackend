@@ -4,8 +4,7 @@ import com.monetique.PinSenderV0.payload.response.AgentStatisticsResponse;
 import com.monetique.PinSenderV0.payload.response.BankStatisticsResponse;
 import com.monetique.PinSenderV0.payload.response.OverallStatisticsResponse;
 
-public interface IStatisticsService {
-    // Log the sent item (OTP or PIN)
+public interface IStatisticservices {
     void logSentItem(Long agentId, Long branchId, Long bankId, String type);
 
     // Bank-specific statistics
@@ -17,3 +16,5 @@ public interface IStatisticsService {
     // Overall statistics
     OverallStatisticsResponse getOverallStatistics();
 }
+
+

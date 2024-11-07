@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.Services;
 
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 
+import com.monetique.PinSenderV0.Interfaces.IStatisticservices;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +16,15 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
-
 public class OtpService implements IOtpService {
     @Autowired
-    SmsService smsService;
+    private SmsService smsService;
     @Autowired
-    HSMService hsmService;
+    private HSMService hsmService;
+   @Autowired
+   private IStatisticservices statisticservices;
+
+
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
 
 
@@ -28,7 +32,7 @@ public class OtpService implements IOtpService {
     private Map<String, String> otpStore = new HashMap<>();
     private Map<String, LocalDateTime> otpExpiryStore = new HashMap<>();
 
-    private static final int OTP_VALIDITY_MINUTES = 2; // OTP validity (e.g., 1 minutes)
+    private static final int OTP_VALIDITY_MINUTES = 1; // OTP validity (e.g., 1 minutes)
 
     @Override
     public String sendOtp(String phoneNumber) {
@@ -74,6 +78,8 @@ public class OtpService implements IOtpService {
                     .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
                     .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
                     .subscribe(); // Non-blocking
+            statisticservices.logSentItem(otpValidationRequest.getAgentId(), otpValidationRequest.getBranchId(), otpValidationRequest.getBankId(), "PIN");
+
             return true;
         } else {
             System.out.println("Invalid OTP for phone number: " + phoneNumber);

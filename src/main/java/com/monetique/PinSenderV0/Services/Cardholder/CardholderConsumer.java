@@ -1,6 +1,6 @@
 package com.monetique.PinSenderV0.Services.Cardholder;
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
-import com.monetique.PinSenderV0.Interfaces.IStatisticsService;
+import com.monetique.PinSenderV0.Interfaces.IStatisticservices;
 import com.monetique.PinSenderV0.controllers.WebSocketController;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
 import com.monetique.PinSenderV0.repository.TabCardHolderRepository;
@@ -16,7 +16,7 @@ public class CardholderConsumer {
     @Autowired
     private IOtpService otpService;
     @Autowired
-    IStatisticsService statisticsService;
+    private IStatisticservices statisticservices;
     @Autowired
     private WebSocketController webSocketController;
 
@@ -43,7 +43,7 @@ public class CardholderConsumer {
             webSocketController.notifyClient(request.getCardNumber(), "Cardholder verified successfully . OTP sent.",200);
 
             // Log the sent OTP using details from the authenticated user
-            statisticsService.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
+            statisticservices.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
 
 
             // Here you can wait for the user to input the OTP or return a success response

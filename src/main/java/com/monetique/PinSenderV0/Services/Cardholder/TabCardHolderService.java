@@ -29,14 +29,14 @@ public class TabCardHolderService implements ICardholderService {
     private static final Logger logger = LoggerFactory.getLogger(AgencyService.class);
 
     @Autowired
-    TabCardHolderRepository tabCardHolderRepository;
+    private TabCardHolderRepository tabCardHolderRepository;
 
     @Autowired
-    CardHolderLoadReportRepository cardHolderLoadReportRepository;
+    private CardHolderLoadReportRepository cardHolderLoadReportRepository;
     @Autowired
-    IbankService ibankService;
+    private IbankService ibankService;
     @Autowired
-    ItabBinService itabBinService;
+    private ItabBinService itabBinService;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 

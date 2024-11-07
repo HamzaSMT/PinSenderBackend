@@ -32,7 +32,7 @@ public class TabBinController {
     private ItabBinService tabBinService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")

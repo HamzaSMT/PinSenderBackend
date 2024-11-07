@@ -1,9 +1,6 @@
 package com.monetique.PinSenderV0.Services;
 
-import com.monetique.PinSenderV0.Interfaces.IStatisticsService;
-import com.monetique.PinSenderV0.Interfaces.Iagencyservices;
-import com.monetique.PinSenderV0.Interfaces.IbankService;
-import com.monetique.PinSenderV0.Interfaces.IuserManagementService;
+import com.monetique.PinSenderV0.Interfaces.*;
 import com.monetique.PinSenderV0.models.Statistique.SentItemKey;
 import com.monetique.PinSenderV0.models.Statistique.SentItemStatistics;
 import com.monetique.PinSenderV0.models.Statistique.SentitmePinOTP;
@@ -22,17 +19,17 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StatisticsService implements IStatisticsService {
+public class StatisticsService implements IStatisticservices {
     @Autowired
     private SentItemStatisticsRepository statisticsRepository;
     @Autowired
     private SentItemRepository sentItemRepository;
     @Autowired
-    IbankService bankService;
+    private IbankService bankService;
     @Autowired
-    Iagencyservices agencyServices;
+    private Iagencyservices agencyServices;
     @Autowired
-    IuserManagementService userManagementService;
+    private IuserManagementService userManagementService;
 
     @Scheduled(cron = "0 0 0 * * ?") // Every hour
     public void updateStatistics() {

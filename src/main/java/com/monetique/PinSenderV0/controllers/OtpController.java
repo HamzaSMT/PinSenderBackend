@@ -3,9 +3,12 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
+import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,11 @@ public class OtpController {
         boolean isValid = otpService.validateOtp(request);
 
         if (isValid) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
+            request.setAgentId(currentUser.getId());
+            request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
+            request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);
 
             return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {

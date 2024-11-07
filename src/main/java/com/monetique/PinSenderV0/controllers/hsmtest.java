@@ -15,9 +15,9 @@ import java.io.IOException;
 @RequestMapping("/api/cardholders")
 public class hsmtest {
     @Autowired
-    HSMService hsmService;
+    private HSMService hsmService;
     @Autowired
-    HSMCommunication hsmCommunication;
+    private HSMCommunication hsmCommunication;
 
 
     @PostMapping("/test")

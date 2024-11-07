@@ -7,6 +7,8 @@ import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.repository.UserSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -188,7 +190,12 @@ public class TrackingService implements ItrackingingService {
     }
     @Override
     public Page<ApiRequestLog> getAllNonGetLogs(Pageable pageable) {
-        return apiRequestLogRepository.findByMethodNot(HttpMethodEnum.GET,pageable);
+        Pageable sortedByTimestampDesc = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("timestamp").descending()
+        );
+        return apiRequestLogRepository.findByMethodNot(HttpMethodEnum.GET, sortedByTimestampDesc);
     }
     @Override
     public List<ApiRequestLog> getAllLogs() {

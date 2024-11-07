@@ -16,9 +16,9 @@ import java.io.IOException;
 public class HSMService {
     private static final Logger logger = LoggerFactory.getLogger(HSMService.class);
     @Autowired
-    ICardholderService cardholderService;
+    private ICardholderService cardholderService;
     @Autowired
-    HSMCalculPinService hsmCalculPinService;
+    private HSMCalculPinService hsmCalculPinService;
 
 
     public PinRequest getPinRequestFromCardNumber(String cardNumber) {

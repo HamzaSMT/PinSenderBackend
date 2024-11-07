@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.controllers;
 
-import com.monetique.PinSenderV0.Interfaces.IStatisticsService;
+
+import com.monetique.PinSenderV0.Interfaces.IStatisticservices;
 import com.monetique.PinSenderV0.payload.response.AgentStatisticsResponse;
 import com.monetique.PinSenderV0.payload.response.BankStatisticsResponse;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
@@ -17,15 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/statistics")
 public class StatisticsController {
-    @Autowired
-    private IStatisticsService statisticsService;
+   @Autowired
+   private IStatisticservices statisticservices;
 
 
 
     @GetMapping("/bank/{bankId}")
     public ResponseEntity<?> getStatisticsForBank(@PathVariable Long bankId) {
         try {
-            BankStatisticsResponse response = statisticsService.getStatisticsForBank(bankId);
+            BankStatisticsResponse response = statisticservices.getStatisticsForBank(bankId);
             return ResponseEntity.ok(response);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -39,7 +40,7 @@ public class StatisticsController {
     @GetMapping("/agent/{agentId}")
     public ResponseEntity<?> getStatisticsForAgent(@PathVariable Long agentId) {
         try {
-            AgentStatisticsResponse response = statisticsService.getStatisticsForAgent(agentId);
+            AgentStatisticsResponse response = statisticservices.getStatisticsForAgent(agentId);
             return ResponseEntity.ok(response);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -53,7 +54,7 @@ public class StatisticsController {
     @GetMapping("/overall")
     public ResponseEntity<?> getOverallStatistics() {
         try {
-            OverallStatisticsResponse response = statisticsService.getOverallStatistics();
+            OverallStatisticsResponse response = statisticservices.getOverallStatistics();
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
