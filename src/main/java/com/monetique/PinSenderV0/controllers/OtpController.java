@@ -30,11 +30,7 @@ public class OtpController {
         boolean isValid = otpService.validateOtp(request);
 
         if (isValid) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-            request.setAgentId(currentUser.getId());
-            request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
-            request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);
+
 
             return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {
