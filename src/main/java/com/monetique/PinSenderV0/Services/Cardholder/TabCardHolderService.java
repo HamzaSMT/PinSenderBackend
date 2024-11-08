@@ -172,13 +172,15 @@ public class TabCardHolderService implements ICardholderService {
             } catch (DataIntegrityViolationException e) {
                 errorCount++;
                 String cardNumber = line.substring(24, 43);  // Assuming card number is in these positions
-                errorDetails.add(new CardHolderErrorDetail(cardNumber, e.getMessage()));
+                String truncatedMessage = e.getMessage().length() > 100 ? e.getMessage().substring(0, 100) : e.getMessage();
+                errorDetails.add(new CardHolderErrorDetail(cardNumber, truncatedMessage));
 
                 //errorDetails.append("Card Number: ").append(cardNumber).append(", Error: ").append(e.getMessage()).append("\n");
             } catch (Exception e) {
                 errorCount++;
                 String cardNumber = line.substring(24, 43);  // Assuming card number is in these positions
-                errorDetails.add(new CardHolderErrorDetail(cardNumber, e.getMessage()));
+                String truncatedMessage = e.getMessage().length() > 100 ? e.getMessage().substring(0, 100) : e.getMessage();
+                errorDetails.add(new CardHolderErrorDetail(cardNumber, truncatedMessage));
 
             }
         }

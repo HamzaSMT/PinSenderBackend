@@ -47,9 +47,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         UserSession session = trackingingService.getSessionById(sessionId);
         if (session != null && session.getLogoutTime() != null) {
           // Session is logged out, reject the request
-          logger.info("Session is logged out"+ sessionId);
-          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-          response.getWriter().write("Session is invalidated due to logout");
+          logger.info("Session ID is invalid: " + sessionId);
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          response.getWriter().write("Session ID is invalid");
           return; // Stop further processing
         }
 
