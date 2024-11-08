@@ -9,10 +9,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 @Service
 public class SmsService {
 
@@ -25,8 +21,6 @@ public class SmsService {
     }
 
     public Mono<String> sendSms(String to, String message) {
-        // Encode the message in UTF-16BE (UCS-2)
-        String ucs2Message = toHexUcs2(message);
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/cgi-bin/sendsms")
@@ -34,8 +28,7 @@ public class SmsService {
                         .queryParam("password", "PIN2024")
                         .queryParam("from", "MONETIQUE")
                         .queryParam("to", to)
-                        .queryParam("text", ucs2Message) // Send encoded message
-                        .queryParam("encoding", "UCS2") // Indicate UCS2 encoding if API supports it
+                        .queryParam("text", message)
                         .build())
                 .retrieve()  // Retrieve response
                 .onStatus(status -> status.isError(), clientResponse -> {
@@ -58,12 +51,5 @@ public class SmsService {
                     logger.error("Fallback: Failed to send SMS to {}: {}", to, e.getMessage());
                     return Mono.just("SMS sending failed.");
                 });
-    }
-
-    private String toHexUcs2(String message) {
-        byte[] bytes = message.getBytes(StandardCharsets.UTF_16BE);
-        return IntStream.range(0, bytes.length)
-                .mapToObj(i -> String.format("%02X", bytes[i]))
-                .collect(Collectors.joining());
     }
 }

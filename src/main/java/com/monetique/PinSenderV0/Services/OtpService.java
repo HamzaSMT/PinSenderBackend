@@ -46,8 +46,9 @@ public class OtpService implements IOtpService {
         // Store the OTP against the phone number
         otpStore.put(phoneNumber, otp);
         otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
-        String message = String.format("Code : %s. Ne partagez pas. لا تشارك هذا الرمز.", otp);
-        byte[] ucs2Bytes = message.getBytes(StandardCharsets.UTF_16BE);
+
+        String message = String.format("Votre code de verification est : %s. Ce code est temporaire et strictement confidentiel.", otp);
+        
         smsService.sendSms(phoneNumber, message)
                 .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
                 .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
@@ -82,7 +83,8 @@ public class OtpService implements IOtpService {
             // 2. Calculer le PIN en clair
             String clearPin = hsmService.clearpin(cartnumber);
             // Envoyer le PIN au téléphone
-            String message = String.format("PIN: %s. Ne partagez avec personne. Memorisez-le. الرقم السري خاص بك، لا تشاركه.", clearPin);
+
+            String message = String.format("Votre code PIN est : %s. Ce code est strictement personnel et confidentiel. Ne le partagez jamais et ne l'ecrivez pas.", clearPin);
             smsService.sendSms(phoneNumber, message)
                     .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
                     .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
