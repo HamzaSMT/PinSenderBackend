@@ -31,7 +31,8 @@ public class StatisticsService implements IStatisticservices {
     @Autowired
     private IuserManagementService userManagementService;
 
-    @Scheduled(cron = "0 0 0 * * ?") // Every hour
+    @Scheduled(cron = "0 0 20 * * ?")
+
     public void updateStatistics() {
         List<SentitmePinOTP> sentItems = sentItemRepository.findAllByCountedFalse();
 

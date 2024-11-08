@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +47,7 @@ public class OtpService implements IOtpService {
         otpStore.put(phoneNumber, otp);
         otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
         String message = String.format("Code : %s. Ne partagez pas. لا تشارك هذا الرمز.", otp);
+        byte[] ucs2Bytes = message.getBytes(StandardCharsets.UTF_16BE);
         smsService.sendSms(phoneNumber, message)
                 .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
                 .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
