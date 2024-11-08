@@ -107,3 +107,1316 @@
 2024-11-08 09:51:44 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
 2024-11-08 09:51:44 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
 2024-11-08 09:51:44 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:52:45 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signin
+2024-11-08 09:52:45 [http-nio-8080-exec-10] ERROR c.m.P.security.jwt.JwtUtils - JWT token is expired: JWT expired at 2024-09-18T09:22:07Z. Current time: 2024-11-08T08:52:45Z, a difference of 4404638199 milliseconds.  Allowed clock skew: 0 milliseconds.
+2024-11-08 09:52:45 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/signin
+2024-11-08 09:52:45 [http-nio-8080-exec-10] INFO  c.m.P.s.jwt.AuthenticationService - Received sign-in request for username: superadmin
+2024-11-08 09:52:45 [http-nio-8080-exec-10] WARN  c.m.P.s.jwt.AuthenticationService - Invalidated previous session for user superadmin.
+2024-11-08 09:52:45 [http-nio-8080-exec-10] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2024-11-08 09:52:45 [http-nio-8080-exec-10] INFO  c.m.P.controllers.AuthController - User superadmin signed in successfully.
+2024-11-08 09:52:48 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 09:52:48 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 09:52:48 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:52:48 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:52:48 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:52:48 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:52:48 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:52:48 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:52:57 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/cardholders/load-reports
+2024-11-08 09:52:57 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/cardholders/load-reports
+2024-11-08 09:52:57 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:52:57 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:05 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/error-count
+2024-11-08 09:53:05 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/activeSessions
+2024-11-08 09:53:05 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:53:05 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/average-response-time
+2024-11-08 09:53:05 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:05 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:53:05 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:53:05 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/statistics/overall
+2024-11-08 09:53:05 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:05 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:05 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:05 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:05 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:05 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:05 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:05 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:05 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:05 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:05 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:05 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:05 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:05 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:05 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:13 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/auth/signout?SessionId=92
+2024-11-08 09:53:13 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signout?SessionId=92
+2024-11-08 09:53:13 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:13 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 92
+2024-11-08 09:53:29 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/auth/signin
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signin
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/signin
+2024-11-08 09:53:29 [http-nio-8080-exec-2] INFO  c.m.P.s.jwt.AuthenticationService - Received sign-in request for username: superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-2] WARN  c.m.P.s.jwt.AuthenticationService - Invalidated previous session for user superadmin.
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2024-11-08 09:53:29 [http-nio-8080-exec-2] INFO  c.m.P.controllers.AuthController - User superadmin signed in successfully.
+2024-11-08 09:53:29 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/error-count
+2024-11-08 09:53:29 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:53:29 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:53:29 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:53:29 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:53:29 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:53:29 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:53:29 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:29 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:53:29 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:53:42 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 09:53:42 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 09:53:42 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:53:42 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:53:42 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:42 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:42 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:53:42 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:53:42 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:53:42 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:53:42 [http-nio-8080-exec-5] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:53:42 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:53:42 [http-nio-8080-exec-5] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:53:42 [http-nio-8080-exec-5] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:53:42 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:53:42 [http-nio-8080-exec-5] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:53:48 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signin
+2024-11-08 09:53:48 [http-nio-8080-exec-3] ERROR c.m.P.security.jwt.JwtUtils - JWT token is expired: JWT expired at 2024-09-18T09:22:07Z. Current time: 2024-11-08T08:53:48Z, a difference of 4404701004 milliseconds.  Allowed clock skew: 0 milliseconds.
+2024-11-08 09:53:48 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/signin
+2024-11-08 09:53:48 [http-nio-8080-exec-3] INFO  c.m.P.s.jwt.AuthenticationService - Received sign-in request for username: superadmin
+2024-11-08 09:53:48 [http-nio-8080-exec-3] WARN  c.m.P.s.jwt.AuthenticationService - Invalidated previous session for user superadmin.
+2024-11-08 09:53:48 [http-nio-8080-exec-3] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2024-11-08 09:53:48 [http-nio-8080-exec-3] INFO  c.m.P.controllers.AuthController - User superadmin signed in successfully.
+2024-11-08 09:53:53 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/cardholders/load-reports
+2024-11-08 09:53:53 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/cardholders/load-reports
+2024-11-08 09:53:53 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:53:53 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:54:09 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/error-count
+2024-11-08 09:54:09 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:54:09 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/activeSessions
+2024-11-08 09:54:09 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:54:09 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:54:09 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:54:09 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/average-response-time
+2024-11-08 09:54:09 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:54:09 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:54:09 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:54:09 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/statistics/overall
+2024-11-08 09:54:09 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:54:09 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:54:09 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:54:09 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:54:09 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:54:09 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:54:09 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:54:09 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:54:09 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:54:09 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:54:09 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:54:09 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:55:57 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/auth/signout?SessionId=94
+2024-11-08 09:55:57 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signout?SessionId=94
+2024-11-08 09:55:57 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:55:57 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - Session ID is invalid: 94
+2024-11-08 09:59:46 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/auth/signin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/signin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] INFO  c.m.P.s.jwt.AuthenticationService - Received sign-in request for username: superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] WARN  c.m.P.s.jwt.AuthenticationService - Invalidated previous session for user superadmin.
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2024-11-08 09:59:46 [http-nio-8080-exec-3] INFO  c.m.P.controllers.AuthController - User superadmin signed in successfully.
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/error-count
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/average-response-time
+2024-11-08 09:59:46 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:59:46 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 09:59:46 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:46 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:46 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:46 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:46 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/activeSessions
+2024-11-08 09:59:46 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:46 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:46 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:46 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:46 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:59:46 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/logs/all?page=0&size=50
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:59:46 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:59:46 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:59:46 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:46 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:46 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:47 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/statistics/overall
+2024-11-08 09:59:47 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:47 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/statistics/overall
+2024-11-08 09:59:47 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:59:47 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:47 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:59:47 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:47 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:59:47 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:59:47 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/average-response-time
+2024-11-08 09:59:47 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:47 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/average-response-time
+2024-11-08 09:59:47 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/monitor/error-count
+2024-11-08 09:59:47 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:47 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/monitor/error-count
+2024-11-08 09:59:51 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:51 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:51 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:51 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:51 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:51 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:51 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/tabbin/all
+2024-11-08 09:59:51 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 09:59:51 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 09:59:51 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:51 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:51 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:51 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 09:59:51 [http-nio-8080-exec-8] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 09:59:51 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:51 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:51 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:51 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:51 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:51 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:59:52 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 09:59:52 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:52 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:52 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:52 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:52 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:52 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:53 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:53 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:53 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:53 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:53 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:53 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:53 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:53 [http-nio-8080-exec-7] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:53 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:53 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:53 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:53 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:53 [http-nio-8080-exec-7] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:59:53 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:54 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:54 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:54 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:54 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:54 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:54 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:55 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:55 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 09:59:55 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:55 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:55 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:55 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 09:59:55 [http-nio-8080-exec-9] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:55 [http-nio-8080-exec-9] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:55 [http-nio-8080-exec-9] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:55 [http-nio-8080-exec-10] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 09:59:55 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:55 [http-nio-8080-exec-9] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:59:56 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:56 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:56 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:56 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:56 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:56 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:56 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:56 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 09:59:56 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:56 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:56 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 09:59:56 [http-nio-8080-exec-8] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 09:59:56 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:56 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:56 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:56 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:56 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:56 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:59:57 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:57 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:57 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:57 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:57 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:57 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:58 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 09:59:58 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 09:59:58 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:58 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:58 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:58 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:58 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:58 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:58 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:58 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:58 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:58 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:58 [http-nio-8080-exec-7] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:58 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:58 [http-nio-8080-exec-7] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 09:59:58 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:58 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 09:59:58 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:58 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 09:59:58 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 09:59:58 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 09:59:58 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 09:59:59 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/tabbin/all
+2024-11-08 09:59:59 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 09:59:59 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 09:59:59 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:59 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 09:59:59 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 09:59:59 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:59 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 09:59:59 [http-nio-8080-exec-3] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 09:59:59 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 09:59:59 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 09:59:59 [http-nio-8080-exec-8] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 09:59:59 [http-nio-8080-exec-3] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:00 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:00 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:00 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:00 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:00 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:00 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:01 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:01 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:01 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:01 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:01 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:01 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:01 [http-nio-8080-exec-5] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:01 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:01 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:01 [http-nio-8080-exec-6] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:01 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:01 [http-nio-8080-exec-6] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:02 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:02 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:02 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:02 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:02 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:02 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:03 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 10:00:03 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 10:00:03 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:03 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:03 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:03 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:03 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:03 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:03 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:03 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:03 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:03 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:03 [http-nio-8080-exec-10] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:03 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:03 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:03 [http-nio-8080-exec-10] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:05 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:05 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:05 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:05 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:05 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:05 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:06 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:06 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:06 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:06 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:06 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:06 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:06 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:06 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:06 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:06 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:06 [http-nio-8080-exec-3] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:06 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:06 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:06 [http-nio-8080-exec-3] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:06 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:06 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:06 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:06 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:06 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:06 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:07 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:07 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:07 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:07 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:07 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:07 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:07 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:07 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:07 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:07 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:07 [http-nio-8080-exec-6] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:07 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:07 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:07 [http-nio-8080-exec-6] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:07 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:07 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:07 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:07 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:07 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:07 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:08 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/tabbin/all
+2024-11-08 10:00:08 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 10:00:08 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:08 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:08 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:08 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:08 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:08 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:08 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:08 [http-nio-8080-exec-8] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:08 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:08 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:08 [http-nio-8080-exec-9] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:08 [http-nio-8080-exec-8] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:09 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 10:00:09 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:09 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:09 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:09 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:09 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:09 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:10 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:10 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:10 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:10 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:10 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:10 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:10 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:10 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:10 [http-nio-8080-exec-5] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:10 [http-nio-8080-exec-4] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:10 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:10 [http-nio-8080-exec-4] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:11 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:11 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:11 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:11 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:11 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:11 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:11 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:11 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:11 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:11 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:11 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:11 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:11 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:11 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:11 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:11 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:11 [http-nio-8080-exec-7] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:11 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:11 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:11 [http-nio-8080-exec-7] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:12 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:12 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:12 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:12 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:12 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:12 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:14 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 10:00:14 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/tabbin/all
+2024-11-08 10:00:14 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:14 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:14 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:14 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:14 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:14 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:14 [http-nio-8080-exec-3] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:14 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:14 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:14 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:14 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:14 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:15 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 10:00:15 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:15 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:15 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:15 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:15 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:15 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:17 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:17 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:17 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:17 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:17 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:17 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:17 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:17 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:17 [http-nio-8080-exec-10] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:17 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:17 [http-nio-8080-exec-6] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:17 [http-nio-8080-exec-10] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:18 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:18 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:18 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:18 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:18 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:18 [http-nio-8080-exec-7] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:19 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:19 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:19 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:19 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:19 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:19 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:19 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:19 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:19 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:19 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:19 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:19 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:19 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:19 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:20 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:20 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:20 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:20 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:20 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:20 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:20 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/tabbin/all
+2024-11-08 10:00:20 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 10:00:20 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:20 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:20 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:20 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:20 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:20 [http-nio-8080-exec-5] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:20 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:20 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:20 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:20 [http-nio-8080-exec-4] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:20 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:20 [http-nio-8080-exec-4] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:21 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 10:00:21 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:21 [http-nio-8080-exec-10] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:21 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:21 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:21 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:21 [http-nio-8080-exec-10] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:22 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:22 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:22 [http-nio-8080-exec-7] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:22 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:22 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:22 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:22 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:22 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:22 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:22 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:22 [http-nio-8080-exec-7] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:22 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:23 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:23 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:23 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:23 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:23 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:23 [http-nio-8080-exec-9] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:23 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:23 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:23 [http-nio-8080-exec-8] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:23 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:23 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:23 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:23 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:23 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:23 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:23 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:23 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:23 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:23 [http-nio-8080-exec-1] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:23 [http-nio-8080-exec-8] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:24 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:24 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:24 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:24 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:24 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:24 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:24 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:24 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:24 [http-nio-8080-exec-4] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:24 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:24 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:24 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:24 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:24 [http-nio-8080-exec-4] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:24 [http-nio-8080-exec-4] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:24 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:24 [http-nio-8080-exec-5] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:24 [http-nio-8080-exec-4] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:25 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:25 [http-nio-8080-exec-6] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:25 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:25 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:25 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:25 [http-nio-8080-exec-6] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:26 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/tabbin/all
+2024-11-08 10:00:26 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/bank/banks/list
+2024-11-08 10:00:26 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/tabbin/all
+2024-11-08 10:00:26 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:26 [http-nio-8080-exec-9] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:26 [http-nio-8080-exec-2] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:26 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/tabbin/all
+2024-11-08 10:00:26 [http-nio-8080-exec-9] INFO  c.m.P.controllers.TabBinController - Fetching all TabBins
+2024-11-08 10:00:26 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:26 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:26 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:26 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:26 [http-nio-8080-exec-2] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:26 [http-nio-8080-exec-2] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:00:26 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/users/users
+2024-11-08 10:00:26 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:26 [http-nio-8080-exec-1] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:26 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:26 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:26 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:26 [http-nio-8080-exec-1] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:27 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/users/users
+2024-11-08 10:00:27 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/bank/banks/list
+2024-11-08 10:00:27 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:27 [http-nio-8080-exec-3] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:00:27 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/users/users
+2024-11-08 10:00:27 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Fetching users by admin
+2024-11-08 10:00:27 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - Admin ID from authenticated user: 1
+2024-11-08 10:00:27 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/bank/banks/list
+2024-11-08 10:00:27 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:27 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.monetique.PinSenderV0.controllers.BankController.listAllBanks(); target is of class [com.monetique.PinSenderV0.controllers.BankController]
+2024-11-08 10:00:27 [http-nio-8080-exec-3] INFO  c.m.P.controllers.BankController - Received request to get banks list
+2024-11-08 10:00:27 [http-nio-8080-exec-3] INFO  c.m.P.S.managementbank.BankService - Listing all banks 
+2024-11-08 10:00:27 [http-nio-8080-exec-5] INFO  c.m.P.S.managementbank.BankService - All users are listed for admin ID: 1
+2024-11-08 10:00:27 [http-nio-8080-exec-3] INFO  c.m.P.controllers.BankController - List of banks retrieved successfully by user superadmin
+2024-11-08 10:01:35 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/auth/signout?SessionId=96
+2024-11-08 10:01:35 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/signout?SessionId=96
+2024-11-08 10:01:35 [http-nio-8080-exec-5] INFO  c.m.P.security.jwt.AuthTokenFilter - username from token is superadmin
+2024-11-08 10:01:35 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/signout?SessionId=96
+2024-11-08 10:01:35 [http-nio-8080-exec-5] INFO  c.m.P.controllers.AuthController - Received sign-out request.
+2024-11-08 10:01:35 [http-nio-8080-exec-5] INFO  c.m.P.s.jwt.AuthenticationService - Session ended successfully.
+2024-11-08 10:01:35 [http-nio-8080-exec-5] INFO  c.m.P.controllers.AuthController - User signed out successfully.
+2024-11-08 10:10:59 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2024-11-08 10:10:59 [Thread-22] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2024-11-08 10:10:59 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:10:59 [Thread-22] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7d91730e]]
+2024-11-08 10:10:59 [Thread-22] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2024-11-08 10:10:59 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:11:00 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:11:00 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:11:00 [Thread-22] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:00 [Thread-22] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-11-08 10:11:00 [Thread-22] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-11-08 10:11:00 [Thread-22] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [mssql-jdbc-shared-timer-core-0] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:11:00 [Thread-22] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:11:00 [Thread-22] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:00 [Thread-22] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:00 [Thread-22] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:11:00 [Thread-22] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:11:00 [Thread-22] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:11:00 [Thread-22] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-11-08 10:11:00 [Thread-22] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-11-08 10:11:00 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Starting PinSenderApplication using Java 17.0.12 with PID 2432 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-11-08 10:11:00 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-08 10:11:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-08 10:11:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 39 ms. Found 12 JPA repository interfaces.
+2024-11-08 10:11:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-11-08 10:11:01 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:01 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-08 10:11:01 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-11-08 10:11:01 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-08 10:11:01 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 414 ms
+2024-11-08 10:11:01 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-08 10:11:01 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:11:01 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-08 10:11:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-11-08 10:11:01 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection ConnectionID:11 ClientConnectionId: dd9530c5-a5ff-4490-97ae-0e4d20ae1092
+2024-11-08 10:11:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-11-08 10:11:01 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-11-08 10:11:01 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:11:01 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:11:02 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@589bff25, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7d4ac68b, org.springframework.security.web.context.SecurityContextHolderFilter@2f01a675, org.springframework.security.web.header.HeaderWriterFilter@701ade91, org.springframework.web.filter.CorsFilter@7f662b23, org.springframework.security.web.authentication.logout.LogoutFilter@3d030eeb, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@10f9abb4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6b36bcea, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4dfe194b, org.springframework.security.web.session.SessionManagementFilter@284f5e18, org.springframework.security.web.access.ExceptionTranslationFilter@7f577493, org.springframework.security.web.access.intercept.AuthorizationFilter@5e854d36]
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.hsmtest:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.StatisticsController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.UserManagementController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-11-08 10:11:02 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-08 10:11:02 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-11-08 10:11:02 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#61484fd5:0/SimpleConnection@25e78dcb [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60721]
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@94967c1]]
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-11-08 10:11:02 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Started PinSenderApplication in 2.237 seconds (process running for 1256.575)
+2024-11-08 10:11:02 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-11-08 10:11:04 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2024-11-08 10:11:04 [Thread-24] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2024-11-08 10:11:04 [Thread-24] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@94967c1]]
+2024-11-08 10:11:04 [Thread-24] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2024-11-08 10:11:04 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:11:04 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:11:04 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:11:04 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:11:04 [Thread-24] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:04 [Thread-24] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-11-08 10:11:04 [Thread-24] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [mssql-jdbc-shared-timer-core-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:11:04 [Thread-24] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-2 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:11:04 [Thread-24] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-2 connection adder] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1061)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:11:04 [Thread-24] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:04 [Thread-24] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:04 [Thread-24] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:11:04 [Thread-24] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:11:04 [Thread-24] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:11:04 [Thread-24] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2024-11-08 10:11:04 [Thread-24] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2024-11-08 10:11:04 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Starting PinSenderApplication using Java 17.0.12 with PID 2432 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-11-08 10:11:04 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-08 10:11:05 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-08 10:11:05 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 49 ms. Found 12 JPA repository interfaces.
+2024-11-08 10:11:05 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-11-08 10:11:05 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:05 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-08 10:11:05 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-11-08 10:11:05 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-08 10:11:05 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 294 ms
+2024-11-08 10:11:05 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-08 10:11:05 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:11:05 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-08 10:11:05 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2024-11-08 10:11:05 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection ConnectionID:21 ClientConnectionId: 315ccfd2-9c1f-4133-bd83-3230ae2507c6
+2024-11-08 10:11:05 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2024-11-08 10:11:05 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-11-08 10:11:05 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:11:05 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-11-08 10:11:05 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:11:06 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@31b24c9e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5c5d18cd, org.springframework.security.web.context.SecurityContextHolderFilter@39c5b9b6, org.springframework.security.web.header.HeaderWriterFilter@33b528eb, org.springframework.web.filter.CorsFilter@1f22fe3b, org.springframework.security.web.authentication.logout.LogoutFilter@76436825, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@5e1de86c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3ba06d4c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21c8e8a3, org.springframework.security.web.session.SessionManagementFilter@243cfd16, org.springframework.security.web.access.ExceptionTranslationFilter@24014e6, org.springframework.security.web.access.intercept.AuthorizationFilter@28dad529]
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.hsmtest:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.StatisticsController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.UserManagementController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-11-08 10:11:06 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-08 10:11:06 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-11-08 10:11:06 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#75365b09:0/SimpleConnection@cf75a1b [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60734]
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1313ccf7]]
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-11-08 10:11:06 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Started PinSenderApplication in 1.292 seconds (process running for 1259.949)
+2024-11-08 10:11:06 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-11-08 10:12:06 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 2, completed tasks = 0]
+2024-11-08 10:12:26 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2024-11-08 10:12:26 [Thread-44] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2024-11-08 10:12:26 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:12:26 [Thread-44] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1313ccf7]]
+2024-11-08 10:12:26 [Thread-44] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2024-11-08 10:12:26 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:12:27 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:12:27 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:12:27 [Thread-44] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:12:27 [Thread-44] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-11-08 10:12:27 [Thread-44] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [mssql-jdbc-shared-timer-core-2] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:12:27 [Thread-44] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-3 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:12:27 [Thread-44] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:12:27 [Thread-44] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:12:27 [Thread-44] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:12:27 [Thread-44] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:12:27 [Thread-44] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:12:27 [Thread-44] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2024-11-08 10:12:27 [Thread-44] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2024-11-08 10:12:27 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Starting PinSenderApplication using Java 17.0.12 with PID 2432 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-11-08 10:12:27 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-08 10:12:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-08 10:12:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 43 ms. Found 12 JPA repository interfaces.
+2024-11-08 10:12:27 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-11-08 10:12:27 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:12:27 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-08 10:12:27 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-11-08 10:12:27 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-08 10:12:27 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 288 ms
+2024-11-08 10:12:27 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-08 10:12:27 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:12:27 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-08 10:12:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2024-11-08 10:12:27 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection ConnectionID:31 ClientConnectionId: 5049893e-eced-4cd1-bbe4-5c37bbca4ad1
+2024-11-08 10:12:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2024-11-08 10:12:27 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-11-08 10:12:27 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:12:27 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-11-08 10:12:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:12:30 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'otpController': Unsatisfied dependency expressed through field 'otpService': No qualifying bean of type 'com.monetique.PinSenderV0.Interfaces.IOtpService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2024-11-08 10:12:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:12:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2024-11-08 10:12:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2024-11-08 10:12:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-11-08 10:12:30 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-11-08 10:12:30 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field otpService in com.monetique.PinSenderV0.controllers.OtpController required a bean of type 'com.monetique.PinSenderV0.Interfaces.IOtpService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.monetique.PinSenderV0.Interfaces.IOtpService' in your configuration.
+
+2024-11-08 10:17:38 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Starting PinSenderApplication using Java 17.0.12 with PID 2432 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-11-08 10:17:38 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-08 10:17:38 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-08 10:17:38 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 39 ms. Found 12 JPA repository interfaces.
+2024-11-08 10:17:39 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-11-08 10:17:39 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:39 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-08 10:17:39 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-11-08 10:17:39 [restartedMain] INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-08 10:17:39 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 345 ms
+2024-11-08 10:17:39 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-08 10:17:39 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:17:39 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-08 10:17:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2024-11-08 10:17:39 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection ConnectionID:41 ClientConnectionId: 4cfd74e4-31e2-4b6d-845e-1ec6c24606cd
+2024-11-08 10:17:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2024-11-08 10:17:39 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-11-08 10:17:39 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:17:39 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:17:40 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@b1cd2e8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d5f51ed, org.springframework.security.web.context.SecurityContextHolderFilter@2ea49a65, org.springframework.security.web.header.HeaderWriterFilter@121f2156, org.springframework.web.filter.CorsFilter@5813fbf1, org.springframework.security.web.authentication.logout.LogoutFilter@36fe0f61, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@7352bf7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d465506, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6b8cc69, org.springframework.security.web.session.SessionManagementFilter@1405c098, org.springframework.security.web.access.ExceptionTranslationFilter@1b7b0b5c, org.springframework.security.web.access.intercept.AuthorizationFilter@29d4c009]
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.hsmtest:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.StatisticsController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.UserManagementController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-11-08 10:17:40 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-08 10:17:40 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-11-08 10:17:40 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#2b611f0a:0/SimpleConnection@3114caa0 [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60802]
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@cd5f8e7]]
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-11-08 10:17:40 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Started PinSenderApplication in 2.168 seconds (process running for 1654.551)
+2024-11-08 10:17:40 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-11-08 10:17:51 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2024-11-08 10:17:51 [Thread-64] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2024-11-08 10:17:51 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:17:51 [Thread-64] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@cd5f8e7]]
+2024-11-08 10:17:51 [Thread-64] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2024-11-08 10:17:51 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:17:51 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:17:51 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:17:51 [Thread-64] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:51 [Thread-64] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-11-08 10:17:51 [Thread-64] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [mssql-jdbc-shared-timer-core-4] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:17:51 [Thread-64] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-5 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:17:51 [Thread-64] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:51 [Thread-64] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:51 [Thread-64] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:17:51 [Thread-64] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:17:51 [Thread-64] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:17:51 [Thread-64] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2024-11-08 10:17:51 [Thread-64] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2024-11-08 10:17:52 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Starting PinSenderApplication using Java 17.0.12 with PID 2432 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-11-08 10:17:52 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-08 10:17:52 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-08 10:17:52 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 29 ms. Found 12 JPA repository interfaces.
+2024-11-08 10:17:52 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-11-08 10:17:52 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:52 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-08 10:17:52 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-11-08 10:17:52 [restartedMain] INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-08 10:17:52 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 250 ms
+2024-11-08 10:17:52 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-08 10:17:52 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:17:52 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-08 10:17:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Starting...
+2024-11-08 10:17:52 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-6 - Added connection ConnectionID:51 ClientConnectionId: f6f8ed3b-a7d5-4845-889f-fb7150ca3396
+2024-11-08 10:17:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Start completed.
+2024-11-08 10:17:52 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-11-08 10:17:52 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:17:52 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-11-08 10:17:52 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:17:53 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@74263340, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@599320b0, org.springframework.security.web.context.SecurityContextHolderFilter@581da712, org.springframework.security.web.header.HeaderWriterFilter@64deb4db, org.springframework.web.filter.CorsFilter@7c9a06ca, org.springframework.security.web.authentication.logout.LogoutFilter@35f31d61, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@4b7564f9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@415c7d73, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@50b571ef, org.springframework.security.web.session.SessionManagementFilter@5750ead3, org.springframework.security.web.access.ExceptionTranslationFilter@235741fb, org.springframework.security.web.access.intercept.AuthorizationFilter@6ca77843]
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.hsmtest:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.StatisticsController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.UserManagementController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-11-08 10:17:53 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-08 10:17:53 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-11-08 10:17:53 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#1413327f:0/SimpleConnection@204dd57 [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60815]
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4de3081b]]
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-11-08 10:17:53 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Started PinSenderApplication in 1.22 seconds (process running for 1666.929)
+2024-11-08 10:17:53 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-11-08 10:18:53 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 2, completed tasks = 0]
+2024-11-08 10:23:30 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2024-11-08 10:23:30 [Thread-87] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2024-11-08 10:23:30 [Thread-87] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4de3081b]]
+2024-11-08 10:23:30 [Thread-87] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2024-11-08 10:23:30 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:23:30 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2024-11-08 10:23:30 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:23:30 [messageListenerContainer-11] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2024-11-08 10:23:30 [Thread-87] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:23:30 [Thread-87] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-11-08 10:23:30 [Thread-87] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [mssql-jdbc-shared-timer-core-5] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.12/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:23:30 [Thread-87] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-6 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.12/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.12/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.12/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.12/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.12/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.12/java.lang.Thread.run(Thread.java:842)
+2024-11-08 10:23:30 [Thread-87] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:23:30 [Thread-87] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:23:30 [Thread-87] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:23:30 [Thread-87] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Shutdown ignored - container is already stopped
+2024-11-08 10:23:30 [Thread-87] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:23:30 [Thread-87] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown initiated...
+2024-11-08 10:23:30 [Thread-87] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown completed.
+2024-11-08 10:23:30 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Starting PinSenderApplication using Java 17.0.12 with PID 2432 (E:\SMTProjects\Pinsender V0\pin-code-back-main\target\classes started by Hamza in E:\SMTProjects\Pinsender V0\pin-code-back-main)
+2024-11-08 10:23:30 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-08 10:23:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-08 10:23:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 31 ms. Found 12 JPA repository interfaces.
+2024-11-08 10:23:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2024-11-08 10:23:30 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:23:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-08 10:23:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2024-11-08 10:23:31 [restartedMain] INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-08 10:23:31 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 300 ms
+2024-11-08 10:23:31 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-08 10:23:31 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:23:31 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-08 10:23:31 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Starting...
+2024-11-08 10:23:31 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-7 - Added connection ConnectionID:61 ClientConnectionId: d87c94ff-70a2-4ef2-92db-8cb597d3ad1c
+2024-11-08 10:23:31 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Start completed.
+2024-11-08 10:23:31 [restartedMain] INFO  org.hibernate.orm.dialect - HHH035001: Using dialect: org.hibernate.dialect.SQLServerDialect, version: 16.0
+2024-11-08 10:23:31 [restartedMain] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2024-11-08 10:23:31 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-08 10:23:32 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@663dc462, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7f5e6393, org.springframework.security.web.context.SecurityContextHolderFilter@5040f814, org.springframework.security.web.header.HeaderWriterFilter@605d0c06, org.springframework.web.filter.CorsFilter@69a4dde5, org.springframework.security.web.authentication.logout.LogoutFilter@3635e9e7, com.monetique.PinSenderV0.security.jwt.AuthTokenFilter@46413714, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6a3b17c6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@620e1bbb, org.springframework.security.web.session.SessionManagementFilter@37468538, org.springframework.security.web.access.ExceptionTranslationFilter@8e644ee, org.springframework.security.web.access.intercept.AuthorizationFilter@16c34d38]
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AgencyController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.AuthController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.BankController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.hsmtest:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.OtpController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.StatisticsController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabBinController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.TabCardHolderController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.UserManagementController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.c.WebSocketController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	c.m.P.t.TrackingController:
+	
+2024-11-08 10:23:32 [restartedMain] DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-08 10:23:32 [restartedMain] WARN  o.s.c.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2024-11-08 10:23:32 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#26129af7:0/SimpleConnection@485f4d9a [delegate=amqp://hamza@127.0.0.1:5672/, localPort=60870]
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2616154b]]
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2024-11-08 10:23:32 [restartedMain] INFO  c.m.PinSenderV0.PinSenderApplication - Started PinSenderApplication in 2.175 seconds (process running for 2006.546)
+2024-11-08 10:23:32 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
