@@ -21,7 +21,7 @@ public class HSMCalculPinService {
     // Calcul du PIN chiffré
     public String calculateEncryptedPin(String pvka, String offset, String pinLength, String right12Pan, String decimTable, String pan10) throws IOException {
         String request = "MHDR" + "EE" + pvka + offset + pinLength + right12Pan + decimTable + pan10+"NF";
-        logger.info("Preparing request for encrypted PIN: {}", request);
+        logger.info("Preparing request for encrypted PIN");
 
         try {
             hsmCommunication.connect(hsmIp, hsmPort);  // Actual IP and port
@@ -31,7 +31,7 @@ public class HSMCalculPinService {
             logger.info("Command sent.");
 
             String response = hsmCommunication.getResponse();
-            logger.info("Received response: {}", response);
+            logger.info("Received response: ");
 
             // Additional detailed logging for debugging
             if (response.length() >= 13) {
@@ -40,7 +40,7 @@ public class HSMCalculPinService {
                 String encryptedPin = response.substring(8, response.length());
                 logger.info("Status code: {}", status);
                 logger.info("Result code: {}", resultCode);
-                logger.info("Encrypted PIN extracted: {}", encryptedPin);
+                logger.info("Encrypted PIN extracted: ");
 
                 if ("EF".equals(status) && "00".equals(resultCode)) {
                     return encryptedPin;
@@ -61,7 +61,7 @@ public class HSMCalculPinService {
     // Calcul du PIN en clair
     public String calculateClearPin(String right12Pan, String encryptedPin) throws IOException {
         String request = "MHDR" + "NG" + right12Pan + encryptedPin;
-        logger.info("Preparing request for clear PIN: {}", request);
+        logger.info("Preparing request for clear PIN");
 
         try {
             hsmCommunication.connect(hsmIp, hsmPort);  // Provide actual IP and port
@@ -70,13 +70,13 @@ public class HSMCalculPinService {
             hsmCommunication.sendCommand();
             logger.info("Command sent.");
             String response = hsmCommunication.getResponse();
-            logger.info("Received response: {}", response);
+            logger.info("Received response");
             String status = response.substring(4,6);
             String resultCode = response.substring(6, 8);
             String Pin = response.substring(8, 12);
             logger.info("Status code: {}", status);
             logger.info("Result code: {}", resultCode);
-            logger.info("Encrypted PIN extracted: {}", encryptedPin);
+            logger.info("Encrypted PIN extracted");
             if ("NH".equals(status) && "00".equals(resultCode)) {
                 return Pin;  // Le PIN clair
             } else {

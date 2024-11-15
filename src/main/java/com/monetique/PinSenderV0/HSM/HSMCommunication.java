@@ -26,7 +26,7 @@ public class HSMCommunication {
     public void connect(String hsmIp, int hsmPort) throws IOException {
         try {
             socket = new Socket(hsmIp, hsmPort);
-            System.out.println("Successfully connected to HSM at " + hsmIp + ":" + hsmPort);
+            System.out.println("Successfully connected to HSM ");
             socket.setSoTimeout(5000);
         } catch (IOException e) {
             throw new IOException("Connection error to HSM: " + e.getMessage());

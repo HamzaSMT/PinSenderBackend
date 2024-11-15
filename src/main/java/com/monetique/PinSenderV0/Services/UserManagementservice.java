@@ -215,12 +215,13 @@ public class UserManagementservice implements IuserManagementService {
     }
 
 
+
+
     @Override
     public void toggleUserActiveStatus(Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + userId));
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
             System.out.println("Roles for user " + userId + ": " + user.getRoles());
 
             // Toggle active status
@@ -229,14 +230,13 @@ public class UserManagementservice implements IuserManagementService {
             userRepository.save(user);
             System.out.println("User " + user.getUsername() + " active status set to: " + newStatus);
 
+
             // If the user is an admin, toggle the status of all associated users
             if (isAdmin(user)) {
                 System.out.println("Toggling active status for associated users of admin: " + user.getUsername());
                 toggleAssociatedUsersStatus(user, newStatus);
             }
-        } else {
-            System.out.println("User not found for ID: " + userId);
-        }
+
     }
 
 

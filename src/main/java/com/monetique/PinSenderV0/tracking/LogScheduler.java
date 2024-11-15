@@ -1,6 +1,7 @@
 package com.monetique.PinSenderV0.tracking;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ public class LogScheduler {
 
     @Autowired
     private ItrackingingService apiRequestLogService;
-    private static final String EXTERNAL_LOG_DIRECTORY = "E:/Pinsender_logs"; // Change this to your desired path
+    @Value("${log.directory}")
+    private String externalLogDirectory;
 
 
     // Schedule this task to run every day at midnight
@@ -27,7 +29,7 @@ public class LogScheduler {
         if (!logs.isEmpty()) {
             // Get the current date to append to the filename
             String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String fileName = EXTERNAL_LOG_DIRECTORY+"api_request_logs_" + currentDate + ".txt";
+            String fileName = externalLogDirectory+"api_request_logs_" + currentDate + ".txt";
             // Generate the log file
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
                 for (ApiRequestLog log : logs) {

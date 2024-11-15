@@ -56,9 +56,8 @@ public class UserManagementController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new MessageResponse("User is not authenticated!", 401));
             }
-
             userManagementService.toggleUserActiveStatus(id);
-            return ResponseEntity.ok(new MessageResponse("User and associated users deactivated successfully.", 200));
+            return ResponseEntity.ok(new MessageResponse("User and associated users status changed successfully.", 200));
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)

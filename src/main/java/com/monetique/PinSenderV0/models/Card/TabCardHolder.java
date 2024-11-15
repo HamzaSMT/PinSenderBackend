@@ -55,14 +55,13 @@ public class TabCardHolder {
 
     @Column(name = "PORT-EMAIL")
     private String email;
+    @Column(name = "BANK-CODE")
+    private String bankCode;
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "BIN-Number", referencedColumnName = "BIN-Number", nullable = true)
     private TabBin bin;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "PORT-CODE-BANQUE", referencedColumnName = "bank_code", nullable = true)
-    private TabBank bank; // Reference to TabBank
+
 }

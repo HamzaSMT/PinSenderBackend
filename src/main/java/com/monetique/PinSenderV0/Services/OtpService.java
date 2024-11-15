@@ -42,7 +42,7 @@ public class OtpService implements IOtpService {
     public String sendOtp(String phoneNumber) {
         // Generate a 6-digit OTP
         String otp = generateOtp();
-        logger.info("Generate a 6-digit OTP : "+otp);
+        logger.info("Generate a 6-digit OTP ");
         // Store the OTP against the phone number
         otpStore.put(phoneNumber, otp);
         otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
@@ -101,8 +101,15 @@ public class OtpService implements IOtpService {
     @Override
     public String resendOtp(String phoneNumber) {
         // Resend OTP by generating a new one and resetting the expiration time
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
+        Long AgentId= currentUser.getId();
+        Long BranchId= currentUser.getAgency() != null ? currentUser.getAgency().getId() : null;
+        Long BankId= currentUser.getBank() != null ? currentUser.getBank().getId() : null;
         String newOtp = sendOtp(phoneNumber);
         System.out.println("Resent OTP to phone number: " + phoneNumber);
+        statisticservices.logSentItem(AgentId, BranchId, BankId, "OTP");
+
         return newOtp;
 
     }

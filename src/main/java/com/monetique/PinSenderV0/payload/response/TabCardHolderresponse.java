@@ -40,7 +40,7 @@ import lombok.Setter;
             this.pinOffset = tabCardHolder.getPinOffset();
             this.gsm = tabCardHolder.getGsm();
             this.email = tabCardHolder.getEmail();
-            this.bankCode = tabCardHolder.getBank() != null ? tabCardHolder.getBank().getBankCode() : null;  // Bank details
+            this.bankCode = tabCardHolder.getBankCode() ;  // Bank details
             this.binNumber = tabCardHolder.getBin() != null ? tabCardHolder.getBin() : null;  // Bin details
         }
     }

@@ -87,7 +87,7 @@ public class TabCardHolderService implements ICardholderService {
         cardHolder.setCardNumber(line.substring(24, 43)); // Card number
         cardHolder.setName(line.substring(43, 69));
         cardHolder.setCompanyName(line.substring(69, 95));
-        cardHolder.setBank(ibankService.getbankbybancode(line.substring(95,100)));
+        cardHolder.setBankCode(line.substring(95,100));
         cardHolder.setAgencyCode(line.substring(100, 105));
         cardHolder.setRib(line.substring(105, 129));
         cardHolder.setFinalDate(line.substring(129, 133));
@@ -115,6 +115,7 @@ public class TabCardHolderService implements ICardholderService {
         existingCardHolder.setAgencyCode(updatedCardHolder.getAgencyCode());
         existingCardHolder.setGsm(updatedCardHolder.getGsm());
         existingCardHolder.setEmail(updatedCardHolder.getEmail());
+
         // Save updated cardholder
         try {
             tabCardHolderRepository.save(existingCardHolder);
