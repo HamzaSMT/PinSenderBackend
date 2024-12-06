@@ -4,6 +4,8 @@ import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
 import com.monetique.PinSenderV0.Interfaces.IbankService;
 import com.monetique.PinSenderV0.Interfaces.ItabBinService;
+import com.monetique.PinSenderV0.Services.EncryptionService;
+import com.monetique.PinSenderV0.Services.HashingService;
 import com.monetique.PinSenderV0.models.Card.CardHolderErrorDetail;
 import com.monetique.PinSenderV0.models.Card.CardHolderLoadReport;
 import com.monetique.PinSenderV0.models.Card.TabCardHolder;
@@ -34,7 +36,9 @@ public class TabCardHolderService implements ICardholderService {
     @Autowired
     private CardHolderLoadReportRepository cardHolderLoadReportRepository;
     @Autowired
-    private IbankService ibankService;
+    private EncryptionService encryptionService;
+    @Autowired
+    private HashingService hashingService;
     @Autowired
     private ItabBinService itabBinService;
     @Autowired
@@ -84,20 +88,32 @@ public class TabCardHolderService implements ICardholderService {
 
         // Extract attributes from specific positions in the line
         cardHolder.setClientNumber(line.substring(0, 24)); // Client number
-        cardHolder.setCardNumber(line.substring(24, 43)); // Card number
-        cardHolder.setName(line.substring(43, 69));
-        cardHolder.setCompanyName(line.substring(69, 95));
-        cardHolder.setBankCode(line.substring(95,100));
-        cardHolder.setAgencyCode(line.substring(100, 105));
-        cardHolder.setRib(line.substring(105, 129));
-        cardHolder.setFinalDate(line.substring(129, 133));
-        cardHolder.setCardType(line.substring(133, 135));
-        cardHolder.setCountryCode(line.substring(135, 138));
-        cardHolder.setNationalId(line.substring(138, 154));
-        cardHolder.setPinOffset(line.substring(154,166));// National ID
-        cardHolder.setGsm(line.substring(166, 181)); // GSM
-        cardHolder.setEmail(line.substring(181, 231));
-        cardHolder.setBin(itabBinService.getbinbybinnumber(line.substring(231,239)));
+        //cardHolder.setCardNumber((line.substring(24, 43))); // Card number
+        try {
+            // Cryptage du numéro de carte
+            String cardnumber = line.substring(24, 43).replace(" ", "");
+            String encryptedCardNumber = encryptionService.encrypt(cardnumber); // Card number
+            cardHolder.setCardHash(hashingService.hashPAN(cardnumber));
+            cardHolder.setCardNumber(cardnumber);
+            cardHolder.setCardNumberEncrypted(cardnumber);
+        } catch (Exception e) {
+            logger.error("Erreur lors du cryptage du numéro de carte", e);
+            throw new RuntimeException("Erreur de cryptage", e);
+        }
+        cardHolder.setName(line.substring(43, 69).replace(" ", ""));
+        cardHolder.setCompanyName(line.substring(69, 95).replace(" ", ""));
+        cardHolder.setBankCode(line.substring(95,100).replace(" ", ""));
+        cardHolder.setAgencyCode(line.substring(100, 105).replace(" ", ""));
+        cardHolder.setRib(line.substring(105, 129).replace(" ", ""));
+        cardHolder.setFinalDate(line.substring(129, 133).replace(" ", ""));
+        cardHolder.setCardType(line.substring(133, 135).replace(" ", ""));
+        cardHolder.setCountryCode(line.substring(135, 138).replace(" ", ""));
+        cardHolder.setNationalId(line.substring(138, 154).replace(" ", ""));
+        cardHolder.setPinOffset(line.substring(154,166).replace(" ", ""));// National ID
+        cardHolder.setGsm(line.substring(166, 181).replace(" ", "")); // GSM
+        cardHolder.setEmail(line.substring(181, 231).replace(" ", ""));
+
+        cardHolder.setBin(itabBinService.getbinbybinnumber(line.substring(231,239).replace(" ", "")));
         // Add other field extractions here (e.g., bin, bank, etc.)
 
         return cardHolder;
@@ -131,7 +147,7 @@ public class TabCardHolderService implements ICardholderService {
         // Extract the card number and other attributes from the line once
 
         TabCardHolder cardHolderAttributes = extractCardHolderAttributes(line);
-        String cardNumber = cardHolderAttributes.getCardNumber();  // Extract the card number
+        String cardNumber = cardHolderAttributes.getCardNumber();
         String numclient= cardHolderAttributes.getClientNumber();
         logger.info("Processing Card Holder with card number: ",cardNumber);
         // Check if the cardholder already exists in the system

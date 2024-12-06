@@ -25,9 +25,11 @@ import lombok.Setter;
         private String email;
         private String bankCode;  // To hold the bank code
         private TabBin binNumber;  // To hold the bin number
+        private String cardNumberEncrypted;
 
         public TabCardHolderresponse(TabCardHolder tabCardHolder) {
             this.clientNumber = tabCardHolder.getClientNumber();
+            this.cardNumberEncrypted = tabCardHolder.getCardNumberEncrypted();
             this.cardNumber = tabCardHolder.getCardNumber();
             this.name = tabCardHolder.getName();
             this.companyName = tabCardHolder.getCompanyName();

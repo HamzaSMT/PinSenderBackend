@@ -40,7 +40,7 @@ public class BankController {
     @Autowired
     private IbankService bankservice;
 
-    // Create a new Bank (Only for Super Admin)
+  /*  // Create a new Bank (Only for Super Admin)
     @PostMapping(path = "/Addbanks")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> addBank(
@@ -80,7 +80,7 @@ public class BankController {
 
 
     }
-
+*/
 
     // List all banks (Accessible to Super Admin)
 
@@ -110,18 +110,6 @@ public class BankController {
             // Log and return a generic error message
             logger.error("Error while listing banks: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error retrieving bank list!", 500));
-        }
-    }
-    @GetMapping("/banks/list1")
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> listAllBanks1() {
-        try {
-            // Logic to get the list of banks
-            return ResponseEntity.ok(bankservice.listAllBanks());
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Access denied", 403));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("An error occurred", 500));
         }
     }
 

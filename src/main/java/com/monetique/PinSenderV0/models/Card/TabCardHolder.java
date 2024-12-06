@@ -23,6 +23,13 @@ public class TabCardHolder {
     @Column(name = "PORT-NOPORT", nullable = false, unique = true)
     private String cardNumber;
 
+
+    @Column(name = "PORT-NOPORT-ENCRYPTED", nullable = true)
+    private String cardNumberEncrypted;
+
+    @Column(nullable = false, unique = true)
+    private String cardHash;
+
     @Column(name = "PORT-NOM", nullable = true)
     private String name;
 
@@ -57,6 +64,9 @@ public class TabCardHolder {
     private String email;
     @Column(name = "BANK-CODE")
     private String bankCode;
+
+
+
 
     @JsonBackReference
     @ManyToOne

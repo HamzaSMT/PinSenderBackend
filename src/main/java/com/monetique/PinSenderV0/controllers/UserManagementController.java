@@ -256,7 +256,6 @@ public class UserManagementController {
             try {
                 // Generate a random password for the specified user
                 String newPassword = userManagementService.generateRandomPassword(request.getUserId());
-
                 // Check if password generation was successful
                 if (newPassword == null || newPassword.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
