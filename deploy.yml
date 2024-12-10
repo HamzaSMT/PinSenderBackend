@@ -1,0 +1,145 @@
+---
+  - name: Deploy Backend, RabbitMQ, Metrics, and Logging
+    hosts: app
+    become: yes
+    vars:
+      clean_deploy: true  # Set to true to ensure a clean deployment
+      loki_url: "http://10.0.2.4:3100/loki/api/v1/push"  # Replace with your Loki endpoint
+  
+    tasks:
+      # Step 1: Ensure Docker and Docker Compose are installed
+      - name: Check if Docker is installed
+        command: docker --version
+        register: docker_installed
+        ignore_errors: yes
+  
+      - name: Install prerequisites for Docker
+        yum:
+          name:
+            - yum-utils
+            - device-mapper-persistent-data
+            - lvm2
+          state: present
+        when: docker_installed.rc != 0
+  
+      - name: Add Docker repository
+        shell: |
+          yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+        when: docker_installed.rc != 0
+  
+      - name: Install Docker CE
+        yum:
+          name: docker-ce
+          state: present
+        when: docker_installed.rc != 0
+  
+      - name: Ensure Docker service is started
+        service:
+          name: docker
+          state: started
+          enabled: yes
+  
+      - name: Check if Docker Compose is installed
+        command: docker-compose --version
+        register: docker_compose_installed
+        ignore_errors: yes
+  
+      - name: Install Docker Compose
+        shell: |
+          curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+        when: docker_compose_installed.rc != 0
+  
+      # Step 2: Install Loki Docker Plugin
+      - name: Check if Loki plugin is installed
+        shell: docker plugin ls | grep loki
+        register: loki_plugin_installed
+        ignore_errors: yes
+  
+      - name: Install Loki plugin
+        shell: |
+          docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+        when: loki_plugin_installed.rc != 0
+  
+      # Step 3: Modify Docker Daemon for Loki Logging
+      - name: Ensure Docker daemon.json is configured for Loki
+        copy:
+          dest: /etc/docker/daemon.json
+          content: |
+            {
+              "log-driver": "loki",
+              "log-opts": {
+                "loki-url": "{{ loki_url }}"
+              }
+            }
+          mode: "0644"
+        notify:
+          - Restart Docker
+  
+      # Step 4: Conditional Clean Deployment
+      - name: Perform clean deployment (Remove all Docker resources and old files)
+        when: clean_deploy | default(false)
+        block:
+          - name: Stop all running containers
+            shell: docker ps -q | xargs --no-run-if-empty docker stop
+            ignore_errors: yes
+  
+          - name: Remove all stopped containers
+            shell: docker ps -aq | xargs --no-run-if-empty docker rm
+            ignore_errors: yes
+  
+          - name: Remove all Docker images
+            shell: docker images -q | xargs --no-run-if-empty docker rmi -f
+            ignore_errors: yes
+  
+          - name: Remove all unused volumes
+            shell: docker volume prune -f
+            ignore_errors: yes
+  
+          - name: Prune unused Docker networks
+            shell: docker network prune -f
+            ignore_errors: yes
+  
+          - name: Clean up old deployment files
+            file:
+              path: "/tmp"
+              state: directory
+              mode: '0755'
+              recurse: yes
+            with_items:
+              - "/tmp/backend-app.tar"
+              - "/tmp/rabbitmq-app.tar"
+              - "/tmp/docker-compose.yml"
+  
+      # Step 5: Copy application resources
+      - name: Copy backend Docker image to VM
+        copy:
+          src: "{{ playbook_dir }}/backend-image.tar"
+          dest: /tmp/backend-app.tar
+  
+      - name: Copy RabbitMQ Docker image to VM
+        copy:
+          src: "{{ playbook_dir }}/rabbitmq-image.tar"
+          dest: /tmp/rabbitmq-app.tar
+  
+      - name: Copy Docker Compose file to VM
+        copy:
+          src: "{{ playbook_dir }}/docker-compose.yml"
+          dest: /tmp/docker-compose.yml
+  
+      # Step 6: Load and deploy services with Docker Compose
+      - name: Load backend Docker image
+        shell: docker load < /tmp/backend-app.tar
+  
+      - name: Load RabbitMQ Docker image
+        shell: docker load < /tmp/rabbitmq-app.tar
+  
+      - name: Start services with Docker Compose
+        shell: docker-compose -f /tmp/docker-compose.yml up -d
+  
+    handlers:
+      - name: Restart Docker
+        service:
+          name: docker
+          state: restarted
+  

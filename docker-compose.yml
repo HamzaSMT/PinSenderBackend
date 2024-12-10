@@ -1,0 +1,74 @@
+version: '3.9'
+
+services:
+  backend:
+    image: back-app:latest
+    container_name: backend-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://10.0.2.15:1433;databaseName=test;encrypt=true;trustServerCertificate=true
+      SPRING_DATASOURCE_USERNAME: ahmed
+      SPRING_DATASOURCE_PASSWORD: ferchichi123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: hamza
+      SPRING_RABBITMQ_PASSWORD: hamza
+    logging:
+      driver: "loki"
+      options:
+        loki-url: "http://10.0.2.4:3100/loki/api/v1/push"  # Loki URL
+        loki-external-labels: job=backend-service  # Label for Grafana filtering
+    depends_on:
+      - rabbitmq
+    networks:
+      - app_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-service
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: hamza
+      RABBITMQ_DEFAULT_PASS: hamza
+    logging:
+      driver: "loki"
+      options:
+        loki-url: "http://10.0.2.4:3100/loki/api/v1/push"  # Loki URL
+        loki-external-labels: job=rabbitmq-service  # Label for Grafana filtering
+    networks:
+      - app_network
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - "9100:9100"  # Expose Node Exporter metrics
+    networks:
+      - app_network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8181:8080"  # Expose cAdvisor metrics
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - app_network
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  app_network:
+    driver: bridge

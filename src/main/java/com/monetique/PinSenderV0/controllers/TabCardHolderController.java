@@ -32,29 +32,17 @@ public class TabCardHolderController {
         List<TabCardHolderresponse> cardHolders = cardHolderService.getAllCardHolders();
         return ResponseEntity.ok(cardHolders);
     }
-
-
-
-
     @PostMapping("/verify")
     public ResponseEntity<?> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-
         // Set user details in the request
         request.setAgentId(currentUser.getId());
         request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
         request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);
-
-
         cardHolderService.verifyCardholder(request);
-
-
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new MessageResponse("Verification request sent to queue.", 202));
-
-
     }
-
 ///////////////////////////////////////////////////load cards
 @PostMapping("/upload")
 public ResponseEntity<?> uploadCardHolderFile(@RequestParam("file") MultipartFile file) {
@@ -63,24 +51,21 @@ public ResponseEntity<?> uploadCardHolderFile(@RequestParam("file") MultipartFil
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty.");
         }
-
         // Read lines from the uploaded file
         List<String> lines;
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             lines = reader.lines().collect(Collectors.toList());
         }
-
         // Process the cardholder lines and log the result
         cardHolderService.processCardHolderLines(lines, file.getOriginalFilename());
-
         return ResponseEntity.ok("Cardholder file processed successfully.");
     } catch (Exception e) {
-
         return ResponseEntity.status(500).body(new MessageResponse("Error processing file", 500));
     }
 }
-// Endpoint to get all load reports
+
+/// Endpoint to get all load reports
 @GetMapping("/load-reports")
 public ResponseEntity<List<CardHolderLoadReport>> getAllLoadReports() {
     List<CardHolderLoadReport> loadReports = cardHolderService.getAllLoadReports();
