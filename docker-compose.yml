@@ -9,7 +9,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:sqlserver://10.0.2.15:1433;databaseName=test;encrypt=true;trustServerCertificate=true
       SPRING_DATASOURCE_USERNAME: ahmed
-      SPRING_DATASOURCE_PASSWORD: ferchichi123
+      SPRING_DATASOURCE_PASSWORD: ahmed
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_RABBITMQ_HOST: rabbitmq
