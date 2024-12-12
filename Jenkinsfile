@@ -39,6 +39,57 @@ pipeline {
                 }
             }
         }
+        stage('Check and Start Monitoring Services') {
+            steps {
+                script {
+                    echo "Ensuring Prometheus, Grafana, and Loki are running..."
+
+                    // Check and start Prometheus
+                    def prometheusStatus = sh(script: "pgrep -f ${PROMETHEUS_PROCESS}", returnStatus: true)
+                    if (prometheusStatus != 0) {
+                        echo "Starting Prometheus..."
+                        sh """
+                            cd ${PROMETHEUS_DIR}
+                            nohup ./prometheus --config.file=prometheus.yml &
+                        """
+                    } else {
+                        echo "Prometheus is already running."
+                    }
+
+                    // Check and manage Grafana container
+                    def grafanaRunning = sh(script: "docker ps --filter 'name=${GRAFANA_CONTAINER}' --filter 'status=running' -q", returnStdout: true).trim()
+                    if (grafanaRunning) {
+                        echo "Grafana container is already running: ${grafanaRunning}"
+                    } else {
+                        def grafanaExists = sh(script: "docker ps -a --filter 'name=${GRAFANA_CONTAINER}' -q", returnStdout: true).trim()
+                        if (grafanaExists) {
+                            echo "Removing existing Grafana container..."
+                            sh "docker rm -f ${grafanaExists}"
+                        }
+                        echo "Starting Grafana container..."
+                        sh """
+                            docker run -d --name=${GRAFANA_CONTAINER} -p 3000:3000 grafana/grafana
+                        """
+                    }
+
+                    // Check and manage Loki container
+                    def lokiRunning = sh(script: "docker ps --filter 'name=${LOKI_CONTAINER}' --filter 'status=running' -q", returnStdout: true).trim()
+                    if (lokiRunning) {
+                        echo "Loki container is already running: ${lokiRunning}"
+                    } else {
+                        def lokiExists = sh(script: "docker ps -a --filter 'name=${LOKI_CONTAINER}' -q", returnStdout: true).trim()
+                        if (lokiExists) {
+                            echo "Removing existing Loki container..."
+                            sh "docker rm -f ${lokiExists}"
+                        }
+                        echo "Starting Loki container..."
+                        sh """
+                            docker run -d --name=${LOKI_CONTAINER} -p 3100:3100 grafana/loki:latest
+                        """
+                    }
+                }
+            }
+        }
 
         stage('Test Ansible Connection') {
             steps {
