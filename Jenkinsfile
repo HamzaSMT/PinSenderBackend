@@ -4,19 +4,19 @@ pipeline {
     environment {
         BACKEND_IMAGE = "back-app"
         RABBITMQ_IMAGE = "rabbitmq:3-management"
-        INVENTORY = "PinSenderBackend-main/inventory.ini"
-        PLAYBOOK = "PinSenderBackend-main/deploy.yml"
+        INVENTORY = "inventory.ini"
+        PLAYBOOK = "deploy.yml"
         MAVEN_OPTS = '-Dmaven.repo.local=/var/lib/jenkins/.m2/repository'
     }
 
     tools {
-        maven 'Maven-3.8.5'
+        maven 'Maven-3.9.9'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'master', url: 'https://github.com/ahmedenzo/pinesender-fullProject.git'
+                git branch: 'main', url: 'https://github.com/HamzaSMT/PinSenderBackend.git'
             }
         }
 
@@ -112,7 +112,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                dir('PinSenderBackend-main') {
+                dir('.') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -120,7 +120,7 @@ pipeline {
 
         stage('Build Backend Docker Image') {
             steps {
-                dir('PinSenderBackend-main') {
+                dir('.') {
                     sh '''
                         docker build -t ${BACKEND_IMAGE}:latest .
                     '''
@@ -138,7 +138,7 @@ pipeline {
 
         stage('Export Docker Images') {
             steps {
-                dir('PinSenderBackend-main') {
+                dir('.') {
                     sh '''
                         docker save -o backend-image.tar ${BACKEND_IMAGE}:latest
                         docker save -o rabbitmq-image.tar ${RABBITMQ_IMAGE}
@@ -149,7 +149,7 @@ pipeline {
 
         stage('Deploy with Ansible') {
             steps {
-                dir('PinSenderBackend-main') {
+                dir('.') {
                     script {
                         // Trigger Ansible playbook with clean_deploy=true
                         def cleanDeploy = true
