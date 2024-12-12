@@ -7,9 +7,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://10.0.2.15:1433;databaseName=test;encrypt=true;trustServerCertificate=true
-      SPRING_DATASOURCE_USERNAME: ahmed
-      SPRING_DATASOURCE_PASSWORD: ahmed
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://10.0.2.15:1433;databaseName=test;integratedSecurity=true;encrypt=true;trustServerCertificate=true;columnEncryptionSetting=Enabled
+      SPRING_DATASOURCE_USERNAME: hamza
+      SPRING_DATASOURCE_PASSWORD: hamza
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_RABBITMQ_HOST: rabbitmq
