@@ -4,7 +4,7 @@
     become: yes
     vars:
       clean_deploy: true  # Set to true to ensure a clean deployment
-      loki_url: "http://10.0.2.4:3100/loki/api/v1/push"  # Replace with your Loki endpoint
+      loki_url: "http://172.17.5.190:3100/loki/api/v1/push"  # Replace with your Loki endpoint
   
     tasks:
       # Step 1: Ensure Docker and Docker Compose are installed
