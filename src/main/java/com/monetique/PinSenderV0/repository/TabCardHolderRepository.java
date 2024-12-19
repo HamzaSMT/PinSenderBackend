@@ -3,6 +3,7 @@ package com.monetique.PinSenderV0.repository;
 import com.monetique.PinSenderV0.models.Card.TabCardHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +23,6 @@ public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, St
 
     boolean existsByCardHashAndFinalDateAndNationalIdAndGsm(String cardHash, String finalDate, String nationalId, String gsm);
 
-    Optional<String> findBankCodeByCardHash(String cardHash);
+    @Query("SELECT c.bankCode FROM TabCardHolder c WHERE c.cardHash = :cardHash")
+    String findBankCodeByCardHash(@Param("cardHash") String cardHash);
 }

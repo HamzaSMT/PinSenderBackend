@@ -34,9 +34,8 @@ public class CardholderConsumer {
         // Simulate processing the verification
         System.out.println("Received verification request for cardholder: " + request.getCardNumber());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-        String authenticatedUserBankCode = currentUser.getAdmin().getBank().getBankCode();
+        String authenticatedUserBankCode = request.getAuthenticatedUserBankCode(); // Use the value from the request
+
 
         String cardHash = hashingService.hashPAN(request.getCardNumber());
         // Check if the cardholder belongs to the same bank
@@ -80,7 +79,7 @@ public class CardholderConsumer {
     }
 
     public boolean isCardholderAndUserInSameBank(String cardHash, String authenticatedUserBankCode) {
-        Optional<String> cardholderBankCode = cardholderRepository.findBankCodeByCardHash(cardHash);
-        return cardholderBankCode.isPresent() && cardholderBankCode.get().equals(authenticatedUserBankCode);
+        String cardholderBankCode = cardholderRepository.findBankCodeByCardHash(cardHash);
+        return cardholderBankCode.equals(authenticatedUserBankCode);
     }
 }

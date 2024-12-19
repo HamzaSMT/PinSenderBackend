@@ -37,6 +37,13 @@ public class TabCardHolderController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
         // Set user details in the request
+
+
+        // Set user details in the request
+        request.setAgentId(currentUser.getId());
+        request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
+        request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);
+        request.setAuthenticatedUserBankCode(currentUser.getAdmin().getBank().getBankCode()); // Add bank code directly to the request
         request.setAgentId(currentUser.getId());
         request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
         request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);

@@ -18,6 +18,8 @@ public class VerifyCardholderRequest {
     private Long agentId;  // Add these fields
     private Long branchId; // Add these fields
     private Long bankId;   // Add these fields
+    private String authenticatedUserBankCode; // Authenticated user's bank code
+
 
 
 

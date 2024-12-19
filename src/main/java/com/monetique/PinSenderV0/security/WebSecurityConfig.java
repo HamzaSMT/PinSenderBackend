@@ -26,68 +26,68 @@ import java.util.Collections;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-  @Autowired
-  UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
-  @Autowired
-  private AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
 
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
-    return new AuthTokenFilter();
-  }
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
 
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userDetailsService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-    return authProvider;
-  }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-    return authConfig.getAuthenticationManager();
-  }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf  (csrf -> csrf.disable())
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**",  "/api/test/**","/favicon.ico").permitAll()
-                    .requestMatchers("/ws/**", "/topic/**", "/app/**").permitAll()
-                    .anyRequest().authenticated())
-             .cors(cors -> cors.configurationSource(request -> {
-              CorsConfiguration corsConfig = new CorsConfiguration();
-              corsConfig.setExposedHeaders(Collections.singletonList("Set-Cookie")); // Allow the Set-Cookie header to be visiblecorsConfig.setAllowCredentials(true); // This is essential for cookies
-              corsConfig.setAllowedOrigins(Collections.singletonList("http://172.17.5.191:8443"));
-              corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-              corsConfig.setAllowedHeaders(Arrays.asList("*"));
-              corsConfig.setAllowCredentials(true);
-              return corsConfig;
-            }))
-            .headers(headers -> {
-              headers.addHeaderWriter(new StaticHeadersWriter("X-XSS-Protection", "1; mode=block"));
-              headers.contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; script-src 'self'"));
-              headers.frameOptions(frameOptions -> frameOptions.deny());
-              headers.addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy", "default-src 'self'"));
-              headers.addHeaderWriter(new StaticHeadersWriter("X-WebKit-CSP", "default-src 'self'"));
-            });
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf  (csrf -> csrf.disable())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**",  "/api/test/**").permitAll()
+                        .requestMatchers("/ws/**", "/topic/**", "/app/**").permitAll()
+                        .anyRequest().authenticated())
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration corsConfig = new CorsConfiguration();
+                    corsConfig.setExposedHeaders(Collections.singletonList("Set-Cookie")); // Allow the Set-Cookie header to be visiblecorsConfig.setAllowCredentials(true); // This is essential for cookies
+                    corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                    corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(Arrays.asList("*"));
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                }))
+                .headers(headers -> {
+                    headers.addHeaderWriter(new StaticHeadersWriter("X-XSS-Protection", "1; mode=block"));
+                    headers.contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; script-src 'self'"));
+                    headers.frameOptions(frameOptions -> frameOptions.deny());
+                    headers.addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy", "default-src 'self'"));
+                    headers.addHeaderWriter(new StaticHeadersWriter("X-WebKit-CSP", "default-src 'self'"));
+                });
 
-    // Configure anonymous users behavior
-    http.anonymous(anonymousConfigurer -> anonymousConfigurer.disable());
+        // Configure anonymous users behavior
+        http.anonymous(anonymousConfigurer -> anonymousConfigurer.disable());
 
-    // Add JWT filter before username/password authentication filter
-    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        // Add JWT filter before username/password authentication filter
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    return http.build();
-  }
+        return http.build();
+    }
 
 }
