@@ -22,26 +22,36 @@ public class OtpController {
     private IOtpService otpService;
 
 
-    // Endpoint to validate OTP
     @PostMapping("/validate")
     public ResponseEntity<MessageResponse> validateOtp(@RequestBody OtpValidationRequest request) {
-        boolean isValid = otpService.validateOtp(request);
-        if (isValid) {
-            return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new MessageResponse("Invalid OTP",400));
+        try {
+            boolean isValid = otpService.validateOtp(request);
+            if (isValid) {
+                return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.", 200));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new MessageResponse("Invalid OTP", 400));
+            }
+        } catch (Exception ex) {
+            // Log and handle generic exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("An unexpected error occurred.", 500));
         }
     }
+
+
+
     @PostMapping("/resend")
-    public ResponseEntity<MessageResponse> resendOtp(@RequestBody String gsmnumber) {
+    public ResponseEntity<MessageResponse> resendOtp(@RequestBody String gsmNumber) {
         try {
-        String otp = otpService.resendOtp(gsmnumber);
-
-        return ResponseEntity.ok(new MessageResponse("code OTP resent successfully.",200));
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new MessageResponse("Invalid OTP",400));
+            String otp = otpService.resendOtp(gsmNumber);
+            return ResponseEntity.ok(new MessageResponse("Code OTP resent successfully.", 200));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Failed to resend OTP", 400));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("An unexpected error occurred", 500));
+        }
     }
-
-}}
+}

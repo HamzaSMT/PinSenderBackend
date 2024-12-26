@@ -60,11 +60,12 @@ public class CardholderConsumer {
                 request.getGsm());
         if (valid) {
             logger.info("Cardholder verified successfully for GSM: " + request.getGsm());
-
+            webSocketController.notifyClient(request.getCardNumber(),
+                    "Cardholder verified successfully",
+                    200);
             // Proceed with OTP generation, sending SMS, etc.
             SMSResponse smsResponse = otpService.sendOtp(request); // Get response from sendOtp
             logger.info("OTP will be sent to phone number: " + request.getGsm());
-
             // Check the response status and handle accordingly
             if ("Success".equals(smsResponse.getStatus())) {
                 // OTP sent successfully

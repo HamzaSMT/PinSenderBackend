@@ -25,8 +25,7 @@ public class OtpService implements IOtpService {
     private HSMService hsmService;
    @Autowired
    private IStatisticservices statisticservices;
-    @Autowired
-    private WebSocketController webSocketController;
+
 
 
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);

@@ -1,11 +1,13 @@
 package com.monetique.PinSenderV0.tracking;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,7 +21,14 @@ public class LogScheduler {
     private ItrackingingService apiRequestLogService;
     @Value("${log.directory}")
     private String externalLogDirectory;
-
+    @PostConstruct
+    public void init() {
+        // Ensure that the log directory exists
+        File directory = new File(externalLogDirectory);
+        if (!directory.exists()) {
+            directory.mkdirs();  // Creates the directory if it doesn't exist
+        }
+    }
 
     // Schedule this task to run every day at midnight
     @Scheduled(cron = "0 0 0 * * ?")  // Adjust cron expression as needed
