@@ -15,13 +15,11 @@ public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, St
     // Method to find cardholders by agencyCode
     List<TabCardHolder> findByAgencyCode(String agencyCode);
 
-    boolean existsByCardNumberAndFinalDateAndNationalIdAndGsm(String cardNumber, String finalDate, String nationalId, String gsm);
-
     TabCardHolder findByCardNumber(String cardNumber);
 
     TabCardHolder findByClientNumber(String clientNumber);
 
-    boolean existsByCardHashAndFinalDateAndNationalIdAndGsm(String cardHash, String finalDate, String nationalId, String gsm);
+    TabCardHolder findByCardHash(String cardHash);
 
     @Query("SELECT c.bankCode FROM TabCardHolder c WHERE c.cardHash = :cardHash")
     String findBankCodeByCardHash(@Param("cardHash") String cardHash);

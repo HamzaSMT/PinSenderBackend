@@ -28,10 +28,9 @@ public class HSMCalculPinService {
             logger.info("Successfully connected to HSM.");
             hsmCommunication.setRequest(request);
             hsmCommunication.sendCommand();
-            logger.info("Command sent.");
-
+            logger.info("Command sent....");
             String response = hsmCommunication.getResponse();
-            logger.info("Received response: ");
+            logger.info("Received response.... ");
 
             // Additional detailed logging for debugging
             if (response.length() >= 13) {
@@ -40,8 +39,6 @@ public class HSMCalculPinService {
                 String encryptedPin = response.substring(8, response.length());
                 logger.info("Status code: {}", status);
                 logger.info("Result code: {}", resultCode);
-                logger.info("Encrypted PIN extracted: ");
-
                 if ("EF".equals(status) && "00".equals(resultCode)) {
                     return encryptedPin;
                 }
@@ -53,7 +50,7 @@ public class HSMCalculPinService {
             throw e;
         } finally {
             hsmCommunication.close();
-            logger.info("Connection closed.");
+            logger.info("Connection closed....");
         }
     }
 
@@ -68,15 +65,15 @@ public class HSMCalculPinService {
             logger.info("Successfully connected to HSM.");
             hsmCommunication.setRequest(request);  // Set the request before sending
             hsmCommunication.sendCommand();
-            logger.info("Command sent.");
+            logger.info("Command sent....");
             String response = hsmCommunication.getResponse();
-            logger.info("Received response");
+            logger.info("Received response....");
             String status = response.substring(4,6);
             String resultCode = response.substring(6, 8);
             String Pin = response.substring(8, 12);
             logger.info("Status code: {}", status);
             logger.info("Result code: {}", resultCode);
-            logger.info("Encrypted PIN extracted");
+            logger.info("Encrypted PIN extracted.....");
             if ("NH".equals(status) && "00".equals(resultCode)) {
                 return Pin;  // Le PIN clair
             } else {

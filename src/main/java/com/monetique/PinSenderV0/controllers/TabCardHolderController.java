@@ -36,10 +36,6 @@ public class TabCardHolderController {
     public ResponseEntity<?> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-        // Set user details in the request
-
-
-        // Set user details in the request
         request.setAgentId(currentUser.getId());
         request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
         request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);

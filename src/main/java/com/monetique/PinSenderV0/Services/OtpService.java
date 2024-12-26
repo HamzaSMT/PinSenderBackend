@@ -1,9 +1,10 @@
 package com.monetique.PinSenderV0.Services;
-
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
-
 import com.monetique.PinSenderV0.Interfaces.IStatisticservices;
+import com.monetique.PinSenderV0.controllers.WebSocketController;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
+import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
+import com.monetique.PinSenderV0.payload.response.SMSResponse;
 import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +25,8 @@ public class OtpService implements IOtpService {
     private HSMService hsmService;
    @Autowired
    private IStatisticservices statisticservices;
+    @Autowired
+    private WebSocketController webSocketController;
 
 
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
@@ -39,79 +39,118 @@ public class OtpService implements IOtpService {
     private static final int OTP_VALIDITY_MINUTES = 1; // OTP validity (e.g., 1 minutes)
 
     @Override
-    public String sendOtp(String phoneNumber) {
+    public SMSResponse sendOtp(VerifyCardholderRequest request) {
         // Generate a 6-digit OTP
         String otp = generateOtp();
-        logger.info("Generate a 6-digit OTP ");
-        // Store the OTP against the phone number
-        otpStore.put(phoneNumber, otp);
-        otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+        logger.info("Generate a 6-digit OTP");
+        otpStore.put(request.getGsm(), otp);
+        otpExpiryStore.put(request.getGsm(), LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+        String message = String.format("Votre code de verification est : %s. Ce code est temporaire.", otp);
 
-        String message = String.format("Votre code de verification est : %s. Ce code est temporaire et strictement confidentiel.", otp);
-        
-        smsService.sendSms(phoneNumber, message)
-                .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
-                .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
-                .subscribe(); // Non-blocking
-        logger.info("sending OTP SMS"+otp);
-        return otp;
-    }
+        // Use a blocking call here to resolve the Mono synchronously
+        try {
+            // Send SMS and resolve the Mono synchronously
+            return smsService.sendSms(request.getGsm(), message)
+                    .doOnSuccess(res -> {
+                        logger.info("SMS sent successfully to {}: {}", request.getGsm(), res);
+                        statisticservices.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
+                    })
+                    .doOnError(error -> {
+                        // Log the error and fallback to failure response
+                        logger.error("Error sending OTP SMS to {}: {}", request.getGsm(), error.getMessage());
+                    })
+                    .map(res -> new SMSResponse("Success", "OTP sent successfully.", otp, 200)) // Success response
+                    .onErrorReturn(new SMSResponse("Failure", "Failed to send OTP SMS.", null, 500)) // Fallback response
+                    .block(); // Block to retrieve the result
 
-
-
-    @Override
-    public boolean validateOtp(OtpValidationRequest otpValidationRequest) {
-        // Check if the OTP matches the one we sent
-        String phoneNumber =otpValidationRequest.getPhoneNumber();
-        String otp =otpValidationRequest.getOtp();
-        String cartnumber= otpValidationRequest.getCardNumber();
-
-        System.out.println("cardnummber " + cartnumber );
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-        otpValidationRequest.setAgentId(currentUser.getId());
-        otpValidationRequest.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
-        otpValidationRequest.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);
-        if (isOtpExpired(phoneNumber)) {
-            System.out.println("OTP for phone number " + phoneNumber + " has expired.");
-            return false;
-        }
-
-        String storedOtp = otpStore.get(phoneNumber);
-        if (storedOtp != null && storedOtp.equals(otp)) {
-            System.out.println("OTP validated successfully for phone number: " + phoneNumber);
-            // 2. Calculer le PIN en clair
-            String clearPin = hsmService.clearpin(cartnumber);
-            // Envoyer le PIN au téléphone
-
-            String message = String.format("Votre code PIN est : %s. Ce code est strictement personnel et confidentiel. Ne le partagez jamais et ne l'ecrivez pas.", clearPin);
-            smsService.sendSms(phoneNumber, message)
-                    .doOnSuccess(response -> System.out.println("SMS sent successfully: " + response))
-                    .doOnError(error -> System.err.println("Error sending OTP SMS: " + error.getMessage()))
-                    .subscribe(); // Non-blocking
-            statisticservices.logSentItem(otpValidationRequest.getAgentId(), otpValidationRequest.getBranchId(), otpValidationRequest.getBankId(), "PIN");
-
-            return true;
-        } else {
-            System.out.println("Invalid OTP for phone number: " + phoneNumber);
-            return false;
+        } catch (Exception e) {
+            // Handle fallback for unexpected exceptions
+            logger.error("Unexpected error occurred while sending OTP to {}: {}", request.getGsm(), e.getMessage());
+            return new SMSResponse("Failure", "Failed to send OTP SMS due to an unexpected error.", null, 500);
         }
     }
-
     @Override
     public String resendOtp(String phoneNumber) {
         // Resend OTP by generating a new one and resetting the expiration time
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-        Long AgentId= currentUser.getId();
-        Long BranchId= currentUser.getAgency() != null ? currentUser.getAgency().getId() : null;
-        Long BankId= currentUser.getBank() != null ? currentUser.getBank().getId() : null;
-        String newOtp = sendOtp(phoneNumber);
-        System.out.println("Resent OTP to phone number: " + phoneNumber);
-        statisticservices.logSentItem(AgentId, BranchId, BankId, "OTP");
 
-        return newOtp;
+        logger.info("Resent OTP to phone number: " + phoneNumber);
+        String otp = generateOtp();
+        otpStore.put(phoneNumber, otp);
+        otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+        String message = String.format("Votre code de verification est : %s. Ce code est temporaire.", otp);
+        // Use a blocking call here to resolve the Mono synchronously
+        try {
+            String response = smsService.sendSms(phoneNumber, message)
+                    .doOnSuccess(res -> {
+                        logger.info("SMS sent successfully: {}", res);
+                        // Only log to statistic services on success
 
+                        statisticservices.logSentItem(currentUser.getId(),
+                                currentUser.getAgency() != null ? currentUser.getAgency().getId() : null,
+                                currentUser.getBank() != null ? currentUser.getBank().getId() : null,
+                                "OTP");
+                    })
+                    .doOnError(error -> logger.error("Error sending OTP SMS: {}", error.getMessage()))
+                    .block(); // Block to get the result synchronously
+
+            logger.info("OTP successfully sent: {}", otp);
+            return response; // Return the OTP upon success
+        } catch (Exception e) {
+            logger.error("Fallback: Failed to send SMS to {}: {}", phoneNumber, e.getMessage());
+            throw new RuntimeException("Failed to send OTP SMS.", e);
+        }
+
+    }
+
+    @Override
+    public boolean validateOtp(OtpValidationRequest otpValidationRequest ) {
+        // Check if the OTP matches the one we sent
+        String phoneNumber =otpValidationRequest.getPhoneNumber();
+        String otp =otpValidationRequest.getOtp();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
+
+        if (isOtpExpired(phoneNumber)) {
+            System.out.println("OTP for phone number " + phoneNumber + " has expired.");
+            return false;
+        }
+        String storedOtp = otpStore.get(phoneNumber);
+        String cartNumber= otpValidationRequest.getCardNumber();
+        if (storedOtp != null && storedOtp.equals(otp)) {
+            logger.info("OTP validated successfully for phone number: " + phoneNumber);
+            // 2. Calculate the clear PIN using HSM service
+            String clearPin = hsmService.clearpin(cartNumber);
+            // 3. Send the PIN to the phone number via SMS
+            String message = String.format("Votre code PIN est : %s. Ce code est strictement personnel et confidentiel." +
+                    " Ne le partagez jamais et ne l'écrivez pas.", clearPin);
+            try {
+                smsService.sendSms(phoneNumber, message)
+                        .doOnSuccess(response -> {
+                            // Log the success response after sending the SMS
+                            logger.info("SMS sent successfully: {}", response);
+
+                            // Log the statistic item after SMS success
+                            statisticservices.logSentItem(
+                                    currentUser.getId(),
+                                    currentUser.getAgency() != null ? currentUser.getAgency().getId() : null,
+                                    currentUser.getBank() != null ? currentUser.getBank().getId() : null,
+                                    "PIN");
+                        })
+                        .doOnError(error -> {
+                            // Handle errors during SMS sending
+                            logger.error("Error sending PIN SMS: {}: {}", error.getMessage());
+                        })
+                        .block(); // Block to ensure SMS is sent before continuing
+            } catch (Exception e) {
+                logger.error("Error during SMS sending or statistic logging: {}", e.getMessage());
+            }
+            return true;
+        } else {
+            logger.error("Invalid OTP for phone number: {}", phoneNumber);
+            return false;
+        }
     }
 
     @Override

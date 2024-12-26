@@ -53,7 +53,7 @@ public class TabCardHolderService implements ICardholderService {
     public void verifyCardholder(VerifyCardholderRequest request) {
         // Send the request to the RabbitMQ exchange using the specific routing key
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, request);  // Message is converted to JSON
-        System.out.println("Verification request sent for cardholder: " + request.getCardNumber());
+        logger.info("Verification request sent");
     }
 
     @Override
@@ -70,12 +70,10 @@ public class TabCardHolderService implements ICardholderService {
     public TabCardHolder getCardHolderByCardNumber(String cardNumber) {
         // Rechercher le cardholder par numéro de carte
         TabCardHolder cardHolder = tabCardHolderRepository.findByCardNumber(cardNumber);
-
         // Gérer le cas où le cardholder n'est pas trouvé
         if (cardHolder == null) {
             throw new ResourceNotFoundException("CardHolder", "cardNumber", cardNumber);
         }
-
         return cardHolder;
     }
 
@@ -85,7 +83,6 @@ public class TabCardHolderService implements ICardholderService {
     public TabCardHolder extractCardHolderAttributes(String line) {
         TabCardHolder cardHolder = new TabCardHolder();
         logger.info("Extract attributes from specific positions in the line");
-
         // Extract attributes from specific positions in the line
         cardHolder.setClientNumber(line.substring(0, 24)); // Client number
         //cardHolder.setCardNumber((line.substring(24, 43))); // Card number

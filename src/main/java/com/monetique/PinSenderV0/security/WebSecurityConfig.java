@@ -61,13 +61,13 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**",  "/api/test/**","/favicon.ico").permitAll()
+                        .requestMatchers("/api/auth/**",  "/api/test/**").permitAll()
                         .requestMatchers("/ws/**", "/topic/**", "/app/**").permitAll()
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();
                     corsConfig.setExposedHeaders(Collections.singletonList("Set-Cookie")); // Allow the Set-Cookie header to be visiblecorsConfig.setAllowCredentials(true); // This is essential for cookies
-                    corsConfig.setAllowedOrigins(Collections.singletonList("http://172.17.5.191:8443"));
+                    corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                     corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     corsConfig.setAllowedHeaders(Arrays.asList("*"));
                     corsConfig.setAllowCredentials(true);

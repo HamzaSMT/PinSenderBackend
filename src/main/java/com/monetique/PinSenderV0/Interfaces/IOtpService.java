@@ -1,10 +1,12 @@
 package com.monetique.PinSenderV0.Interfaces;
 
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
+import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
+import com.monetique.PinSenderV0.payload.response.SMSResponse;
 
 public interface IOtpService {
     // Method to send OTP to the provided phone number
-    String sendOtp(String phoneNumber);
+    SMSResponse sendOtp(VerifyCardholderRequest request);
 
     // Method to validate the OTP input by the user
   //  boolean validateOtp(String phoneNumber, String otp);

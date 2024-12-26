@@ -22,16 +22,11 @@ public class OtpController {
     private IOtpService otpService;
 
 
-
-
     // Endpoint to validate OTP
     @PostMapping("/validate")
     public ResponseEntity<MessageResponse> validateOtp(@RequestBody OtpValidationRequest request) {
         boolean isValid = otpService.validateOtp(request);
-
         if (isValid) {
-
-
             return ResponseEntity.ok(new MessageResponse("Phone number validated successfully.",200));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -39,9 +34,14 @@ public class OtpController {
         }
     }
     @PostMapping("/resend")
-    public ResponseEntity<String> resendOtp(@RequestBody String gsmnumber) {
+    public ResponseEntity<MessageResponse> resendOtp(@RequestBody String gsmnumber) {
+        try {
         String otp = otpService.resendOtp(gsmnumber);
-        return ResponseEntity.ok("OTP "+ otp +"resent to " + gsmnumber);
+
+        return ResponseEntity.ok(new MessageResponse("code OTP resent successfully.",200));
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponse("Invalid OTP",400));
     }
 
-}
+}}
