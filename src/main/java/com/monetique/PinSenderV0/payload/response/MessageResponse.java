@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MessageResponse {
   private String message;
-  private int statusCode;
+  private int status;
 }
