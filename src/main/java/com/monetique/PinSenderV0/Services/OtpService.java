@@ -39,34 +39,32 @@ public class OtpService implements IOtpService {
 
     @Override
     public SMSResponse sendOtp(VerifyCardholderRequest request) {
-        // Generate a 6-digit OTP
         String otp = generateOtp();
-        logger.info("Generate a 6-digit OTP");
+        logger.info("Generated a 6-digit OTP: {}", otp);
+
         otpStore.put(request.getGsm(), otp);
         otpExpiryStore.put(request.getGsm(), LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
         String message = String.format("Votre code de verification est : %s. Ce code est temporaire.", otp);
 
-        // Use a blocking call here to resolve the Mono synchronously
         try {
-            // Send SMS and resolve the Mono synchronously
-            return smsService.sendSms(request.getGsm(), message)
-                    .doOnSuccess(res -> {
-                        logger.info("SMS sent successfully to {}: {}", request.getGsm(), res);
-                        statisticservices.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
-                    })
-                    .doOnError(error -> {
-                        // Log the error and fallback to failure response
-                        logger.error("Error sending OTP SMS to {}: {}", request.getGsm(), error.getMessage());
-                    })
-                    .map(res -> new SMSResponse("Success", "OTP sent successfully.", otp, 200)) // Success response
-                    .onErrorReturn(new SMSResponse("Failure", "Failed to send OTP SMS.", null, 500)) // Fallback response
-                    .block(); // Block to retrieve the result
+            String smsResult = smsService.sendSms(request.getGsm(), message)
+                    .block(); // Blocking call for synchronous execution
+
+            if ("SMS sending failed.".equals(smsResult)) {
+                // SMS service returned fallback message
+                logger.error("SMS service failed to send OTP.");
+                return new SMSResponse("Failure", "Failed to send OTP SMS.", null, 500);
+            }
+
+            logger.info("SMS sent successfully to {}: {}", request.getGsm(), smsResult);
+            statisticservices.logSentItem(request.getAgentId(), request.getBranchId(), request.getBankId(), "OTP");
+            return new SMSResponse("Success", "OTP sent successfully.", otp, 200);
 
         } catch (Exception e) {
-            // Handle fallback for unexpected exceptions
             logger.error("Unexpected error occurred while sending OTP to {}: {}", request.getGsm(), e.getMessage());
             return new SMSResponse("Failure", "Failed to send OTP SMS due to an unexpected error.", null, 500);
         }
+
     }
     @Override
     public String resendOtp(String phoneNumber) {

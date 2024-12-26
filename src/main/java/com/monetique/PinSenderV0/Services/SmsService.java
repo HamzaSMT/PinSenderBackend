@@ -30,26 +30,16 @@ public class SmsService {
                         .queryParam("to", to)
                         .queryParam("text", message)
                         .build())
-                .retrieve()  // Retrieve response
-                .onStatus(status -> status.isError(), clientResponse -> {
-                    // Handle error response
-                    return clientResponse.bodyToMono(String.class)
-                            .flatMap(errorBody -> {
-                                // Log error or handle it based on the response body
-                                return Mono.error(new RuntimeException(
+                .retrieve()
+                .onStatus(
+                        status -> status.isError(),
+                        clientResponse -> clientResponse.bodyToMono(String.class)
+                                .flatMap(errorBody -> Mono.error(new RuntimeException(
                                         "Failed to send SMS. Status code: " + clientResponse.statusCode() +
-                                                ", Error: " + errorBody));
-                            });
-                })
-                .bodyToMono(String.class)  // Convert the response body to String
-                .doOnError(WebClientResponseException.class, ex -> {
-                    // Handle WebClient-specific exceptions (like 404, 500, etc.)
-                    logger.error("Error occurred while sending SMS: {}", ex.getMessage());
-                })
-                .onErrorResume(e -> {
-                    // Handle any other errors (fallback handling)
-                    logger.error("Fallback: Failed to send SMS to {}: {}", to, e.getMessage());
-                    return Mono.just("SMS sending failed.");
-                });
+                                                ", Error: " + errorBody)))
+                )
+                .bodyToMono(String.class)
+                .doOnSuccess(response -> logger.info("SMS sent successfully: {}", response))
+                .doOnError(error -> logger.error("Error occurred while sending SMS: {}", error.getMessage()));
     }
 }
