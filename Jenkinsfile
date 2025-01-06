@@ -1,36 +1,41 @@
 pipeline {
     agent any
-
+ 
     environment {
         BACKEND_IMAGE = "back-app"
         RABBITMQ_IMAGE = "rabbitmq:3-management"
         INVENTORY = "inventory.ini"
         PLAYBOOK = "deploy.yml"
+        PROMETHEUS_PROCESS = "prometheus" // Prometheus process name
+        PROMETHEUS_DIR = "/data/jenkins/prometheus" // Prometheus directory
+        GRAFANA_CONTAINER = "grafana"
+        LOKI_CONTAINER = "loki"
         MAVEN_OPTS = '-Dmaven.repo.local=/var/lib/jenkins/.m2/repository'
     }
-
+ 
     tools {
-        maven 'Maven-3.9.9'
+        maven 'Maven-3.8.5'
     }
-
+ 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/HamzaSMT/PinSenderBackend.git'
+                //git branch: 'main', url: 'git@github.com:ahmedenzo/PinSenderBackend.git', credentialsId: '0fd2b45f-357b-4a7a-8e6a-968b10a9e78e'
+                git branch: 'main', url: 'https://github.com/ahmedenzo/PinSenderBackend.git'
             }
         }
-
+ 
         stage('Verify Required Files') {
             steps {
                 script {
                     echo "Verifying required files: ${INVENTORY} and ${PLAYBOOK}..."
-
+ 
                     if (!fileExists("${INVENTORY}")) {
                         error "The file ${INVENTORY} is missing. Stopping the pipeline."
                     } else {
                         echo "The file ${INVENTORY} is present."
                     }
-
+ 
                     if (!fileExists("${PLAYBOOK}")) {
                         error "The file ${PLAYBOOK} is missing. Stopping the pipeline."
                     } else {
@@ -43,7 +48,7 @@ pipeline {
             steps {
                 script {
                     echo "Ensuring Prometheus, Grafana, and Loki are running..."
-
+ 
                     // Check and start Prometheus
                     def prometheusStatus = sh(script: "pgrep -f ${PROMETHEUS_PROCESS}", returnStatus: true)
                     if (prometheusStatus != 0) {
@@ -55,7 +60,7 @@ pipeline {
                     } else {
                         echo "Prometheus is already running."
                     }
-
+ 
                     // Check and manage Grafana container
                     def grafanaRunning = sh(script: "docker ps --filter 'name=${GRAFANA_CONTAINER}' --filter 'status=running' -q", returnStdout: true).trim()
                     if (grafanaRunning) {
@@ -71,7 +76,7 @@ pipeline {
                             docker run -d --name=${GRAFANA_CONTAINER} -p 3000:3000 grafana/grafana
                         """
                     }
-
+ 
                     // Check and manage Loki container
                     def lokiRunning = sh(script: "docker ps --filter 'name=${LOKI_CONTAINER}' --filter 'status=running' -q", returnStdout: true).trim()
                     if (lokiRunning) {
@@ -90,7 +95,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Test Ansible Connection') {
             steps {
                 script {
@@ -109,7 +114,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Build with Maven') {
             steps {
                 dir('.') {
@@ -117,7 +122,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Build Backend Docker Image') {
             steps {
                 dir('.') {
@@ -127,7 +132,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Pull RabbitMQ Docker Image') {
             steps {
                 sh '''
@@ -135,7 +140,7 @@ pipeline {
                 '''
             }
         }
-
+ 
         stage('Export Docker Images') {
             steps {
                 dir('.') {
@@ -146,7 +151,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Deploy with Ansible') {
             steps {
                 dir('.') {
@@ -160,7 +165,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Post-clean Specific Docker Image') {
             steps {
                 script {
@@ -168,19 +173,17 @@ pipeline {
                     sh '''
                         # Remove the Backend image
                         docker images back-app:latest -q | xargs --no-run-if-empty docker rmi -f
-
+ 
                         # Remove the RabbitMQ image
                         docker images rabbitmq:3-management -q | xargs --no-run-if-empty docker rmi -f
-
-
-                        # Clean up unused Docker resources
-                        docker system prune -f --volumes
+ 
+ 
                     '''
                 }
             }
         }
     }
-
+ 
     post {
         success {
             echo 'Pipeline succeeded! 🎉'

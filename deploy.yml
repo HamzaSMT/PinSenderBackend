@@ -91,14 +91,9 @@
           - name: Remove all Docker images
             shell: docker images -q | xargs --no-run-if-empty docker rmi -f
             ignore_errors: yes
-  
-          - name: Remove all unused volumes
-            shell: docker volume prune -f
-            ignore_errors: yes
-  
-          - name: Prune unused Docker networks
-            shell: docker network prune -f
-            ignore_errors: yes
+            
+
+
   
           - name: Clean up old deployment files
             file:

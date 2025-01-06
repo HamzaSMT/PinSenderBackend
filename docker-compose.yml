@@ -7,9 +7,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      #SPRING_DATASOURCE_URL: jdbc:sqlserver://10.0.2.15:1433;databaseName=test;integratedSecurity=true;encrypt=true;trustServerCertificate=true;columnEncryptionSetting=Enabled
-      SPRING_DATASOURCE_URL:  jdbc:sqlserver://172.17.235.190:1433;databaseName=test;encrypt=true;trustServerCertificate=true
-
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://172.17.235.190:1433;databaseName=test;encrypt=true;trustServerCertificate=true;columnEncryptionSetting=Enabled
       SPRING_DATASOURCE_USERNAME: hamza
       SPRING_DATASOURCE_PASSWORD: hamza
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -21,13 +19,16 @@ services:
     logging:
       driver: "loki"
       options:
-        loki-url: "http://172.17.5.190:3100/loki/api/v1/push"  # Loki URL
-        loki-external-labels: job=backend-service  # Label for Grafana filtering
+        loki-url: "http://172.17.5.190:3100/loki/api/v1/push"
+        loki-external-labels: job=backend-service
     depends_on:
       - rabbitmq
     networks:
       - app_network
     restart: unless-stopped
+    volumes:
+      - backend_logs:/app/logs      # Volume pour les fichiers de logs
+      - backend_logos:/app/logos    # Volume pour les fichiers de photos
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -41,8 +42,8 @@ services:
     logging:
       driver: "loki"
       options:
-        loki-url: "http://172.17.5.190:3100/loki/api/v1/push"  # Loki URL
-        loki-external-labels: job=rabbitmq-service  # Label for Grafana filtering
+        loki-url: "http://172.17.5.190:3100/loki/api/v1/push"
+        loki-external-labels: job=rabbitmq-service
     networks:
       - app_network
     volumes:
@@ -53,7 +54,7 @@ services:
     image: quay.io/prometheus/node-exporter:latest
     container_name: node_exporter
     ports:
-      - "9100:9100"  # Expose Node Exporter metrics
+      - "9100:9100"
     networks:
       - app_network
     restart: unless-stopped
@@ -62,7 +63,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     ports:
-      - "8181:8080"  # Expose cAdvisor metrics
+      - "8181:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -74,6 +75,8 @@ services:
 
 volumes:
   rabbitmq_data:
+  backend_logs:  # Volume pour les logs
+  backend_logos: # Volume pour les photos
 
 networks:
   app_network:
