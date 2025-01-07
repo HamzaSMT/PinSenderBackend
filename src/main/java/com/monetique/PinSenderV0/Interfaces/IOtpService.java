@@ -11,7 +11,7 @@ public interface IOtpService {
     // Method to validate the OTP input by the user
   //  boolean validateOtp(String phoneNumber, String otp);
 
-    boolean validateOtp(OtpValidationRequest otpValidationRequest);
+    boolean validateOtp(OtpValidationRequest otpValidationRequest) throws Exception;
 
     // Method to resend OTP
     String resendOtp(String phoneNumber);

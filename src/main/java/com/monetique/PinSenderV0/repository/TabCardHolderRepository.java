@@ -15,7 +15,7 @@ public interface TabCardHolderRepository extends JpaRepository<TabCardHolder, St
     // Method to find cardholders by agencyCode
     List<TabCardHolder> findByAgencyCode(String agencyCode);
 
-    TabCardHolder findByCardNumber(String cardNumber);
+    //TabCardHolder findByCardNumber(String cardNumber);
 
     TabCardHolder findByClientNumber(String clientNumber);
 

@@ -21,9 +21,9 @@ public class hsmtest {
 
 
     @PostMapping("/test")
-    public String testHsmService(@RequestParam String cardNumber) {
+    public String testHsmService(@RequestParam String cardNumber, @RequestParam String hashPan) {
 
-        String encryptedPin = hsmService.generateEncryptedPin(cardNumber);
+        String encryptedPin = hsmService.generateEncryptedPin(cardNumber, hashPan);
 
         String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);
 
@@ -32,10 +32,10 @@ public class hsmtest {
 
     }
     @PostMapping("/calculatePin")
-    public String calculatePin(@RequestParam String cardNumber) {
+    public String calculatePin(@RequestParam String cardNumber, @RequestParam String hashPan) {
         try {
             // 1. Calculer le PIN chiffré à partir du numéro de carte
-            String encryptedPin = hsmService.generateEncryptedPin(cardNumber);
+            String encryptedPin = hsmService.generateEncryptedPin(cardNumber, hashPan);
 
             // 2. Calculer le PIN en clair à partir du PIN chiffré
             String clearPin = hsmService.generateClearPin(cardNumber, encryptedPin);

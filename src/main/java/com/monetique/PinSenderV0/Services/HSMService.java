@@ -3,6 +3,7 @@ package com.monetique.PinSenderV0.Services;
 
 import com.monetique.PinSenderV0.HSM.HSMCalculPinService;
 import com.monetique.PinSenderV0.Interfaces.ICardholderService;
+import com.monetique.PinSenderV0.Interfaces.IEncryptionService;
 import com.monetique.PinSenderV0.models.Card.TabCardHolder;
 import com.monetique.PinSenderV0.payload.request.PinRequest;
 import org.slf4j.Logger;
@@ -19,15 +20,17 @@ public class HSMService {
     private ICardholderService cardholderService;
     @Autowired
     private HSMCalculPinService hsmCalculPinService;
+    @Autowired
+    private IEncryptionService encryptionService;
 
 
-    public PinRequest getPinRequestFromCardNumber(String cardNumber) {
+    public PinRequest getPinRequestFromCardNumber(String cardNumber , String cardHash) {
         // Cherche le titulaire de la carte par le numéro de carte
-        TabCardHolder cardholder = cardholderService.getCardHolderByCardNumber(cardNumber);
+        TabCardHolder cardholder = cardholderService.getCardHolderByHashPan(cardHash);
 
         if (cardholder!= null) {
             PinRequest pinRequest = new PinRequest();
-            pinRequest.setPvka(cardholder.getBin().getKeyDataA());
+            pinRequest.setPvka(encryptionService.decrypt(cardholder.getBin().getKeyDataA()));
             pinRequest.setOffset(cardholder.getPinOffset());
             pinRequest.setPinLength("04");
             String right12Pan = cardNumber.substring(cardNumber.length() - 13, cardNumber.length() - 1);
@@ -41,9 +44,9 @@ public class HSMService {
             throw new RuntimeException("Cardholder not found with card number: " + cardNumber);
         }
     }
-    public String generateEncryptedPin(String cardNumber) {
+    public String generateEncryptedPin(String cardNumber, String cardHash) {
         // Extraire les paramètres nécessaires du cardNumber
-        PinRequest pinRequest = getPinRequestFromCardNumber(cardNumber);
+        PinRequest pinRequest = getPinRequestFromCardNumber(cardNumber,cardHash);
         String pvka = pinRequest.getPvka();
         String offset = pinRequest.getOffset();
         String pinLength = pinRequest.getPinLength();
@@ -69,11 +72,11 @@ public class HSMService {
             throw new RuntimeException("Error calculating clear PIN", e);
         }
     }
-    public String clearpin(String cardNumber) {
+    public String clearpin(String cardNumber , String cardHash) {
          logger.info("calculate Clear Pin");
 
         // Appeler generateEncryptedPin pour obtenir le PIN chiffré
-        String encryptedPin = generateEncryptedPin(cardNumber);
+        String encryptedPin = generateEncryptedPin(cardNumber,cardHash);
         // Appeler generateClearPin pour obtenir le PIN clair à partir du PIN chiffré
         String clearPin = generateClearPin(cardNumber, encryptedPin);
         return clearPin;

@@ -20,8 +20,8 @@ public class TabCardHolder {
     @Column(name = "PORT-NUMCLT", nullable = false)
     private String clientNumber;
 
-    @Column(name = "PORT-NOPORT", nullable = false, unique = true)
-    private String cardNumber;
+   // @Column(name = "PORT-NOPORT", nullable = false, unique = true)
+  //  private String cardNumber;
 
 
     @Column(name = "PORT-NOPORT-ENCRYPTED", nullable = true)

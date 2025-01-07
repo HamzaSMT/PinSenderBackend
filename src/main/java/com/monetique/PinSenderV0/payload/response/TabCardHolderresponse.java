@@ -10,6 +10,7 @@ import lombok.Setter;
     @Setter
     public class TabCardHolderresponse {
         private String clientNumber;
+        private String encrytedcard;
         private String cardNumber;
         private String name;
         private String companyName;
@@ -30,7 +31,7 @@ import lombok.Setter;
         public TabCardHolderresponse(TabCardHolder tabCardHolder) {
             this.clientNumber = tabCardHolder.getClientNumber();
             this.cardNumberEncrypted = tabCardHolder.getCardNumberEncrypted();
-            this.cardNumber = tabCardHolder.getCardNumber();
+            this.cardNumber = tabCardHolder.getCardNumberEncrypted();
             this.name = tabCardHolder.getName();
             this.companyName = tabCardHolder.getCompanyName();
             this.agencyCode = tabCardHolder.getAgencyCode();

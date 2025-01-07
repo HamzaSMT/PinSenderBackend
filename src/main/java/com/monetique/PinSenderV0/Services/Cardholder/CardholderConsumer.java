@@ -29,8 +29,7 @@ public class CardholderConsumer {
     private TabCardHolderRepository cardholderRepository;
     @Autowired
     private IOtpService otpService;
-    @Autowired
-    private IStatisticservices statisticservices;
+
     @Autowired
     private WebSocketController webSocketController;
     @Autowired

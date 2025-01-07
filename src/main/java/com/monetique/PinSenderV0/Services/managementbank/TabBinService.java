@@ -8,6 +8,7 @@ import com.monetique.PinSenderV0.models.Banks.TabBin;
 import com.monetique.PinSenderV0.payload.request.TabBinRequest;
 import com.monetique.PinSenderV0.payload.response.BinDTOresponse;
 import com.monetique.PinSenderV0.repository.BankRepository;
+import com.monetique.PinSenderV0.Interfaces.IEncryptionService;
 import com.monetique.PinSenderV0.repository.TabBinRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class TabBinService implements ItabBinService {
     private TabBinRepository tabBinRepository;
     @Autowired
     private BankRepository bankRepository;
+    @Autowired
+    private IEncryptionService encryptionService;
 
     @Override
 
@@ -45,8 +48,8 @@ public class TabBinService implements ItabBinService {
             tabBin.setSystemCode(tabBinRequest.getSystemCode());
             tabBin.setCardType(tabBinRequest.getCardType());
             tabBin.setServiceCode(tabBinRequest.getServiceCode());
-            tabBin.setKeyDataA(tabBinRequest.getKeyDataA());
-            tabBin.setKeyDataB(tabBinRequest.getKeyDataB());
+            tabBin.setKeyDataA(encryptionService.encrypt(tabBinRequest.getKeyDataA()));
+            tabBin.setKeyDataB(encryptionService.encrypt(tabBinRequest.getKeyDataB()));
             return tabBinRepository.save(tabBin);
         }
 
@@ -58,10 +61,22 @@ public class TabBinService implements ItabBinService {
             throw new ResourceNotFoundException("No bins found");
         }
 
-        return bins.stream()
-                .map(BinDTOresponse::new)
-                .collect(Collectors.toList());
+        return bins.stream().map(bin -> {
+            try {
+                // Decrypt sensitive fields
+                if (bin.getKeyDataA() != null) {
+                    bin.setKeyDataA(encryptionService.decrypt(bin.getKeyDataA()));
+                }
+                if (bin.getKeyDataB() != null) {
+                    bin.setKeyDataB(encryptionService.decrypt(bin.getKeyDataB()));
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to decrypt key data for bin: " + bin.getBin(), e);
+            }
+            return new BinDTOresponse(bin);
+        }).collect(Collectors.toList());
     }
+
     @Override
     public BinDTOresponse getTabBinByBin(String bin) {
         Optional<TabBin> tabBinOptional = tabBinRepository.findByBin(bin);
@@ -70,8 +85,23 @@ public class TabBinService implements ItabBinService {
             throw new ResourceNotFoundException("Bin not found with bin number: " + bin);
         }
 
-        return new BinDTOresponse(tabBinOptional.get());
+        TabBin tabBin = tabBinOptional.get();
+
+        try {
+            // Decrypt sensitive fields
+            if (tabBin.getKeyDataA() != null) {
+                tabBin.setKeyDataA(encryptionService.decrypt(tabBin.getKeyDataA()));
+            }
+            if (tabBin.getKeyDataB() != null) {
+                tabBin.setKeyDataB(encryptionService.decrypt(tabBin.getKeyDataB()));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to decrypt key data for bin", e);
+        }
+
+        return new BinDTOresponse(tabBin);
     }
+
 
     @Override
     public TabBin updateTabBin(String bin, TabBinRequest tabBinRequest) {
@@ -89,8 +119,8 @@ public class TabBinService implements ItabBinService {
         tabBin.setSystemCode(tabBinRequest.getSystemCode());
         tabBin.setCardType(tabBinRequest.getCardType());
         tabBin.setServiceCode(tabBinRequest.getServiceCode());
-        tabBin.setKeyDataA(tabBinRequest.getKeyDataA());
-        tabBin.setKeyDataB(tabBinRequest.getKeyDataB());
+        tabBin.setKeyDataA(encryptionService.encrypt(tabBinRequest.getKeyDataA()));
+        tabBin.setKeyDataB(encryptionService.encrypt(tabBinRequest.getKeyDataB()));
 
         // Save the updated TabBin
         return tabBinRepository.save(tabBin);
@@ -100,13 +130,28 @@ public class TabBinService implements ItabBinService {
 
 
     @Override
-    public TabBin getbinbybinnumber(String binNumber){
+    public TabBin getbinbybinnumber(String binNumber) {
         logger.info("Fetching bin with binNumber: {}", binNumber);
-        TabBin bin =  tabBinRepository.findByBin(binNumber)
+
+        // Fetch the bin
+        TabBin bin = tabBinRepository.findByBin(binNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("bin", "binNumber", binNumber));
+
+        try {
+            // Decrypt sensitive fields
+            if (bin.getKeyDataA() != null) {
+                bin.setKeyDataA(encryptionService.decrypt(bin.getKeyDataA()));
+            }
+            if (bin.getKeyDataB() != null) {
+                bin.setKeyDataB(encryptionService.decrypt(bin.getKeyDataB()));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to decrypt key data for bin", e);
+        }
 
         return bin;
     }
+
 
     @Override
     public void deleteTabBin(String bin) {

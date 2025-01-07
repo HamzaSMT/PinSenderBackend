@@ -12,6 +12,8 @@ public interface ICardholderService {
 
     TabCardHolder getCardHolderByCardNumber(String cardNumber);
 
+    TabCardHolder getCardHolderByHashPan(String cardHash);
+
     TabCardHolder extractCardHolderAttributes(String line);
 
     void updateCardHolder(TabCardHolder existingCardHolder, TabCardHolder updatedCardHolder);

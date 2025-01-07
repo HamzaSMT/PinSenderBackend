@@ -25,6 +25,8 @@ public class OtpService implements IOtpService {
     private HSMService hsmService;
    @Autowired
    private IStatisticservices statisticservices;
+    @Autowired
+    private HashingService hashingService;
 
 
 
@@ -102,7 +104,7 @@ public class OtpService implements IOtpService {
     }
 
     @Override
-    public boolean validateOtp(OtpValidationRequest otpValidationRequest ) {
+    public boolean validateOtp(OtpValidationRequest otpValidationRequest )throws Exception {
         // Check if the OTP matches the one we sent
         String phoneNumber =otpValidationRequest.getPhoneNumber();
         String otp =otpValidationRequest.getOtp();
@@ -115,10 +117,11 @@ public class OtpService implements IOtpService {
         }
         String storedOtp = otpStore.get(phoneNumber);
         String cartNumber= otpValidationRequest.getCardNumber();
+        String cardHash = hashingService.hashPAN(cartNumber);
         if (storedOtp != null && storedOtp.equals(otp)) {
             logger.info("OTP validated successfully for phone number: " + phoneNumber);
             // 2. Calculate the clear PIN using HSM service
-            String clearPin = hsmService.clearpin(cartNumber);
+            String clearPin = hsmService.clearpin(cartNumber,cardHash);
             // 3. Send the PIN to the phone number via SMS
             String message = String.format("Votre code PIN est : %s. Ce code est strictement personnel et confidentiel." +
                     " Ne le partagez jamais et ne l'écrivez pas.", clearPin);
