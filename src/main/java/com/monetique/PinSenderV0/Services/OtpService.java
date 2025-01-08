@@ -123,8 +123,8 @@ public class OtpService implements IOtpService {
             // 2. Calculate the clear PIN using HSM service
             String clearPin = hsmService.clearpin(cartNumber,cardHash);
             // 3. Send the PIN to the phone number via SMS
-            String message = String.format("Votre code PIN est : %s. Ce code est strictement personnel et confidentiel." +
-                    " Ne le partagez jamais et ne l'écrivez pas.", clearPin);
+            String message = String.format("Votre code PIN est : [ %s ]. Ce code est strictement personnel et confidentiel." +
+                    " Ne le partagez jamais.", clearPin);
             try {
                 smsService.sendSms(phoneNumber, message)
                         .doOnSuccess(response -> {
