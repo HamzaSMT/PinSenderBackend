@@ -28,10 +28,9 @@ public class HSMCalculPinService {
             logger.info("Successfully connected to HSM.");
             hsmCommunication.setRequest(request);
             hsmCommunication.sendCommand();
-            logger.info("Command sent....");
+            logger.info("Command sent.... ok");
             String response = hsmCommunication.getResponse();
-            logger.info("Received response.... ");
-
+            logger.info("Received response......ok");
             // Additional detailed logging for debugging
             if (response.length() >= 13) {
                 String status = response.substring(4,6);
@@ -67,7 +66,8 @@ public class HSMCalculPinService {
             hsmCommunication.sendCommand();
             logger.info("Command sent....");
             String response = hsmCommunication.getResponse();
-            logger.info("Received response....");
+            logger.info("Received response.... ok ");
+
             String status = response.substring(4,6);
             String resultCode = response.substring(6, 8);
             String Pin = response.substring(8, 12);
