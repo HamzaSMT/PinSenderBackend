@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class StatisticsController {
 
 
     @GetMapping("/bank/{bankId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getStatisticsForBank(@PathVariable Long bankId) {
         try {
             BankStatisticsResponse response = statisticservices.getStatisticsForBank(bankId);
@@ -33,11 +35,12 @@ public class StatisticsController {
                     .body(new MessageResponse ("Bank not found: " + bankId,404));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body( new MessageResponse("Error fetching statistics for bank: " + e.getMessage(),500));
+                    .body( new MessageResponse("Error fetching statistics for bank: ",500));
         }
     }
 
     @GetMapping("/agent/{agentId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getStatisticsForAgent(@PathVariable Long agentId) {
         try {
             AgentStatisticsResponse response = statisticservices.getStatisticsForAgent(agentId);
@@ -47,18 +50,19 @@ public class StatisticsController {
                     .body(new MessageResponse("Agent not found: " + agentId,404));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Error fetching statistics for agent: " + e.getMessage(),500));
+                    .body(new MessageResponse("Error fetching statistics for agent: ",500));
         }
     }
 
     @GetMapping("/overall")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> getOverallStatistics() {
         try {
             OverallStatisticsResponse response = statisticservices.getOverallStatistics();
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Error fetching overall statistics: " + e.getMessage(),500));
+                    .body(new MessageResponse("Error fetching overall statistics: ",500));
         }
     }
 }

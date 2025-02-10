@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class AuthenticationService {
 
 
         User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + loginRequest.getUsername()));
+                .orElseThrow(() -> new BadCredentialsException("User Not Found with username: " + loginRequest.getUsername()));
 
         if (!user.isActive()) {
             logger.error("Attempted sign-in for inactive user: {}", loginRequest.getUsername());

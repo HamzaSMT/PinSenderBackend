@@ -162,7 +162,7 @@ public class AuthController {
               .body(new MessageResponse("You've been signed out successfully!", 200));
     } catch (RuntimeException e) {
       logger.error("Error during sign-out: {}", e.getMessage());
-      return ResponseEntity.status(400).body(new MessageResponse("Error: " + e.getMessage(), 400));
+      return ResponseEntity.status(400).body(new MessageResponse("Error during sign-out", 400));
     } catch (Exception e) {
       logger.error("Error during sign-out: {}", e.getMessage(), e);
       return ResponseEntity.status(500).body(new MessageResponse("Error: Unable to sign out due to a server error", 500));
@@ -190,7 +190,7 @@ public class AuthController {
               .body(response); // Return the new JWT and refresh token details
     } catch (TokenRefreshException e) {
       logger.error("Error refreshing token: {}", e.getMessage());
-      return ResponseEntity.status(400).body(new MessageResponse("Error: " + e.getMessage(), 400));
+      return ResponseEntity.status(400).body(new MessageResponse("Error refreshing token" , 400));
     } catch (Exception e) {
       logger.error("Error during token refresh: {}", e.getMessage());
       return ResponseEntity.status(500).body(new MessageResponse("Error: Internal server error", 500));
@@ -226,7 +226,7 @@ public class AuthController {
     } catch (Exception e) {
       // Handle any other unexpected exceptions
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("An error occurred: " + e.getMessage(), 500));
+              .body(new MessageResponse("An error occurred: ", 500));
     }
   }
 

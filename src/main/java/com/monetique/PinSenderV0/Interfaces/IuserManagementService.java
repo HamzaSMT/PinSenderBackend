@@ -11,7 +11,7 @@ import java.util.List;
 public interface IuserManagementService {
     String generateRandomPassword(Long userId);
 
-    User getuserbyId(Long userId);
+    UserResponseDTO getuserbyId(Long userId);
 
     void changePassword(Long userId, String oldPassword, String newPassword);
 

@@ -42,7 +42,7 @@ public class hsmtest {
 
             return "PIN en clair : " + clearPin;
         } catch (Exception e) {
-            return "Erreur lors du calcul du PIN : " + e.getMessage();
+            return "Erreur lors du calcul du PIN : " ;
         }
     }
 

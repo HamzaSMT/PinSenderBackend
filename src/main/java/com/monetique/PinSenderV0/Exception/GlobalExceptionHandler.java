@@ -17,6 +17,13 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+
+    public GlobalExceptionHandler() {
+        logger.info("GlobalExceptionHandler initialized");
+    }
+
+
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
         logger.error("Access Denied: {}", ex.getMessage(), ex);

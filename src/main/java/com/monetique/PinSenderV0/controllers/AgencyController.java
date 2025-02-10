@@ -160,7 +160,7 @@ public class AgencyController {
             return ResponseEntity.ok(agency);
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
-            return ResponseEntity.status(403).body(new MessageResponse(e.getMessage(), 403));
+            return ResponseEntity.status(403).body(new MessageResponse("Accès interdit", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Error fetching agency: {}", e.getMessage());
             return ResponseEntity.status(404).body(new MessageResponse("Error fetching agency", 404));

@@ -238,6 +238,4 @@ public List<CardHolderLoadReport> getAllLoadReports() {
         return cardHolderLoadReportRepository.findAll();
     }
 
-
-
 }

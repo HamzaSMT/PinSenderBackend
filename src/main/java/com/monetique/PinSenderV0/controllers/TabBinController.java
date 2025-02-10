@@ -62,7 +62,7 @@ public class TabBinController {
         } catch (ResourceAlreadyExistsException e) {
             logger.error("Error creating TabBin: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new MessageResponse(e.getMessage(), 409));
+                    .body(new MessageResponse("Error creating Bin", 409));
         } catch (Exception e) {
             logger.error("Error while creating TabBin: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -103,6 +103,7 @@ public class TabBinController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> getAllTabBins() {
         logger.info("Fetching all TabBins");
 
@@ -154,11 +155,12 @@ public class TabBinController {
         } catch (ResourceAlreadyExistsException e) {
             logger.error("Error updating TabBin: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new MessageResponse(e.getMessage(), 409));
+                    .body(new MessageResponse("Error updating " +
+                            "Error updating Bin", 409));
         } catch (ResourceNotFoundException e) {
             logger.error("TabBin not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse(e.getMessage(), 404));
+                    .body(new MessageResponse("Bin not found", 404));
         } catch (Exception e) {
             logger.error("Error while updating TabBin: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -194,7 +196,7 @@ public class TabBinController {
         } catch (ResourceNotFoundException e) {
             logger.error("TabBin not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse(e.getMessage(), 404));
+                    .body(new MessageResponse("Bin not found", 404));
         } catch (Exception e) {
             logger.error("Error while deleting TabBin: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

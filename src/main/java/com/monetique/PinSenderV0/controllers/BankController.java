@@ -230,7 +230,8 @@ public class BankController {
         } catch (ResourceAlreadyExistsException e) {
             logger.error("Bank creation failed: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new MessageResponse(e.getMessage(), 409));
+                    .body(new MessageResponse("Bank creation failed" +
+                            "", 409));
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)

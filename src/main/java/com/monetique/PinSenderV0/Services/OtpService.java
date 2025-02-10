@@ -12,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class OtpService implements IOtpService {
@@ -23,8 +26,8 @@ public class OtpService implements IOtpService {
     private SmsService smsService;
     @Autowired
     private HSMService hsmService;
-   @Autowired
-   private IStatisticservices statisticservices;
+    @Autowired
+    private IStatisticservices statisticservices;
     @Autowired
     private HashingService hashingService;
 
@@ -36,6 +39,14 @@ public class OtpService implements IOtpService {
     // A simple in-memory store for OTPs (
     private Map<String, String> otpStore = new HashMap<>();
     private Map<String, LocalDateTime> otpExpiryStore = new HashMap<>();
+    private static final int MAX_OTP_ATTEMPTS = 3;
+    private static final long BLOCK_DURATION_MINUTES = 3;
+    private final Map<String, Integer> otpAttempts = new ConcurrentHashMap<>();
+    private final Map<String, LocalDateTime> blockedNumbers = new ConcurrentHashMap<>();
+    private static final int MAX_RESEND_ATTEMPTS = 3;
+    private static final Duration RESEND_INTERVAL = Duration.ofMinutes(1);
+    private final Map<String, Integer> otpResendAttempts = new ConcurrentHashMap<>();
+    private final Map<String, LocalDateTime> lastResendTime = new ConcurrentHashMap<>();
 
     private static final int OTP_VALIDITY_MINUTES = 1; // OTP validity (e.g., 1 minutes)
 
@@ -68,23 +79,42 @@ public class OtpService implements IOtpService {
         }
 
     }
+
+
     @Override
     public String resendOtp(String phoneNumber) {
-        // Resend OTP by generating a new one and resetting the expiration time
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
 
-        logger.info("Resent OTP to phone number: " + phoneNumber);
-        String otp = generateOtp();
-        otpStore.put(phoneNumber, otp);
-        otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+        logger.info("Attempting to resend OTP to phone number: {}", phoneNumber);
+
+        // Vérifier si un OTP existe déjà pour ce numéro
+        String otp = otpStore.get(phoneNumber);
+        if (otp == null) {
+            throw new IllegalStateException("Aucun OTP à renvoyer pour ce numéro.");
+        }
+
+        // Vérifier le rate limit
+        LocalDateTime lastSentTime = lastResendTime.get(phoneNumber);
+        if (lastSentTime != null && Duration.between(lastSentTime, LocalDateTime.now()).compareTo(RESEND_INTERVAL) < 0) {
+            throw new IllegalStateException("Trop de demandes de renvoi d’OTP. Veuillez patienter.");
+        }
+
+        int resendAttempts = otpResendAttempts.getOrDefault(phoneNumber, 0);
+        if (resendAttempts >= MAX_RESEND_ATTEMPTS) {
+            throw new IllegalStateException("Limite de renvoi d’OTP atteinte pour ce numéro.");
+        }
+
+        // Mettre à jour le compteur de tentatives et le timestamp du dernier envoi
+        otpResendAttempts.put(phoneNumber, resendAttempts + 1);
+        lastResendTime.put(phoneNumber, LocalDateTime.now());
+
         String message = String.format("Votre code de verification est : %s. Ce code est temporaire.", otp);
-        // Use a blocking call here to resolve the Mono synchronously
+
         try {
             String response = smsService.sendSms(phoneNumber, message)
                     .doOnSuccess(res -> {
                         logger.info("SMS sent successfully: {}", res);
-                        // Only log to statistic services on success
 
                         statisticservices.logSentItem(currentUser.getId(),
                                 currentUser.getAgency() != null ? currentUser.getAgency().getId() : null,
@@ -92,16 +122,16 @@ public class OtpService implements IOtpService {
                                 "OTP");
                     })
                     .doOnError(error -> logger.error("Error sending OTP SMS: {}", error.getMessage()))
-                    .block(); // Block to get the result synchronously
+                    .block();
 
-            logger.info("OTP successfully sent: {}", otp);
-            return response; // Return the OTP upon success
+            logger.info("OTP successfully resent: {}", otp);
+            return response;
         } catch (Exception e) {
-            logger.error("Fallback: Failed to send SMS to {}: {}", phoneNumber, e.getMessage());
-            throw new RuntimeException("Failed to send OTP SMS.", e);
+            logger.error("Fallback: Failed to resend OTP to {}: {}", phoneNumber, e.getMessage());
+            throw new RuntimeException("Échec du renvoi de l’OTP.", e);
         }
-
     }
+
 
     @Override
     public boolean validateOtp(OtpValidationRequest otpValidationRequest )throws Exception {
@@ -110,7 +140,10 @@ public class OtpService implements IOtpService {
         String otp =otpValidationRequest.getOtp();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
-
+        if (isBlocked(phoneNumber)) {
+            logger.warn("Tentative de validation d'OTP pour un numéro bloqué : {}", phoneNumber);
+            return false;
+        }
         if (isOtpExpired(phoneNumber)) {
             System.out.println("OTP for phone number " + phoneNumber + " has expired.");
             return false;
@@ -146,8 +179,20 @@ public class OtpService implements IOtpService {
             } catch (Exception e) {
                 logger.error("Error during SMS sending or statistic logging: {}", e.getMessage());
             }
+            otpAttempts.remove(phoneNumber);
             return true;
         } else {
+            logger.error("Invalid OTP for phone number: {}", phoneNumber);
+            otpAttempts.put(phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0) + 1);
+
+            if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
+                blockedNumbers.put(phoneNumber, LocalDateTime.now().plusMinutes(BLOCK_DURATION_MINUTES));
+                logger.warn("Numéro {} bloqué pour {} minutes après {} tentatives échouées.",
+                        phoneNumber, BLOCK_DURATION_MINUTES, MAX_OTP_ATTEMPTS);
+            }
+
+            logger.error("OTP invalide pour {}. Tentatives restantes : {}",
+                    phoneNumber, MAX_OTP_ATTEMPTS - otpAttempts.get(phoneNumber));
             logger.error("Invalid OTP for phone number: {}", phoneNumber);
             return false;
         }
@@ -166,4 +211,19 @@ public class OtpService implements IOtpService {
     private String generateOtp() {
         return String.format("%06d", new Random().nextInt(999999));
     }
+
+
+    private boolean isBlocked(String phoneNumber) {
+        if (blockedNumbers.containsKey(phoneNumber)) {
+            LocalDateTime unblockTime = blockedNumbers.get(phoneNumber);
+            if (LocalDateTime.now().isBefore(unblockTime)) {
+                return true; // Toujours bloqué
+            } else {
+                blockedNumbers.remove(phoneNumber); // Débloquer après la durée
+                otpAttempts.remove(phoneNumber); // Réinitialiser les tentatives
+            }
+        }
+        return false;
+    }
+
 }

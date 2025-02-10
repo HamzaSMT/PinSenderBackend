@@ -9,6 +9,7 @@ import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +34,14 @@ public class TabCardHolderController {
         return ResponseEntity.ok(cardHolders);
     }
     @PostMapping("/verify")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> verifyCardholder(@RequestBody VerifyCardholderRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("You do not have permission to perform this action.", 403));
+        }
         request.setAgentId(currentUser.getId());
         request.setBranchId(currentUser.getAgency() != null ? currentUser.getAgency().getId() : null);
         request.setBankId(currentUser.getBank() != null ? currentUser.getBank().getId() : null);

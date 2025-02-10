@@ -48,6 +48,7 @@ public class UserManagementController {
 
 
     @PutMapping("/{id}/deactivate")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -94,7 +95,7 @@ public class UserManagementController {
         } catch (AccessDeniedException e) {
             logger.error("bad data: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(e.getMessage(), 403));
+                    .body(new MessageResponse("bad data", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -106,6 +107,7 @@ public class UserManagementController {
         }
     }
     @PostMapping("/associateUserToAgency")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> associateUserToAgency(@RequestParam Long userId, @RequestParam Long agencyId) {
         logger.info("Received request to associate user {} with agency {}", userId, agencyId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -124,7 +126,7 @@ public class UserManagementController {
         } catch (AccessDeniedException e) {
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(e.getMessage(), 403));
+                    .body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
             logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -137,6 +139,7 @@ public class UserManagementController {
     }
     // Signup method (Register)
     @PostMapping("/signup")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         logger.info("Received sign-up request for username: {}", signUpRequest.getUsername());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -213,6 +216,7 @@ public class UserManagementController {
         }
     }
     @PostMapping("/forgetPassword")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -240,7 +244,7 @@ public class UserManagementController {
             } catch (Exception e) {
                 // Handle any other unexpected exceptions
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new MessageResponse("An error occurred: " + e.getMessage(), 500));
+                        .body(new MessageResponse("An error occurred: " , 500));
             }
         }
 
@@ -262,7 +266,7 @@ public class UserManagementController {
             return ResponseEntity.ok(new MessageResponse("User updated successfully!", 200));
         } catch (ResourceNotFoundException e) {
             logger.error("User not found: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage(), 404));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found", 404));
         } catch (Exception e) {
             logger.error("Error updating user details: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -270,6 +274,7 @@ public class UserManagementController {
         }
     }
     @GetMapping("/users")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     // Ensure only admins can access this endpoint
     public ResponseEntity<?> getUsersByAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -284,7 +289,7 @@ public class UserManagementController {
         } catch (ResourceNotFoundException e) {
             // Handle case when no users are found
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse(e.getMessage(), 404));
+                    .body(new MessageResponse("User not found", 404));
         } catch (IllegalStateException e) {
             // Handle case when user is not authenticated
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -304,17 +309,18 @@ public class UserManagementController {
                     .body(new MessageResponse("User is not authenticated!", 401));
         }
         try {
-            User user = userManagementService.getuserbyId(userId);
-            logger.info("User found: {}", user);
-            return ResponseEntity.ok(user); // Return the user object if found
+            UserResponseDTO userDTO = userManagementService.getuserbyId(userId);
+            logger.info("User found: {}", userDTO);
+            return ResponseEntity.ok(userDTO);
         } catch (NoSuchElementException e) {
             logger.error("User not found with ID: {}", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("User not found", 404)); // 404 Not Found
+                    .body(new MessageResponse("User not found", 404));
         } catch (Exception e) {
             logger.error("Error retrieving user: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Error retrieving user", 500)); // 500 Internal Server Error
+                    .body(new MessageResponse("Error retrieving user", 500));
         }
     }
+
 }
