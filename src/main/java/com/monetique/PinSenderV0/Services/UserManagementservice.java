@@ -5,7 +5,6 @@ import com.monetique.PinSenderV0.Services.managementbank.BankService;
 import com.monetique.PinSenderV0.models.Banks.Agency;
 import com.monetique.PinSenderV0.models.Banks.TabBank;
 import com.monetique.PinSenderV0.models.Users.ERole;
-import com.monetique.PinSenderV0.models.Users.Role;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.InvalidPasswordException;
@@ -58,36 +57,17 @@ public class UserManagementservice implements IuserManagementService {
     }
 
 
+
+
     @Override
-    public UserResponseDTO getuserbyId(Long userId) {
+    public User getuserbyId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        return mapToDTO(user);
+        return user;
     }
 
-    private UserResponseDTO mapToDTO(User user) {
-        UserResponseDTO dto = new UserResponseDTO();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setStatus(user.isActive());
 
-        // Récupérer le rôle
-        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
-            dto.setRole(user.getRoles().iterator().next().getName().toString());
-        }
-
-        // Récupérer les infos de la banque
-        if (user.getBank() != null) {
-            dto.setBankName(user.getBank().getLibelleBanque());
-            dto.setBankCode(user.getBank().getBankCode());
-            dto.setLogoContent(user.getBank().getLogoContent());
-        }
-
-        return dto;
-    }
 
 
 
