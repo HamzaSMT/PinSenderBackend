@@ -172,7 +172,7 @@ public class OtpService implements IOtpService {
             smsService.sendSms(phoneNumber, message)
                     .doOnSuccess(response -> {
                         logger.info("SMS envoyé avec succès : {}", response);
-                        statisticService.logSentItem(
+                        statisticservices.logSentItem(
                                 currentUser.getId(),
                                 currentUser.getAgency() != null ? currentUser.getAgency().getId() : null,
                                 currentUser.getBank() != null ? currentUser.getBank().getId() : null,
