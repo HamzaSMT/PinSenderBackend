@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.Interfaces;
 
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
+import com.monetique.PinSenderV0.payload.response.OtpValidationResult;
 import com.monetique.PinSenderV0.payload.response.SMSResponse;
 
 public interface IOtpService {
@@ -11,11 +12,9 @@ public interface IOtpService {
     // Method to validate the OTP input by the user
   //  boolean validateOtp(String phoneNumber, String otp);
 
-    boolean validateOtp(OtpValidationRequest otpValidationRequest) throws Exception;
+    OtpValidationResult validateOtp(OtpValidationRequest otpValidationRequest) throws Exception;
 
     // Method to resend OTP
     String resendOtp(String phoneNumber);
 
-    // Method to check if OTP is expired
-    boolean isOtpExpired(String phoneNumber);
 }
