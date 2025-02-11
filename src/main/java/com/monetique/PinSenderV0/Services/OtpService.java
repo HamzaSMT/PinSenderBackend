@@ -208,11 +208,16 @@ public class OtpService implements IOtpService {
     }
 
     private void incrementOtpAttempts(String phoneNumber) {
-        otpAttempts.compute(phoneNumber, (key, attempts) -> {
-            int newAttempts = (attempts == null) ? 1 : attempts + 1;
-            logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", newAttempts, phoneNumber);
-            return newAttempts;
-        });
+        // Récupérer la dernière valeur des tentatives
+        Integer currentAttempts = otpAttempts.getOrDefault(phoneNumber, 0);
+
+        // Incrémenter les tentatives
+        int newAttempts = currentAttempts + 1;
+
+        // Mettre à jour le compteur dans la map
+        otpAttempts.put(phoneNumber, newAttempts);
+
+        logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", newAttempts, phoneNumber); // Log pour vérifier l'incrémentation
     }
 
     private void resetOtpAttempts(String phoneNumber) {
