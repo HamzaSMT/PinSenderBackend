@@ -11,6 +11,7 @@ import com.monetique.PinSenderV0.payload.request.SignupRequest;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.UserResponseDTO;
+import com.monetique.PinSenderV0.payload.response.UserbyidResponseDTO;
 import com.monetique.PinSenderV0.repository.RoleRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
@@ -309,7 +310,7 @@ public class UserManagementController {
                     .body(new MessageResponse("User is not authenticated!", 401));
         }
         try {
-            User userDTO = userManagementService.getuserbyId(userId);
+            UserbyidResponseDTO userDTO = userManagementService.getuserbyId(userId);
             logger.info("User found: {}", userDTO);
             return ResponseEntity.ok(userDTO);
         } catch (NoSuchElementException e) {
