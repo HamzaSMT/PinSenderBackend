@@ -141,23 +141,21 @@ public class OtpService implements IOtpService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
 
-        // ✅ Vérifier si le numéro est bloqué
+        // Vérifier si le numéro est bloqué
         if (isBlocked(phoneNumber)) {
             logger.warn("🚨 [BLOQUÉ] Numéro {}. Impossible de valider l'OTP.", phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
         }
 
-        // ✅ Vérifier si l'OTP est expiré
+        // Vérifier si l'OTP est expiré
         if (isOtpExpired(phoneNumber)) {
             logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0), MAX_OTP_ATTEMPTS);
 
-            // ✅ Réinitialiser les tentatives et OTP
-            resetOtpAttempts(phoneNumber);
-
+            // Ne pas réinitialiser les tentatives si l'OTP a expiré
             return new OtpValidationResult(OtpValidationStatus.OTP_EXPIRED);
         }
 
-        // ✅ Vérifier si l'OTP est correct
+        // Vérifier si l'OTP est correct
         String storedOtp = otpStore.get(phoneNumber);
         if (storedOtp != null && storedOtp.equals(otp)) {
             return processSuccessfulOtpValidation(phoneNumber, cardNumber, currentUser);
