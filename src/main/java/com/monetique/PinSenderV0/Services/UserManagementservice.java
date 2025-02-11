@@ -9,6 +9,7 @@ import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.InvalidPasswordException;
 import com.monetique.PinSenderV0.payload.response.UserResponseDTO;
+import com.monetique.PinSenderV0.payload.response.UserbyidResponseDTO;
 import com.monetique.PinSenderV0.repository.AgencyRepository;
 import com.monetique.PinSenderV0.repository.BankRepository;
 import com.monetique.PinSenderV0.repository.UserRepository;
@@ -57,15 +58,35 @@ public class UserManagementservice implements IuserManagementService {
     }
 
 
-
-
     @Override
-    public User getuserbyId(Long userId) {
+    public UserbyidResponseDTO getuserbyId(Long userId) {
+        // Récupère l'utilisateur par son ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        return user;
+        // Crée le DTO et y mappe les informations
+        UserbyidResponseDTO responseDTO = new UserbyidResponseDTO();
+        responseDTO.setId(user.getId());
+        responseDTO.setUsername(user.getUsername());
+        responseDTO.setEmail(user.getEmail());
+        responseDTO.setPhoneNumber(user.getPhoneNumber());
+        responseDTO.setActive(user.isActive());
+
+        // Mappage des rôles
+        responseDTO.setRoles(user.getRoles());
+
+        // Mappage de l'adminId (si nécessaire)
+        if (user.getAdmin() != null) {
+            responseDTO.setAdminId(user.getAdmin().getId());
+        }
+
+        // Mappage de la banque et de l'agence
+        responseDTO.setBank(user.getBank());
+        responseDTO.setAgency(user.getAgency());
+
+        return responseDTO;
     }
+
 
 
 

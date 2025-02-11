@@ -4,6 +4,7 @@ import com.monetique.PinSenderV0.Exception.ResourceNotFoundException;
 import com.monetique.PinSenderV0.models.Users.User;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
 import com.monetique.PinSenderV0.payload.response.UserResponseDTO;
+import com.monetique.PinSenderV0.payload.response.UserbyidResponseDTO;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface IuserManagementService {
     String generateRandomPassword(Long userId);
 
-    User getuserbyId(Long userId);
+    UserbyidResponseDTO getuserbyId(Long userId);
 
     void changePassword(Long userId, String oldPassword, String newPassword);
 
