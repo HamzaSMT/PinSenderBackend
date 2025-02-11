@@ -149,10 +149,13 @@ public class OtpService implements IOtpService {
 
         // ✅ Vérifier si l'OTP est expiré
         if (isOtpExpired(phoneNumber)) {
-            incrementOtpAttempts(phoneNumber);
-            logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.get(phoneNumber), MAX_OTP_ATTEMPTS);
+            logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0), MAX_OTP_ATTEMPTS);
 
-            // Vérifier si le numéro doit être bloqué après cette tentative
+            // ✅ Supprimer l'OTP et réinitialiser les tentatives associées
+            resetOtpAttempts(phoneNumber);
+
+            // ✅ Vérifier si le numéro doit être bloqué après cette tentative
+            incrementOtpAttempts(phoneNumber);
             if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
                 blockNumber(phoneNumber);
                 return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
@@ -160,6 +163,7 @@ public class OtpService implements IOtpService {
 
             return new OtpValidationResult(OtpValidationStatus.OTP_EXPIRED);
         }
+
 
         // ✅ Vérifier si l'OTP est correct
         String storedOtp = otpStore.get(phoneNumber);
@@ -214,10 +218,13 @@ public class OtpService implements IOtpService {
     }
 
     private void incrementOtpAttempts(String phoneNumber) {
-        int newAttempts = otpAttempts.getOrDefault(phoneNumber, 0) + 1;
-        otpAttempts.put(phoneNumber, newAttempts);
-        logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", newAttempts, phoneNumber);
+        otpAttempts.compute(phoneNumber, (key, attempts) -> {
+            int newAttempts = (attempts == null) ? 1 : attempts + 1;
+            logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", newAttempts, phoneNumber);
+            return newAttempts;
+        });
     }
+
 
     private void resetOtpAttempts(String phoneNumber) {
         otpAttempts.remove(phoneNumber);
