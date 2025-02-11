@@ -141,17 +141,27 @@ public class OtpService implements IOtpService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
 
+        // 🚨 Vérifier si le numéro est bloqué
         if (isBlocked(phoneNumber)) {
-            logger.warn("Tentative de validation pour un numéro bloqué : {}", phoneNumber);
+            logger.warn("Numéro bloqué : {}. Impossible de valider l'OTP.", phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
         }
 
+        // 🚨 Vérifier si l'OTP est expiré
         if (isOtpExpired(phoneNumber)) {
             incrementOtpAttempts(phoneNumber);
-            logger.warn("OTP expiré pour le numéro : {}. Tentatives restantes : {}", phoneNumber, MAX_OTP_ATTEMPTS - otpAttempts.get(phoneNumber));
+            logger.warn("OTP expiré pour {}. Tentatives restantes : {}", phoneNumber, MAX_OTP_ATTEMPTS - otpAttempts.get(phoneNumber));
+
+            // Vérifier si le numéro doit être bloqué après cette tentative
+            if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
+                blockNumber(phoneNumber);
+                return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
+            }
+
             return new OtpValidationResult(OtpValidationStatus.OTP_EXPIRED);
         }
 
+        // 🔍 Vérifier si l'OTP est correct
         String storedOtp = otpStore.get(phoneNumber);
         if (storedOtp != null && storedOtp.equals(otp)) {
             return processSuccessfulOtpValidation(phoneNumber, cardNumber, currentUser);
@@ -161,7 +171,7 @@ public class OtpService implements IOtpService {
     }
 
     private OtpValidationResult processSuccessfulOtpValidation(String phoneNumber, String cardNumber, UserDetailsImpl currentUser) {
-        logger.info("OTP validé avec succès pour {}", phoneNumber);
+        logger.info("✅ OTP validé avec succès pour {}", phoneNumber);
 
         try {
             String cardHash = hashingService.hashPAN(cardNumber);
@@ -171,7 +181,7 @@ public class OtpService implements IOtpService {
 
             smsService.sendSms(phoneNumber, message)
                     .doOnSuccess(response -> {
-                        logger.info("SMS envoyé avec succès : {}", response);
+                        logger.info("📩 SMS envoyé avec succès : {}", response);
                         statisticservices.logSentItem(
                                 currentUser.getId(),
                                 currentUser.getAgency() != null ? currentUser.getAgency().getId() : null,
@@ -179,13 +189,13 @@ public class OtpService implements IOtpService {
                                 "PIN"
                         );
                     })
-                    .doOnError(error -> logger.error("Erreur lors de l'envoi du SMS : {}", error.getMessage()))
+                    .doOnError(error -> logger.error("❌ Erreur lors de l'envoi du SMS : {}", error.getMessage()))
                     .block();
 
             resetOtpAttempts(phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.SUCCESS);
         } catch (Exception e) {
-            logger.error("Erreur lors de l'envoi du SMS ou de la journalisation : {}", e.getMessage());
+            logger.error("❌ Erreur lors de l'envoi du SMS ou de la journalisation : {}", e.getMessage());
             return new OtpValidationResult(OtpValidationStatus.ERROR);
         }
     }
@@ -194,13 +204,11 @@ public class OtpService implements IOtpService {
         incrementOtpAttempts(phoneNumber);
 
         if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
-            blockedNumbers.put(phoneNumber, LocalDateTime.now().plusMinutes(BLOCK_DURATION_MINUTES));
-            logger.warn("Numéro {} bloqué pour {} minutes après {} tentatives échouées.",
-                    phoneNumber, BLOCK_DURATION_MINUTES, MAX_OTP_ATTEMPTS);
+            blockNumber(phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
         }
 
-        logger.error("OTP invalide pour {}. Tentatives restantes : {}", phoneNumber, MAX_OTP_ATTEMPTS - otpAttempts.get(phoneNumber));
+        logger.error("❌ OTP invalide pour {}. Tentatives restantes : {}", phoneNumber, MAX_OTP_ATTEMPTS - otpAttempts.get(phoneNumber));
         return new OtpValidationResult(OtpValidationStatus.INVALID_OTP);
     }
 
@@ -212,6 +220,11 @@ public class OtpService implements IOtpService {
         otpAttempts.remove(phoneNumber);
         otpStore.remove(phoneNumber);
         otpExpiryStore.remove(phoneNumber);
+    }
+
+    private void blockNumber(String phoneNumber) {
+        blockedNumbers.put(phoneNumber, LocalDateTime.now().plusMinutes(BLOCK_DURATION_MINUTES));
+        logger.warn("🚫 Numéro {} bloqué pour {} minutes après {} tentatives échouées.", phoneNumber, BLOCK_DURATION_MINUTES, MAX_OTP_ATTEMPTS);
     }
 
     private boolean isOtpExpired(String phoneNumber) {
