@@ -151,19 +151,11 @@ public class OtpService implements IOtpService {
         if (isOtpExpired(phoneNumber)) {
             logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0), MAX_OTP_ATTEMPTS);
 
-            // ✅ Supprimer l'OTP et réinitialiser les tentatives associées
+            // ✅ Réinitialiser les tentatives et OTP
             resetOtpAttempts(phoneNumber);
-
-            // ✅ Vérifier si le numéro doit être bloqué après cette tentative
-            incrementOtpAttempts(phoneNumber);
-            if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
-                blockNumber(phoneNumber);
-                return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
-            }
 
             return new OtpValidationResult(OtpValidationStatus.OTP_EXPIRED);
         }
-
 
         // ✅ Vérifier si l'OTP est correct
         String storedOtp = otpStore.get(phoneNumber);
@@ -225,7 +217,6 @@ public class OtpService implements IOtpService {
         });
     }
 
-
     private void resetOtpAttempts(String phoneNumber) {
         otpAttempts.remove(phoneNumber);
         otpStore.remove(phoneNumber);
@@ -252,6 +243,7 @@ public class OtpService implements IOtpService {
         otpAttempts.remove(phoneNumber);
         return false;
     }
+
 
 
     // Generate a 6-digit OTP
