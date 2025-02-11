@@ -151,7 +151,6 @@ public class OtpService implements IOtpService {
         if (isOtpExpired(phoneNumber)) {
             logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}",
                     phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0), MAX_OTP_ATTEMPTS);
-            incrementOtpAttempts(phoneNumber);
             // Ne pas réinitialiser les tentatives si l'OTP a expiré
             return new OtpValidationResult(OtpValidationStatus.OTP_EXPIRED);
         }
@@ -197,26 +196,25 @@ public class OtpService implements IOtpService {
     }
 
     private OtpValidationResult processFailedOtpAttempt(String phoneNumber) {
+        int currentAttempts = otpAttempts.getOrDefault(phoneNumber, 0);
 
-        if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
+        if (currentAttempts >= MAX_OTP_ATTEMPTS) {
             blockNumber(phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
         }
+
+        // Incrémentation des tentatives uniquement si l'OTP est incorrect
         incrementOtpAttempts(phoneNumber);
 
-        logger.warn("❌ [INVALIDE] OTP incorrect pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.get(phoneNumber), MAX_OTP_ATTEMPTS);
+        logger.warn("❌ [INVALIDE] OTP incorrect pour {}. Tentatives actuelles : {}/{}", phoneNumber, currentAttempts + 1, MAX_OTP_ATTEMPTS);
 
         return new OtpValidationResult(OtpValidationStatus.INVALID_OTP);
     }
 
     private void incrementOtpAttempts(String phoneNumber) {
-
-        // Récupérer la dernière valeur des tentatives
-        int currentAttempts = otpAttempts.getOrDefault(phoneNumber, 0);
-
-        otpAttempts.put(phoneNumber, currentAttempts+1);
-
-        logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", currentAttempts, phoneNumber); // Log pour vérifier l'incrémentation
+        // Utilisation d'un mécanisme sécurisé pour éviter les problèmes de concurrence
+        otpAttempts.merge(phoneNumber, 1, Integer::sum); // Incrémente la valeur de manière atomique
+        logger.debug("🔢 [COMPTEUR] Tentatives actuelles pour {} : {}", phoneNumber, otpAttempts.get(phoneNumber)); // Log pour vérifier l'incrémentation
     }
 
     private void resetOtpAttempts(String phoneNumber) {
@@ -245,6 +243,7 @@ public class OtpService implements IOtpService {
         otpAttempts.remove(phoneNumber);
         return false;
     }
+
 
 
 
