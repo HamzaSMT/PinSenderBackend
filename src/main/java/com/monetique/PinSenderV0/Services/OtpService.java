@@ -149,8 +149,9 @@ public class OtpService implements IOtpService {
 
         // Vérifier si l'OTP est expiré
         if (isOtpExpired(phoneNumber)) {
-            logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0), MAX_OTP_ATTEMPTS);
-
+            logger.warn("❌ [EXPIRÉ] OTP expiré pour {}. Tentatives actuelles : {}/{}",
+                    phoneNumber, otpAttempts.getOrDefault(phoneNumber, 0), MAX_OTP_ATTEMPTS);
+            incrementOtpAttempts(phoneNumber);
             // Ne pas réinitialiser les tentatives si l'OTP a expiré
             return new OtpValidationResult(OtpValidationStatus.OTP_EXPIRED);
         }
@@ -171,7 +172,8 @@ public class OtpService implements IOtpService {
             String cardHash = hashingService.hashPAN(cardNumber);
             String clearPin = hsmService.clearpin(cardNumber, cardHash);
 
-            String message = String.format("Votre code PIN est : [ %s ]. Ce code est strictement personnel et confidentiel. Ne le partagez jamais.", clearPin);
+            String message = String.format("Votre code PIN est : [ %s ]." +
+                    " Ce code est strictement personnel et confidentiel. Ne le partagez jamais.", clearPin);
 
             smsService.sendSms(phoneNumber, message)
                     .doOnSuccess(response -> {
@@ -195,29 +197,26 @@ public class OtpService implements IOtpService {
     }
 
     private OtpValidationResult processFailedOtpAttempt(String phoneNumber) {
-        incrementOtpAttempts(phoneNumber);
-
-        logger.warn("❌ [INVALIDE] OTP incorrect pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.get(phoneNumber), MAX_OTP_ATTEMPTS);
 
         if (otpAttempts.get(phoneNumber) >= MAX_OTP_ATTEMPTS) {
             blockNumber(phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
         }
+        incrementOtpAttempts(phoneNumber);
+
+        logger.warn("❌ [INVALIDE] OTP incorrect pour {}. Tentatives actuelles : {}/{}", phoneNumber, otpAttempts.get(phoneNumber), MAX_OTP_ATTEMPTS);
 
         return new OtpValidationResult(OtpValidationStatus.INVALID_OTP);
     }
 
     private void incrementOtpAttempts(String phoneNumber) {
+
         // Récupérer la dernière valeur des tentatives
-        Integer currentAttempts = otpAttempts.getOrDefault(phoneNumber, 0);
+        int currentAttempts = otpAttempts.getOrDefault(phoneNumber, 0);
 
-        // Incrémenter les tentatives
-        int newAttempts = currentAttempts + 1;
+        otpAttempts.put(phoneNumber, currentAttempts+1);
 
-        // Mettre à jour le compteur dans la map
-        otpAttempts.put(phoneNumber, newAttempts);
-
-        logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", newAttempts, phoneNumber); // Log pour vérifier l'incrémentation
+        logger.debug("🔢 [COMPTEUR] {} tentatives pour {}", currentAttempts, phoneNumber); // Log pour vérifier l'incrémentation
     }
 
     private void resetOtpAttempts(String phoneNumber) {
