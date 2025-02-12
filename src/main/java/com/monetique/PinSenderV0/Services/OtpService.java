@@ -3,6 +3,7 @@ import com.monetique.PinSenderV0.Interfaces.IOtpService;
 import com.monetique.PinSenderV0.Interfaces.IStatisticservices;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
+import com.monetique.PinSenderV0.payload.response.OtpResendResult;
 import com.monetique.PinSenderV0.payload.response.OtpValidationResult;
 import com.monetique.PinSenderV0.payload.response.OtpValidationStatus;
 import com.monetique.PinSenderV0.payload.response.SMSResponse;
@@ -10,14 +11,13 @@ import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -80,7 +80,7 @@ public class OtpService implements IOtpService {
 
     }
 
-
+/*
     @Override
     public String resendOtp(String phoneNumber) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -132,7 +132,7 @@ public class OtpService implements IOtpService {
         }
     }
 
-
+*/
     @Override
     public OtpValidationResult validateOtp(OtpValidationRequest request) {
         String phoneNumber = request.getPhoneNumber();
@@ -246,15 +246,68 @@ public class OtpService implements IOtpService {
         return false;
     }
 
-
-
-
-
-
     // Generate a 6-digit OTP
     private String generateOtp() {
         return String.format("%06d", 100000 + new Random().nextInt(900000));
     }
+
+
+    @Override
+    public OtpResendResult resendOtp(String phoneNumber) {
+        logger.info("Attempting to resend OTP to phone number: {}", phoneNumber);
+
+        if (blockedNumbers.containsKey(phoneNumber)) {
+            return new OtpResendResult(OtpResendResult.Status.NUMBER_BLOCKED, "This number is temporarily blocked.");
+        }
+
+        if (!otpStore.containsKey(phoneNumber)) {
+            return new OtpResendResult(OtpResendResult.Status.NO_EXISTING_OTP, "No OTP exists for this number.");
+        }
+
+        LocalDateTime lastSentTime = lastResendTime.get(phoneNumber);
+        if (lastSentTime != null && Duration.between(lastSentTime, LocalDateTime.now()).compareTo(RESEND_INTERVAL) < 0) {
+            return new OtpResendResult(OtpResendResult.Status.RATE_LIMIT_EXCEEDED, "Too many resend requests.");
+        }
+
+        int resendAttempts = otpResendAttempts.getOrDefault(phoneNumber, 0);
+        if (resendAttempts >= MAX_RESEND_ATTEMPTS) {
+            blockedNumbers.put(phoneNumber, LocalDateTime.now());
+            return new OtpResendResult(OtpResendResult.Status.TOO_MANY_ATTEMPTS, "Too many resend attempts.");
+        }
+
+        // ❌ Delete the old OTP before generating a new one
+        otpStore.remove(phoneNumber);
+        otpExpiryStore.remove(phoneNumber);
+
+        // Generate and store a new OTP
+        String newOtp = generateOtp();
+        otpStore.put(phoneNumber, newOtp);
+        otpExpiryStore.put(phoneNumber, LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+
+        otpResendAttempts.put(phoneNumber, resendAttempts + 1);
+        lastResendTime.put(phoneNumber, LocalDateTime.now());
+
+        // Send OTP
+        try {
+            smsService.sendSms(phoneNumber, "Your new OTP is: " + newOtp).block();
+            return new OtpResendResult(OtpResendResult.Status.SUCCESS, "OTP resent successfully.");
+        } catch (Exception e) {
+            return new OtpResendResult(OtpResendResult.Status.ERROR, "Failed to resend OTP.");
+        }
+    }
+    @Scheduled(fixedRate = 300000) // Exécution toutes les 5 minutes
+    public void cleanUpExpiredOtp() {
+        LocalDateTime now = LocalDateTime.now();
+        otpExpiryStore.entrySet().removeIf(entry -> entry.getValue().isBefore(now));
+        otpStore.entrySet().removeIf(entry -> otpExpiryStore.get(entry.getKey()).isBefore(now));
+    }
+
+    @Scheduled(fixedRate = 3600000) // Exécution toutes les 1 heure
+    public void unblockNumbers() {
+        LocalDateTime now = LocalDateTime.now();
+        blockedNumbers.entrySet().removeIf(entry -> entry.getValue().isBefore(now.minusMinutes(BLOCK_DURATION_MINUTES)));
+    }
+
 }
 
 

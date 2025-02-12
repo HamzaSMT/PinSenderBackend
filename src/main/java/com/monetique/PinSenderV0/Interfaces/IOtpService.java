@@ -2,6 +2,7 @@ package com.monetique.PinSenderV0.Interfaces;
 
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import com.monetique.PinSenderV0.payload.request.VerifyCardholderRequest;
+import com.monetique.PinSenderV0.payload.response.OtpResendResult;
 import com.monetique.PinSenderV0.payload.response.OtpValidationResult;
 import com.monetique.PinSenderV0.payload.response.SMSResponse;
 
@@ -15,6 +16,6 @@ public interface IOtpService {
     OtpValidationResult validateOtp(OtpValidationRequest otpValidationRequest) throws Exception;
 
     // Method to resend OTP
-    String resendOtp(String phoneNumber);
+    OtpResendResult resendOtp(String phoneNumber);
 
 }

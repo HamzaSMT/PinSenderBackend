@@ -3,6 +3,7 @@ package com.monetique.PinSenderV0.controllers;
 import com.monetique.PinSenderV0.Interfaces.IOtpService;
 import com.monetique.PinSenderV0.payload.request.OtpValidationRequest;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
+import com.monetique.PinSenderV0.payload.response.OtpResendResult;
 import com.monetique.PinSenderV0.payload.response.OtpValidationResult;
 import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,16 +60,39 @@ public class OtpController {
 
 
     @PostMapping("/resend")
-    public ResponseEntity<MessageResponse> resendOtp(@RequestBody String gsmNumber) {
+    public ResponseEntity<MessageResponse> resendOtp(@RequestBody String phoneNumber) {
         try {
-            String otp = otpService.resendOtp(gsmNumber);
-            return ResponseEntity.ok(new MessageResponse("Code OTP resent successfully.", 200));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new MessageResponse("Failed to resend OTP", 400));
-        } catch (Exception e) {
+            OtpResendResult result = otpService.resendOtp(phoneNumber);
+
+            switch (result.getStatus()) {
+                case SUCCESS:
+                    return ResponseEntity.ok(new MessageResponse("OTP resent successfully.", 200));
+
+                case NO_EXISTING_OTP:
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(new MessageResponse("No OTP exists for this number. Please restart the verification process.", 400));
+
+                case TOO_MANY_ATTEMPTS:
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(new MessageResponse("Too many OTP resend attempts. This number is temporarily blocked.", 403));
+
+                case RATE_LIMIT_EXCEEDED:
+                    return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                            .body(new MessageResponse("Too many resend requests. Please wait before trying again.", 429));
+
+                case NUMBER_BLOCKED:
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(new MessageResponse("This number is temporarily blocked. Please try again later.", 403));
+
+                case ERROR:
+                default:
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(new MessageResponse("An unexpected error occurred while resending OTP.", 500));
+            }
+        } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("An unexpected error occurred", 500));
+                    .body(new MessageResponse("An unexpected error occurred.", 500));
         }
     }
+
 }
