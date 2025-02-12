@@ -45,10 +45,10 @@ public class OtpService implements IOtpService {
     private final ConcurrentHashMap<String, LocalDateTime> lastResendTime = new ConcurrentHashMap<>();
 
     private static final int MAX_OTP_ATTEMPTS = 3;
-    private static final long BLOCK_DURATION_MINUTES = 2;
-    private static final int MAX_RESEND_ATTEMPTS = 3;
-    private static final Duration RESEND_INTERVAL = Duration.ofMinutes(1);
-    private static final int OTP_VALIDITY_MINUTES = 1;
+    private static final long BLOCK_DURATION_MINUTES = 1;
+    private static final int MAX_RESEND_ATTEMPTS = 5;
+    private static final Duration RESEND_INTERVAL = Duration.ofSeconds(30);
+    private static final int OTP_VALIDITY_MINUTES = 3;
 
     @Override
     public SMSResponse sendOtp(VerifyCardholderRequest request) {
