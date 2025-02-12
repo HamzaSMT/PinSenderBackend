@@ -258,7 +258,12 @@ public class OtpService implements IOtpService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
         logger.info("Attempting to resend OTP to phone number: {}", phoneNumber);
-
+        String otpStored = otpStore.get(phoneNumber);
+        if (otpStored == null) {
+            System.out.println("❌ No OTP found for " + phoneNumber);
+        } else {
+            System.out.println("✅ OTP Retrieved: " + otpStored);
+        }
         // Check if the number is temporarily blocked
         if (blockedNumbers.containsKey(phoneNumber)) {
             logger.warn("Phone number {} is temporarily blocked.", phoneNumber);
