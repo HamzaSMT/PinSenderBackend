@@ -9,6 +9,7 @@ import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ public class OtpController {
 
 
     @PostMapping("/validate")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<MessageResponse> validateOtp(@RequestBody OtpValidationRequest request) {
         try {
             OtpValidationResult result = otpService.validateOtp(request);
@@ -60,6 +62,7 @@ public class OtpController {
 
 
     @PostMapping("/resend")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<MessageResponse> resendOtp(@RequestBody String phoneNumber) {
         try {
             OtpResendResult result = otpService.resendOtp(phoneNumber);
