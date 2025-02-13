@@ -48,14 +48,27 @@ public class UserManagementservice implements IuserManagementService {
 
     @Override
     public String generateRandomPassword(Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long adminId = userDetails.getId();
+
+        // Find the user for whom the password needs to be reset
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
+        // Ensure the authenticated user is authorized to reset this user's password
+        if (user.getAdmin() == null || !user.getAdmin().getId().equals(adminId)) {
+            throw new AccessDeniedException("You are not authorized to reset the password for this user.");
+        }
+
+        // Generate a strong random password
         String newPassword = generateRandomPassword();
+
+        // Encrypt the password before saving
         user.setPassword(encoder.encode(newPassword));
         userRepository.save(user);
 
-        // Return the generated password to be used in the response
+        // Return the plain generated password (be cautious with exposing this in production)
         return newPassword;
     }
 
@@ -89,12 +102,6 @@ public class UserManagementservice implements IuserManagementService {
         return responseDTO;
     }
 
-
-
-
-
-
-
     public String generateRandomPassword() {
         // Define the length of the password and characters to be included
         int length = 12;
@@ -113,13 +120,21 @@ public class UserManagementservice implements IuserManagementService {
 
     @Override
     public void changePassword(Long userId, String oldPassword, String newPassword) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        // Get the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long authenticatedUserId = userDetails.getId();
 
+        // Find the user by the authenticated user's ID
+        User user = userRepository.findById(authenticatedUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", authenticatedUserId));
+
+        // Verify the old password
         if (!encoder.matches(oldPassword, user.getPassword())) {
             throw new InvalidPasswordException("Old password is incorrect.");
         }
 
+        // Set the new password
         user.setPassword(encoder.encode(newPassword));
         userRepository.save(user);
     }
@@ -244,39 +259,47 @@ public class UserManagementservice implements IuserManagementService {
         userRepository.save(user);
     }
 
-
-
-
     @Override
     public void toggleUserActiveStatus(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long adminId = userDetails.getId();
+
         try {
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for ID: " + userId));
-            if (user.getAdmin() == null || !user.getAdmin().getId().equals(adminId)) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to modify this user.");
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + userId));
+
+            // Vérifier si l'admin actuel est autorisé à modifier ce statut utilisateur
+            if (user.getAdmin() != null && !user.getAdmin().getId().equals(adminId)) {
+                throw new AccessDeniedException("You are not authorized to modify this user.");
             }
+
             logger.info("Roles for user {}: {}", userId, user.getRoles());
-            // Toggle active status
+
+            // Toggle du statut actif
             boolean newStatus = !user.isActive();
             user.setActive(newStatus);
             userRepository.save(user);
             logger.info("User {} active status set to: {}", user.getUsername(), newStatus);
-            // If the user is an admin, toggle the status of all associated users
+
+            // Si l'utilisateur est un admin, modifier le statut de tous les utilisateurs associés
             if (isAdmin(user)) {
                 logger.info("Toggling active status for associated users of admin: {}", user.getUsername());
                 toggleAssociatedUsersStatus(user, newStatus);
             }
-        } catch (ResponseStatusException ex) {
-            logger.warn("Business validation error: {}", ex.getReason());
+
+        } catch (AccessDeniedException ex) {
+            logger.warn("Access denied: {}", ex.getMessage());
+            throw ex;
+        } catch (ResourceNotFoundException ex) {
+            logger.warn("Resource not found: {}", ex.getMessage());
             throw ex;
         } catch (Exception ex) {
             logger.error("Unexpected error occurred while toggling user status.", ex);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected issue occurred. Please contact support.");
         }
     }
+
 
     // Helper method to check if the user has an admin role
     private boolean isAdmin(User user) {

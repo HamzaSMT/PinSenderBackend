@@ -9,6 +9,7 @@ import com.monetique.PinSenderV0.payload.request.ChangePasswordRequest;
 import com.monetique.PinSenderV0.payload.request.GeneratePasswordRequest;
 import com.monetique.PinSenderV0.payload.request.SignupRequest;
 import com.monetique.PinSenderV0.payload.request.UserUpdateRequest;
+import com.monetique.PinSenderV0.payload.response.InvalidPasswordException;
 import com.monetique.PinSenderV0.payload.response.MessageResponse;
 import com.monetique.PinSenderV0.payload.response.UserResponseDTO;
 import com.monetique.PinSenderV0.payload.response.UserbyidResponseDTO;
@@ -27,6 +28,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -48,29 +51,29 @@ public class UserManagementController {
 
 
 
-    @PutMapping("/{id}/deactivate")
+    @PutMapping("/{userId}/toggle-active-status")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> toggleUserActiveStatus(@PathVariable Long userId) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !authentication.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new MessageResponse("User is not authenticated!", 401));
-            }
-            userManagementService.toggleUserActiveStatus(id);
-            return ResponseEntity.ok(new MessageResponse("User and associated users status changed successfully.", 200));
+            // Appeler le service pour changer le statut actif de l'utilisateur
+            userManagementService.toggleUserActiveStatus(userId);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new MessageResponse("User status updated successfully.", 200));
         } catch (AccessDeniedException e) {
+            // Gestion du cas d'accès refusé
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new MessageResponse("Access denied", 403));
         } catch (ResourceNotFoundException e) {
-            logger.error("User not found: {}", e.getMessage());
+            // Gestion du cas où la ressource est introuvable
+            logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("User not found", 404));
+                    .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
         } catch (Exception e) {
-            logger.error("Error during user deactivation: {}", e.getMessage());
+            // Gestion des erreurs imprévues
+            logger.error("Unexpected error while modifying user status: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Internal server error during user deactivation", 500));
+                    .body(new MessageResponse("An unexpected error occurred. Please try again later.", 500));
         }
     }
     @PostMapping("/associateAdminToBank")
@@ -204,50 +207,77 @@ public class UserManagementController {
     }
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        // Get the authenticated user from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new MessageResponse("User is not authenticated!", 401));
         }
+
+        Long authenticatedUserId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+
+        // Ensure that the user is trying to change their own password
+        if (!authenticatedUserId.equals(request.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("You can only change your own password!", 403));
+        }
+
         try {
-            userManagementService.changePassword(request.getUserId(), request.getOldPassword(), request.getNewPassword());
+            // Call the service method to change the password
+            userManagementService.changePassword(authenticatedUserId, request.getOldPassword(), request.getNewPassword());
             return ResponseEntity.ok(new MessageResponse("Password changed successfully!", 200));
+        } catch (InvalidPasswordException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Old password is incorrect", 400));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("User not found", 404));
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(new MessageResponse(e.getMessage(), 400));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("An unexpected error occurred", 500));
         }
     }
+
+
+
     @PostMapping("/forgetPassword")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new MessageResponse("User is not authenticated!", 401));
-            }
-            if (request == null || request.getUserId() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new MessageResponse("User ID is required.", 400));
-            }
-            try {
-                // Generate a random password for the specified user
-                String newPassword = userManagementService.generateRandomPassword(request.getUserId());
-                // Check if password generation was successful
-                if (newPassword == null || newPassword.isEmpty()) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body(new MessageResponse("Failed to generate a new password.", 500));
-                }
-                // Successfully generated and saved the password
-                return ResponseEntity.ok(newPassword);
-            } catch (ResourceNotFoundException e) {
-                // Handle the case where the user is not found
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new MessageResponse("User not found with ID: " + request.getUserId(), 404));
-            } catch (Exception e) {
-                // Handle any other unexpected exceptions
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new MessageResponse("An error occurred: " , 500));
-            }
         }
+
+        // Validate the request parameters
+        if (request == null || request.getUserId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("User ID is required.", 400));
+        }
+
+        try {
+            // Generate a random password for the specified user
+            String generatedPassword = userManagementService.generateRandomPassword(request.getUserId());
+
+            // Return the generated password (note: avoid doing this in production environments)
+            return ResponseEntity.ok(new MessageResponse("Password generated successfully: " + generatedPassword, 200));
+
+        } catch (AccessDeniedException e) {
+            // If the authenticated user is not authorized to reset the password for the user
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse("You are not authorized to reset the password for this user.", 403));
+        } catch (ResourceNotFoundException e) {
+            // If the user is not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("User not found with ID: " + request.getUserId(), 404));
+        } catch (Exception e) {
+            // Handle any unexpected errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("An error occurred: " + e.getMessage(), 500));
+        }
+    }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest updateUserRequest) {
