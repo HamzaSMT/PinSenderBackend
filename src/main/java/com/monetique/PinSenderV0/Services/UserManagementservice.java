@@ -264,7 +264,7 @@ public class UserManagementservice implements IuserManagementService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long adminId = userDetails.getId();
-
+        logger.error("No authentication found in SecurityContext");
         try {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + userId));

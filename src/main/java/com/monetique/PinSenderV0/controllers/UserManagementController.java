@@ -51,17 +51,19 @@ public class UserManagementController {
 
 
 
-    @PutMapping("/{userId}/toggle-active-status")
+    @PutMapping("/{id}/deactivate")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public ResponseEntity<MessageResponse> toggleUserActiveStatus(@PathVariable Long userId) {
+    public ResponseEntity<MessageResponse> toggleUserActiveStatus(@PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
+            logger.error("No authentication found in SecurityContext");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new MessageResponse("User is not authenticated!", 401));
+
         }
         try {
             // Appeler le service pour changer le statut actif de l'utilisateur
-            userManagementService.toggleUserActiveStatus(userId);
+            userManagementService.toggleUserActiveStatus(id);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new MessageResponse("User status updated successfully.", 200));
         } catch (AccessDeniedException e) {
@@ -266,7 +268,7 @@ public class UserManagementController {
             String generatedPassword = userManagementService.generateRandomPassword(request.getUserId());
 
             // Return the generated password (note: avoid doing this in production environments)
-            return ResponseEntity.ok(new MessageResponse("Password generated successfully: " + generatedPassword, 200));
+            return ResponseEntity.ok(generatedPassword);
 
         } catch (AccessDeniedException e) {
             // If the authenticated user is not authorized to reset the password for the user
