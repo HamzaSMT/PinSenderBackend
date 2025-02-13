@@ -310,7 +310,9 @@ public class UserManagementController {
                     .body(new MessageResponse("User is not authenticated!", 401));
         }
         try {
-            UserbyidResponseDTO userDTO = userManagementService.getuserbyId(userId);
+            UserDetailsImpl currentUserDetails = (UserDetailsImpl) authentication.getPrincipal();
+            Long authuserId = currentUserDetails.getId();
+            UserbyidResponseDTO userDTO = userManagementService.getuserbyId(authuserId);
             logger.info("User found: {}", userDTO);
             return ResponseEntity.ok(userDTO);
         } catch (NoSuchElementException e) {

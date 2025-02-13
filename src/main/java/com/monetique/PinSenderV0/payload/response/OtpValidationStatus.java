@@ -5,5 +5,6 @@ public enum OtpValidationStatus {
     INVALID_OTP,
     OTP_EXPIRED,
     NUMBER_BLOCKED,
-    ERROR
+    ERROR,
+    INVALID_PHONE
 }

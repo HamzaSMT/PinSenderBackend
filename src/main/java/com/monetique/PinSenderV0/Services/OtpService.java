@@ -43,6 +43,7 @@ public class OtpService implements IOtpService {
     private final ConcurrentHashMap<String, LocalDateTime> blockedNumbers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Integer> otpResendAttempts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, LocalDateTime> lastResendTime = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, String> cardToPhoneMap = new ConcurrentHashMap<>();
 
     private static final int MAX_OTP_ATTEMPTS = 3;
     private static final long BLOCK_DURATION_MINUTES = 1;
@@ -57,6 +58,8 @@ public class OtpService implements IOtpService {
 
         otpStore.put(request.getGsm(), otp);
         otpExpiryStore.put(request.getGsm(), LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+        // Associer la carte bancaire au numéro de téléphone
+        cardToPhoneMap.put(request.getCardNumber(), request.getGsm());
         String message = String.format("Votre code de verification est : %s. Ce code est temporaire.", otp);
 
         try {
@@ -147,6 +150,10 @@ public class OtpService implements IOtpService {
             logger.warn("🚨 [BLOQUÉ] Numéro {}. Impossible de valider l'OTP.", phoneNumber);
             return new OtpValidationResult(OtpValidationStatus.NUMBER_BLOCKED);
         }
+        if (!isPhoneLinkedToCard(cardNumber, phoneNumber)) {
+            logger.warn("❌ [ÉCHEC] Le numéro {} n'est pas associé à la carte {}.", phoneNumber, cardNumber);
+            return new OtpValidationResult(OtpValidationStatus.INVALID_PHONE);
+        }
 
         // Vérifier si l'OTP est expiré
         if (isOtpExpired(phoneNumber)) {
@@ -230,6 +237,9 @@ public class OtpService implements IOtpService {
         LocalDateTime expirationTime = otpExpiryStore.get(phoneNumber);
         return expirationTime == null || LocalDateTime.now().isAfter(expirationTime);
     }
+    private boolean isPhoneLinkedToCard(String cardNumber, String phoneNumber) {
+        return cardToPhoneMap.containsKey(cardNumber) && cardToPhoneMap.get(cardNumber).contains(phoneNumber);
+    }
 
     private boolean isBlocked(String phoneNumber) {
         LocalDateTime unblockTime = blockedNumbers.get(phoneNumber);
@@ -245,6 +255,7 @@ public class OtpService implements IOtpService {
         }
         return false;
     }
+
 
     // Generate a 6-digit OTP
     private String generateOtp() {
