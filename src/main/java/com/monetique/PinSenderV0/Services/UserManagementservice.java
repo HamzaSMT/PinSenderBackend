@@ -255,9 +255,7 @@ public class UserManagementservice implements IuserManagementService {
         try {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for ID: " + userId));
-
-            // Ensure the current admin is allowed to toggle this user's status
-            if (user.getAdmin() != null && !user.getAdmin().getId().equals(adminId)) {
+            if (user.getAdmin() == null || !user.getAdmin().getId().equals(adminId)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to modify this user.");
             }
             logger.info("Roles for user {}: {}", userId, user.getRoles());
