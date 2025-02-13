@@ -54,6 +54,11 @@ public class UserManagementController {
     @PutMapping("/{userId}/toggle-active-status")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<MessageResponse> toggleUserActiveStatus(@PathVariable Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User is not authenticated!", 401));
+        }
         try {
             // Appeler le service pour changer le statut actif de l'utilisateur
             userManagementService.toggleUserActiveStatus(userId);
@@ -244,7 +249,6 @@ public class UserManagementController {
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
