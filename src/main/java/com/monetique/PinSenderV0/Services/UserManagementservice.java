@@ -18,11 +18,13 @@ import com.monetique.PinSenderV0.security.jwt.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -196,16 +198,13 @@ public class UserManagementservice implements IuserManagementService {
     @Override
     public void associateAdminWithBank(Long adminId, Long bankId)
             throws ResourceNotFoundException, AccessDeniedException {
-
         // Fetch the admin user
         User admin = userRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", adminId));
-
         // Check if the admin already has a bank associated
         if (admin.getBank() != null) {
             throw new AccessDeniedException("Error: This admin already has a bank associated and cannot change it!");
         }
-
         // Fetch the bank
         TabBank bank = bankRepository.findById(bankId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", bankId));
@@ -213,7 +212,6 @@ public class UserManagementservice implements IuserManagementService {
         // Associate the admin with the bank
         admin.setBank(bank);
         userRepository.save(admin);
-
         // Update the bank with the admin's username
         bank.setAdminUsername(admin.getUsername());
         bankRepository.save(bank);
@@ -251,32 +249,41 @@ public class UserManagementservice implements IuserManagementService {
 
     @Override
     public void toggleUserActiveStatus(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + userId));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long adminId = userDetails.getId();
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for ID: " + userId));
 
-            System.out.println("Roles for user " + userId + ": " + user.getRoles());
-
+            // Ensure the current admin is allowed to toggle this user's status
+            if (user.getAdmin() != null && !user.getAdmin().getId().equals(adminId)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to modify this user.");
+            }
+            logger.info("Roles for user {}: {}", userId, user.getRoles());
             // Toggle active status
             boolean newStatus = !user.isActive();
             user.setActive(newStatus);
             userRepository.save(user);
-            System.out.println("User " + user.getUsername() + " active status set to: " + newStatus);
-
-
+            logger.info("User {} active status set to: {}", user.getUsername(), newStatus);
             // If the user is an admin, toggle the status of all associated users
             if (isAdmin(user)) {
-                System.out.println("Toggling active status for associated users of admin: " + user.getUsername());
+                logger.info("Toggling active status for associated users of admin: {}", user.getUsername());
                 toggleAssociatedUsersStatus(user, newStatus);
             }
-
+        } catch (ResponseStatusException ex) {
+            logger.warn("Business validation error: {}", ex.getReason());
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Unexpected error occurred while toggling user status.", ex);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected issue occurred. Please contact support.");
+        }
     }
-
 
     // Helper method to check if the user has an admin role
     private boolean isAdmin(User user) {
         return user.getRoles().stream().anyMatch(role -> role.getName().equals(ERole.ROLE_ADMIN));
     }
-
     // Helper method to deactivate all users associated with an admin
     private void toggleAssociatedUsersStatus(User admin, boolean newStatus) {
         List<User> associatedUsers = userRepository.findByAdminId(admin.getId());
@@ -285,6 +292,5 @@ public class UserManagementservice implements IuserManagementService {
             user.setActive(newStatus);
             userRepository.save(user);
         }
-
     }
 }
