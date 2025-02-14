@@ -251,6 +251,7 @@ public class OtpService implements IOtpService {
                 logger.info("🟢 [DÉBLOQUÉ] Le numéro {} a dépassé la durée de blocage. Déblocage en cours...", phoneNumber);
                 blockedNumbers.remove(phoneNumber);
                 otpAttempts.remove(phoneNumber);
+                otpResendAttempts.remove(phoneNumber);
             }
         }
         return false;
@@ -358,7 +359,7 @@ public class OtpService implements IOtpService {
         });
     }
 
-    @Scheduled(fixedRate = 3600000) // Exécution toutes les 1 heure
+    @Scheduled(fixedRate = 1200000) // Exécution toutes les 1 heure
     public void unblockNumbers() {
         LocalDateTime now = LocalDateTime.now();
         blockedNumbers.entrySet().removeIf(entry -> entry.getValue() != null && entry.getValue().isBefore(now.minusMinutes(BLOCK_DURATION_MINUTES)));
