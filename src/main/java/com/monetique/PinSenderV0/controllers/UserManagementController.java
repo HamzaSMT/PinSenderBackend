@@ -70,7 +70,7 @@ public class UserManagementController {
             // Gestion du cas d'accès refusé
             logger.error("Access denied: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse("Access denied", 403));
+                    .body(new MessageResponse("You are not authorized to modify this user.", 403));
         } catch (ResourceNotFoundException e) {
             // Gestion du cas où la ressource est introuvable
             logger.error("Resource not found: {}", e.getMessage());

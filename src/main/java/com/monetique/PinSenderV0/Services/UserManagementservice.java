@@ -288,10 +288,17 @@ public class UserManagementservice implements IuserManagementService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + userId));
 
-            // Vérifier si l'admin actuel est autorisé à modifier ce statut utilisateur
-            if (user.getAdmin() != null && !user.getAdmin().getId().equals(adminId)) {
+            if (user.getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_SUPER_ADMIN))) {
                 throw new AccessDeniedException("You are not authorized to modify this user.");
             }
+            // Vérifier si l'admin actuel est autorisé à modifier ce statut utilisateur
+            if (user.getAdmin()!= null && !user.getAdmin().getId().equals(adminId)) {
+                logger.info("admin super{}", user.getAdmin());
+                logger.info("User connecte id {}", user.getAdmin().getId().equals(adminId));
+                throw new AccessDeniedException("You are not authorized to modify this user.");
+
+            }
+
 
             logger.info("Roles for user {}: {}", userId, user.getRoles());
 
@@ -308,13 +315,13 @@ public class UserManagementservice implements IuserManagementService {
             }
 
         } catch (AccessDeniedException ex) {
-            logger.warn("Access denied: {}", ex.getMessage());
+            logger.warn("Access denied");
             throw ex;
         } catch (ResourceNotFoundException ex) {
-            logger.warn("Resource not found: {}", ex.getMessage());
+            logger.warn("Resource not found");
             throw ex;
         } catch (Exception ex) {
-            logger.error("Unexpected error occurred while toggling user status.", ex);
+            logger.error("Unexpected error occurred while toggling user status.");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected issue occurred. Please contact support.");
         }
     }
