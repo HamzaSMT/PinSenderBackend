@@ -239,7 +239,7 @@ public class BankController {
         } catch (ResourceNotFoundException e) {
             logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+                    .body(new MessageResponse("Resource not found: ", 404));
         } catch (IOException e) {
             logger.error("Error processing logo file: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

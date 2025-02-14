@@ -75,7 +75,7 @@ public class UserManagementController {
             // Gestion du cas où la ressource est introuvable
             logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+                    .body(new MessageResponse("Resource not found: ", 404));
         } catch (Exception e) {
             // Gestion des erreurs imprévues
             logger.error("Unexpected error while modifying user status: {}", e.getMessage());
@@ -110,7 +110,7 @@ public class UserManagementController {
         } catch (ResourceNotFoundException e) {
             logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+                    .body(new MessageResponse("Resource not found: ", 404));
         } catch (Exception e) {
             logger.error("Unexpected error while associating admin to bank: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -141,7 +141,7 @@ public class UserManagementController {
         } catch (ResourceNotFoundException e) {
             logger.error("Resource not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Resource not found: " + e.getMessage(), 404));
+                    .body(new MessageResponse("Resource not found", 404));
         } catch (Exception e) {
             logger.error("Unexpected error while associating user to agency: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -281,7 +281,7 @@ public class UserManagementController {
         } catch (Exception e) {
             // Handle any unexpected errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("An error occurred: " + e.getMessage(), 500));
+                    .body(new MessageResponse("An error occurred: ", 500));
         }
     }
 

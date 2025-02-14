@@ -28,14 +28,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
         logger.error("Access Denied: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new MessageResponse("Access Denied: " + ex.getMessage(), 403));
+                .body(new MessageResponse("Access Denied: ", 403));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<MessageResponse> handleAuthenticationException(AuthenticationException ex) {
         logger.error("Authentication failed: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new MessageResponse("Authentication failed: " + ex.getMessage(), 401));
+                .body(new MessageResponse("Authentication failed: ", 401));
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
@@ -49,13 +49,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MessageResponse> handleAuthenticationCredentialsNotFoundException(AuthenticationCredentialsNotFoundException ex) {
         logger.error("Authentication required: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new MessageResponse("Authentication required: " + ex.getMessage(), 401));
+                .body(new MessageResponse("Authentication required: ", 401));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGenericException(Exception ex) {
         logger.error("An error occurred: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new MessageResponse("An error occurred: " + ex.getMessage(), 500));
+                .body(new MessageResponse("An error occurred: ", 500));
     }
 }

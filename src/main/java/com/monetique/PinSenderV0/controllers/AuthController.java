@@ -197,38 +197,33 @@ public class AuthController {
     }
   }
   @PostMapping("superadmin/forgetPassword")
-
-  public ResponseEntity<?> generateRandomPassword(@RequestBody GeneratePasswordRequest request) {
-    // Validate the request object and user ID
+  public ResponseEntity<?> generateRandomPasswordSuperadmin(@RequestBody GeneratePasswordRequest request) {
     if (request == null || request.getUserId() == null) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+      return ResponseEntity.badRequest()
               .body(new MessageResponse("User ID is required.", 400));
     }
 
     try {
-      // Generate a random password for the specified user
-      String newPassword = userManagementService.generateRandomPassword(request.getUserId());
+      // Generate a random password for the super admin
+      String newPassword = userManagementService.generateRandomPasswordSuperadmin(request.getUserId());
 
-      // Check if password generation was successful
-      if (newPassword == null || newPassword.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new MessageResponse("Failed to generate a new password.", 500));
-      }
-
-      // Successfully generated and saved the password
-      return ResponseEntity.ok(newPassword);
+      return ResponseEntity.ok()
+              .body(new MessageResponse("New password has been successfully generated."+ "Your new Password is :"+newPassword, 200));
 
     } catch (ResourceNotFoundException e) {
-      // Handle the case where the user is not found
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
               .body(new MessageResponse("User not found with ID: " + request.getUserId(), 404));
 
+    } catch (AccessDeniedException e) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body(new MessageResponse("You are not authorized to reset this password.", 403));
+
     } catch (Exception e) {
-      // Handle any other unexpected exceptions
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-              .body(new MessageResponse("An error occurred: ", 500));
+              .body(new MessageResponse("An error occurred while resetting the password.", 500));
     }
   }
+
 
 ////////////********************************usermanagement**********************************************/////////////////////////////////////////
 

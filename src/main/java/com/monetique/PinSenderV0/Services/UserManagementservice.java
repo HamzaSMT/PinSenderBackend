@@ -71,7 +71,26 @@ public class UserManagementservice implements IuserManagementService {
         // Return the plain generated password (be cautious with exposing this in production)
         return newPassword;
     }
+    @Override
+    public String generateRandomPasswordSuperadmin(Long userId) {
 
+        // Find the user for whom the password needs to be reset
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (!user.getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_SUPER_ADMIN))) {
+            throw new AccessDeniedException("This API is only for the super admin.");
+        }
+
+        // Generate a strong random password
+        String newPassword = generateRandomPassword();
+
+        // Encrypt the password before saving
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
+
+        // Return the plain generated password (be cautious with exposing this in production)
+        return newPassword;
+    }
 
     @Override
     public UserbyidResponseDTO getuserbyId(Long userId) {
