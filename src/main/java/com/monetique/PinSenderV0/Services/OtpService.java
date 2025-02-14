@@ -276,8 +276,9 @@ public class OtpService implements IOtpService {
             System.out.println("✅ OTP Retrieved: " + otpStored);
         }
         // Check if the number is temporarily blocked
-        if (blockedNumbers.containsKey(phoneNumber)) {
-            logger.warn("Phone number {} is temporarily blocked.", phoneNumber);
+
+        if (isBlocked(phoneNumber)) {
+            logger.warn("🚨 [BLOQUÉ] Numéro {}. Impossible de valider l'OTP.", phoneNumber);
             return new OtpResendResult(OtpResendResult.Status.NUMBER_BLOCKED, "This number is temporarily blocked.");
         }
 
