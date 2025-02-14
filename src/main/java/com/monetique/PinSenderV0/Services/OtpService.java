@@ -343,17 +343,24 @@ public class OtpService implements IOtpService {
         }
     }
 
-    @Scheduled(fixedRate = 300000) // Exécution toutes les 5 minutes
+    @Scheduled(fixedRate = 900000) // Exécution toutes les 15 minutes
     public void cleanUpExpiredOtp() {
         LocalDateTime now = LocalDateTime.now();
-        otpExpiryStore.entrySet().removeIf(entry -> entry.getValue().isBefore(now));
-        otpStore.entrySet().removeIf(entry -> otpExpiryStore.get(entry.getKey()).isBefore(now));
+
+        // Remove expired OTPs from otpExpiryStore
+        otpExpiryStore.entrySet().removeIf(entry -> entry.getValue() != null && entry.getValue().isBefore(now));
+
+        // Remove expired OTPs from otpStore, ensuring otpExpiryStore.get() is not null
+        otpStore.entrySet().removeIf(entry -> {
+            LocalDateTime expiryTime = otpExpiryStore.get(entry.getKey());
+            return expiryTime != null && expiryTime.isBefore(now);
+        });
     }
 
     @Scheduled(fixedRate = 3600000) // Exécution toutes les 1 heure
     public void unblockNumbers() {
         LocalDateTime now = LocalDateTime.now();
-        blockedNumbers.entrySet().removeIf(entry -> entry.getValue().isBefore(now.minusMinutes(BLOCK_DURATION_MINUTES)));
+        blockedNumbers.entrySet().removeIf(entry -> entry.getValue() != null && entry.getValue().isBefore(now.minusMinutes(BLOCK_DURATION_MINUTES)));
     }
 
 }
