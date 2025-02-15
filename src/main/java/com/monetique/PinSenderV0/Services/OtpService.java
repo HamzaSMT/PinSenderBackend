@@ -47,8 +47,8 @@ public class OtpService implements IOtpService {
 
     private static final int MAX_OTP_ATTEMPTS = 3;
     private static final long BLOCK_DURATION_MINUTES = 1;
-    private static final int MAX_RESEND_ATTEMPTS = 5;
-    private static final Duration RESEND_INTERVAL = Duration.ofSeconds(30);
+    private static final int MAX_RESEND_ATTEMPTS = 3;
+    private static final Duration RESEND_INTERVAL = Duration.ofSeconds(10);
     private static final int OTP_VALIDITY_MINUTES = 3;
 
     @Override
@@ -345,7 +345,9 @@ public class OtpService implements IOtpService {
             } else {
                 logger.info("🟢 [DÉBLOQUÉ] Le numéro {} a dépassé la durée de blocage. Déblocage en cours...", phoneNumber);
                 blockedNumbers.remove(phoneNumber);
-                otpResendAttempts.remove(phoneNumber);
+                otpResendAttempts.put(phoneNumber, 0); // Remise à zéro du compteur au lieu de le supprimer
+                logger.info("✅ Numéro {} débloqué et compteur réinitialisé.", phoneNumber);// Ajout d’un log ici
+
             }
         }
         return false;
@@ -361,25 +363,48 @@ public class OtpService implements IOtpService {
 
 
 
-
-    @Scheduled(fixedRate = 900000) // Exécution toutes les 15 minutes
+    @Scheduled(fixedRate = 3600000) // Exécution toutes les 15 minutes
     public void cleanUpExpiredOtp() {
         LocalDateTime now = LocalDateTime.now();
+        int otpCountBefore = otpStore.size();
 
-        // Remove expired OTPs from otpExpiryStore
-        otpExpiryStore.entrySet().removeIf(entry -> entry.getValue() != null && entry.getValue().isBefore(now));
+        otpExpiryStore.entrySet().removeIf(entry -> {
+            boolean isExpired = entry.getValue() != null && entry.getValue().isBefore(now);
+            if (isExpired) logger.info("🗑️ Suppression OTP expiré pour {}", entry.getKey());
+            return isExpired;
+        });
 
-        // Remove expired OTPs from otpStore, ensuring otpExpiryStore.get() is not null
         otpStore.entrySet().removeIf(entry -> {
             LocalDateTime expiryTime = otpExpiryStore.get(entry.getKey());
-            return expiryTime != null && expiryTime.isBefore(now);
+            boolean isExpired = expiryTime != null && expiryTime.isBefore(now);
+            if (isExpired) logger.info("🗑️ Suppression de l'OTP stocké pour {}", entry.getKey());
+            return isExpired;
         });
+
+        otpAttempts.entrySet().removeIf(entry -> {
+            LocalDateTime expiryTime = otpExpiryStore.get(entry.getKey());
+            boolean isExpired = expiryTime != null && expiryTime.isBefore(now);
+            if (isExpired) logger.info("🗑️ Réinitialisation des tentatives OTP pour {}", entry.getKey());
+            return isExpired;
+        });
+
+        int otpCountAfter = otpStore.size();
+        logger.info("✅ Nettoyage OTP terminé. {} OTP supprimés.", (otpCountBefore - otpCountAfter));
     }
 
-    @Scheduled(fixedRate = 1200000) // Exécution toutes les 1 heure
+    @Scheduled(fixedRate = 3600000) // Exécution toutes les 1 heure
     public void unblockNumbers() {
         LocalDateTime now = LocalDateTime.now();
-        blockedNumbers.entrySet().removeIf(entry -> entry.getValue() != null && entry.getValue().isBefore(now.minusMinutes(BLOCK_DURATION_MINUTES)));
+        int blockedCountBefore = blockedNumbers.size();
+
+        blockedNumbers.entrySet().removeIf(entry -> {
+            boolean isUnblocked = entry.getValue() != null && entry.getValue().isBefore(now.minusMinutes(BLOCK_DURATION_MINUTES));
+            if (isUnblocked) logger.info("🔓 Déblocage du numéro {}", entry.getKey());
+            return isUnblocked;
+        });
+
+        int blockedCountAfter = blockedNumbers.size();
+        logger.info("✅ Déblocage des numéros terminé. {} numéros débloqués.", (blockedCountBefore - blockedCountAfter));
     }
 
 }
