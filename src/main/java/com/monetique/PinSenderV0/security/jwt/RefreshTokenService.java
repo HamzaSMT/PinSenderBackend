@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +34,7 @@ public class RefreshTokenService {
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
-
+@Transactional
     public RefreshToken createRefreshToken(Long userId,Long sessionid) {
         // Check if a refresh token already exists for the user
         Optional<RefreshToken> existingToken = findByUserId(userId);
