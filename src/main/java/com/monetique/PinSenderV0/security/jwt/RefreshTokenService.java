@@ -63,13 +63,13 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
-
+@Transactional
     public Optional<RefreshToken> findByUserId(Long userId) {
         return refreshTokenRepository.findByUserId(userId);
     }
 
 
-
+@Transactional
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().isBefore(Instant.now())) {
             refreshTokenRepository.delete(token);
