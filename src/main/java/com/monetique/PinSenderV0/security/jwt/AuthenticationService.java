@@ -8,7 +8,7 @@ import com.monetique.PinSenderV0.models.Users.UserSession;
 import com.monetique.PinSenderV0.payload.request.LoginRequest;
 import com.monetique.PinSenderV0.payload.response.JwtResponse;
 import com.monetique.PinSenderV0.payload.response.TokenRefreshResponse;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.monetique.PinSenderV0.repository.UserRepository;
 import com.monetique.PinSenderV0.tracking.ItrackingingService;
 import org.slf4j.Logger;
