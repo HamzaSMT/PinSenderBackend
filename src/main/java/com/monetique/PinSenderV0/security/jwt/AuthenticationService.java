@@ -46,7 +46,7 @@ public class AuthenticationService {
 
 
 
-
+    @Transactional
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         logger.info("Received sign-in request for username: {}", loginRequest.getUsername());
 
