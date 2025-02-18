@@ -363,7 +363,7 @@ public class OtpService implements IOtpService {
 
 
 
-    @Scheduled(fixedRate = 3600000) // Exécution toutes les 15 minutes
+  @Scheduled(cron = "0 0 */4 * * *")
     public void cleanUpExpiredOtp() {
         LocalDateTime now = LocalDateTime.now();
         int otpCountBefore = otpStore.size();
@@ -392,7 +392,7 @@ public class OtpService implements IOtpService {
         logger.info("✅ Nettoyage OTP terminé. {} OTP supprimés.", (otpCountBefore - otpCountAfter));
     }
 
-    @Scheduled(fixedRate = 3600000) // Exécution toutes les 1 heure
+   @Scheduled(cron = "0 0 */4 * * *")
     public void unblockNumbers() {
         LocalDateTime now = LocalDateTime.now();
         int blockedCountBefore = blockedNumbers.size();
